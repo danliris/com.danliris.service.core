@@ -10,7 +10,7 @@ using Com.Moonlay.Models;
 
 namespace Com.DanLiris.Service.Core.Lib.Models
 {
-   public class YarnMaterial : StandardEntity, IValidatableObject
+    public class YarnMaterial : StandardEntity, IValidatableObject
     {
         [MaxLength(255)]
         public string UId { get; set; }
@@ -21,8 +21,15 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         {
             YarnMaterialService service = validationContext.GetService<YarnMaterialService>();
 
-            if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
-                yield return new ValidationResult("Nama yarn sudah ada", new List<string> { "Name" });
+            if (string.IsNullOrWhiteSpace(this.Name))
+            {
+                yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });
+            }
+            else
+            {
+                if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
+                    yield return new ValidationResult("Nama yarn sudah ada", new List<string> { "Name" });
+            }
         }
     }
 }

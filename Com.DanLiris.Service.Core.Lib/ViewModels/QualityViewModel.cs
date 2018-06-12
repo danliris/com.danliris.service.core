@@ -6,15 +6,11 @@ using System.Text;
 
 namespace Com.DanLiris.Service.Core.Lib.ViewModels
 {
-    public class QualityViewModel : BasicViewModel, IValidatableObject
+    public class QualityViewModel : BasicViewModel
     {
         public string Code { get; set; }
         public string Name { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrWhiteSpace(this.Name))
-                yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });
-        }
+
     }
 }

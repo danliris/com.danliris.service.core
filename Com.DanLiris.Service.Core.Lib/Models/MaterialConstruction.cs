@@ -22,9 +22,16 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             YarnMaterialService service = validationContext.GetService<YarnMaterialService>();
+            if (string.IsNullOrWhiteSpace(this.Name))
+            {
+                yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });
+            }
+            else
+            {
+                if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
+                    yield return new ValidationResult("Nama Material sudah ada", new List<string> { "Name" });
+            }
 
-            if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
-                yield return new ValidationResult("Nama Material sudah ada", new List<string> { "Name" });
         }
     }
 }
