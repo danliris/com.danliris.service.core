@@ -9,6 +9,7 @@ using Com.Moonlay.Models;
 using System.ComponentModel.DataAnnotations;
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using Com.DanLiris.Service.Core.Lib.Helpers;
+using System.Linq;
 
 namespace Com.DanLiris.Service.Core.WebApi.Helpers
 {
@@ -322,6 +323,9 @@ namespace Com.DanLiris.Service.Core.WebApi.Helpers
             try
             {
                 TModel model = Service.MapToModel(ViewModel);
+
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+                Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
 
                 await Service.CreateModel(model);
 

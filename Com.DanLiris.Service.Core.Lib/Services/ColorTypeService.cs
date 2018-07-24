@@ -13,29 +13,29 @@ using System.Text;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
-    public class OrderTypeService : BasicService<CoreDbContext, OrderType>, IMap<OrderType, OrderTypeViewModel>
+    public class ColorTypeService : BasicService<CoreDbContext, ColorTypes>, IMap<ColorTypes, ColorTypeViewModel>
     {
-        public OrderTypeService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ColorTypeService(IServiceProvider serviceProvider): base(serviceProvider)
         {
-        }
 
-        public OrderType MapToModel(OrderTypeViewModel viewModel)
+        }
+        public ColorTypes MapToModel(ColorTypeViewModel viewModel)
         {
-            OrderType model = new OrderType();
-            PropertyCopier<OrderTypeViewModel, OrderType>.Copy(viewModel, model);
+            ColorTypes model = new ColorTypes();
+            PropertyCopier<ColorTypeViewModel, ColorTypes>.Copy(viewModel, model);
             return model;
         }
 
-        public OrderTypeViewModel MapToViewModel(OrderType model)
+        public ColorTypeViewModel MapToViewModel(ColorTypes model)
         {
-            OrderTypeViewModel viewModel = new OrderTypeViewModel();
-            PropertyCopier<OrderType, OrderTypeViewModel>.Copy(model, viewModel);
+            ColorTypeViewModel viewModel = new ColorTypeViewModel();
+            PropertyCopier<ColorTypes, ColorTypeViewModel>.Copy(model, viewModel);
             return viewModel;
         }
 
-        public override Tuple<List<OrderType>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        public override Tuple<List<ColorTypes>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<OrderType> Query = this.DbContext.OrderTypes;
+            IQueryable<ColorTypes> Query = this.DbContext.ColorTypes;
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
             Query = ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
@@ -45,7 +45,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "Code", "Name"
+                    "Name","Code"
                 };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
@@ -54,22 +54,23 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "_LastModifiedUtc"
+                "Id", "Code", "Name", "Remark", "_LastModifiedUtc"
             };
 
             Query = Query
-                .Select(b => new OrderType
+                .Select(b => new ColorTypes
                 {
                     Id = b.Id,
                     Code = b.Code,
                     Name = b.Name,
+                    Remark = b.Remark,
                     _LastModifiedUtc = b._LastModifiedUtc
                 });
 
             /* Order */
             if (OrderDictionary.Count.Equals(0))
             {
-                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+                OrderDictionary.Add("_LastModifiedUtc", General.DESCENDING);
 
                 Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
             }
@@ -87,15 +88,15 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             }
 
             /* Pagination */
-            Pageable<OrderType> pageable = new Pageable<OrderType>(Query, Page - 1, Size);
-            List<OrderType> Data = pageable.Data.ToList<OrderType>();
+            Pageable<ColorTypes> pageable = new Pageable<ColorTypes>(Query, Page - 1, Size);
+            List<ColorTypes> Data = pageable.Data.ToList<ColorTypes>();
 
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
-        public override void OnCreating(OrderType model)
+        public override void OnCreating(ColorTypes model)
         {
             CodeGenerator codeGenerator = new CodeGenerator();
 
@@ -106,10 +107,6 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
-            model._CreatedAgent = "core-service";
-            model._CreatedBy = this.Username;
-            model._LastModifiedAgent = "core-service";
-            model._LastModifiedBy = this.Username;
         }
     }
 }

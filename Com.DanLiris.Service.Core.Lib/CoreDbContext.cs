@@ -1,6 +1,7 @@
 ﻿using Com.Moonlay.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Com.DanLiris.Service.Core.Lib.Models;
+using Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles;
 
 namespace Com.DanLiris.Service.Core.Lib
 {
@@ -46,6 +47,15 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<YarnMaterial> YarnMaterials { get; set; }
         public DbSet<MaterialConstruction> MaterialConstructions { get; set; }
         public DbSet<DesignMotive> DesignMotives { get; set; }
+        public DbSet<ProcessType> ProcessType { get; set; }
+        public DbSet<FinishType> FinishType { get; set; }
+        public DbSet<StandardTests> StandardTests { get; set; }
+        public DbSet<AccountProfile> AccountProfiles { get; set; }
+        public DbSet<AccountRole> AccountRoles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<LampStandard> LampStandard { get; set; }
+        public DbSet<ColorTypes> ColorTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

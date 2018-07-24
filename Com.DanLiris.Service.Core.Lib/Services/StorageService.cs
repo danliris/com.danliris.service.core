@@ -85,7 +85,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             StorageViewModel storageVM = new StorageViewModel();
             storageVM.unit = new StorageUnitViewModel();
-            storageVM.unit.division = new UnitDivisionViewModel();
+            storageVM.unit.division = new DivisionViewModel();
 
             storageVM._id = storage.Id;
             storageVM._deleted = storage._IsDeleted;
@@ -101,7 +101,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             storageVM.description = storage.Description;
             storageVM.unit._id = storage.UnitId;
             storageVM.unit.name = storage.UnitName;
-            storageVM.unit.division.name = storage.DivisionName;
+            storageVM.unit.division.Name = storage.DivisionName;
 
             return storageVM;
         }
@@ -127,7 +127,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 storage.UnitId = storageVM.unit._id;
                 storage.UnitName = storageVM.unit.name;
-                storage.DivisionName = storageVM.unit.division.name;
+                storage.DivisionName = storageVM.unit.division.Name;
             }
             else
             {

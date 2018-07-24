@@ -11,14 +11,65 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180716075541_addMasterServices")]
+    partial class addMasterServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<bool>("IsLocked");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("Username");
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Account");
+                });
 
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountProfile", b =>
                 {
@@ -34,6 +85,9 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.Property<string>("Lastname");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
 
                     b.ToTable("AccountProfiles");
                 });
@@ -82,6 +136,8 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.Property<DateTime>("_LastModifiedUtc");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("RoleId");
 
@@ -452,56 +508,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.ColorTypes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Code");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Remark");
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ColorTypes");
                 });
 
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Comodity", b =>
@@ -940,56 +946,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.ToTable("IncomeTaxes");
                 });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.LampStandard", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Code");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Remark");
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LampStandard");
-                });
-
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.MaterialConstruction", b =>
                 {
                     b.Property<int>("Id")
@@ -1097,64 +1053,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderTypes");
-                });
-
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.ProcessType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Code");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("OrderTypeCode");
-
-                    b.Property<int>("OrderTypeId");
-
-                    b.Property<string>("OrderTypeName");
-
-                    b.Property<string>("OrderTypeRemark");
-
-                    b.Property<string>("Remark");
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProcessType");
                 });
 
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Product", b =>
@@ -1680,8 +1578,21 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.ToTable("YarnMaterials");
                 });
 
+            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountProfile", b =>
+                {
+                    b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Account", "Account")
+                        .WithOne("AccountProfile")
+                        .HasForeignKey("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountProfile", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountRole", b =>
                 {
+                    b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Account", "Account")
+                        .WithMany("AccountRoles")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", "Role")
                         .WithMany("AccountRoles")
                         .HasForeignKey("RoleId")

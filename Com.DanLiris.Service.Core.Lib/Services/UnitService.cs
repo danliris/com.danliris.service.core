@@ -45,7 +45,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "_id", "code", "division", "name"
+                "Id", "Code", "Division", "Name"
             };
 
             Query = Query
@@ -91,23 +91,23 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         public UnitViewModel MapToViewModel(Unit unit)
         {
             UnitViewModel unitVM = new UnitViewModel();
-            unitVM.division = new UnitDivisionViewModel();
+            unitVM.Division = new DivisionViewModel();
 
-            unitVM._id = unit.Id;
-            unitVM._deleted = unit._IsDeleted;
-            unitVM._active = unit.Active;
-            unitVM._createdDate = unit._CreatedUtc;
-            unitVM._createdBy = unit._CreatedBy;
-            unitVM._createAgent = unit._CreatedAgent;
-            unitVM._updatedDate = unit._LastModifiedUtc;
-            unitVM._updatedBy = unit._LastModifiedBy;
-            unitVM._updateAgent = unit._LastModifiedAgent;
-            unitVM.code = unit.Code;
-            unitVM.division._id = unit.DivisionId;
-            unitVM.division.code = unit.DivisionCode;
-            unitVM.division.name = unit.DivisionName;
-            unitVM.name = unit.Name;
-            unitVM.description = unit.Description;
+            unitVM.Id = unit.Id;
+            unitVM._IsDeleted = unit._IsDeleted;
+            unitVM.Active = unit.Active;
+            unitVM._CreatedUtc = unit._CreatedUtc;
+            unitVM._CreatedBy = unit._CreatedBy;
+            unitVM._CreatedAgent = unit._CreatedAgent;
+            unitVM._LastModifiedUtc = unit._LastModifiedUtc;
+            unitVM._LastModifiedBy = unit._LastModifiedBy;
+            unitVM._LastModifiedAgent = unit._LastModifiedAgent;
+            unitVM.Code = unit.Code;
+            unitVM.Division.Id = unit.DivisionId;
+            unitVM.Division.Code = unit.DivisionCode;
+            unitVM.Division.Name = unit.DivisionName;
+            unitVM.Name = unit.Name;
+            unitVM.Description = unit.Description;
             
             return unitVM;
         }
@@ -116,21 +116,21 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             Unit unit = new Unit();
 
-            unit.Id = unitVM._id;
-            unit._IsDeleted = unitVM._deleted;
-            unit.Active = unitVM._active;
-            unit._CreatedUtc = unitVM._createdDate;
-            unit._CreatedBy = unitVM._createdBy;
-            unit._CreatedAgent = unitVM._createAgent;
-            unit._LastModifiedUtc = unitVM._updatedDate;
-            unit._LastModifiedBy = unitVM._updatedBy;
-            unit._LastModifiedAgent = unitVM._updateAgent;
-            unit.Code = unitVM.code;
-            unit.DivisionId = unitVM.division._id;
-            unit.DivisionCode = unitVM.division.code;
-            unit.DivisionName = unitVM.division.name;
-            unit.Name = unitVM.name;
-            unit.Description = unitVM.description;
+            unit.Id = unitVM.Id;
+            unit._IsDeleted = unitVM._IsDeleted;
+            unit.Active = unitVM.Active;
+            unit._CreatedUtc = unitVM._CreatedUtc;
+            unit._CreatedBy = unitVM._CreatedBy;
+            unit._CreatedAgent = unitVM._CreatedAgent;
+            unit._LastModifiedUtc = unitVM._LastModifiedUtc;
+            unit._LastModifiedBy = unitVM._LastModifiedBy;
+            unit._LastModifiedAgent = unitVM._LastModifiedAgent;
+            unit.Code = unitVM.Code;
+            unit.DivisionId = unitVM.Division.Id;
+            unit.DivisionCode = unitVM.Division.Code;
+            unit.DivisionName = unitVM.Division.Name;
+            unit.Name = unitVM.Name;
+            unit.Description = unitVM.Description;
 
             return unit;
         }
@@ -147,10 +147,10 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             public UnitMap()
             {
-                Map(b => b.code).Index(0);
-                Map(b => b.division.name).Index(1);
-                Map(b => b.name).Index(2);
-                Map(b => b.description).Index(3);
+                Map(b => b.Code).Index(0);
+                Map(b => b.Division.Name).Index(1);
+                Map(b => b.Name).Index(2);
+                Map(b => b.Description).Index(3);
             }
         }
 
@@ -165,25 +165,25 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 ErrorMessage = "";
 
-                if (string.IsNullOrWhiteSpace(unitVM.code))
+                if (string.IsNullOrWhiteSpace(unitVM.Code))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Kode tidak boleh kosong, ");
                 }
-                else if (Data.Any(d => d != unitVM && d.code.Equals(unitVM.code)))
+                else if (Data.Any(d => d != unitVM && d.Code.Equals(unitVM.Code)))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Kode tidak boleh duplikat, ");
                 }
 
-                if (string.IsNullOrWhiteSpace(unitVM.name))
+                if (string.IsNullOrWhiteSpace(unitVM.Name))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh kosong, ");
                 }
-                else if (Data.Any(d => d != unitVM && d.name.Equals(unitVM.name)))
+                else if (Data.Any(d => d != unitVM && d.Name.Equals(unitVM.Name)))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                 }
 
-                if(string.IsNullOrWhiteSpace(unitVM.division.name))
+                if(string.IsNullOrWhiteSpace(unitVM.Division.Name))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Divisi tidak boleh kosong, ");
                 }
@@ -191,14 +191,14 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
                     /* Service Validation */
-                    division = this.DbContext.Set<Division>().FirstOrDefault(d => d._IsDeleted.Equals(false) && d.Name.Equals(unitVM.division.name));
+                    division = this.DbContext.Set<Division>().FirstOrDefault(d => d._IsDeleted.Equals(false) && d.Name.Equals(unitVM.Division.Name));
 
-                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Code.Equals(unitVM.code)))
+                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Code.Equals(unitVM.Code)))
                     {
                         ErrorMessage = string.Concat(ErrorMessage, "Kode tidak boleh duplikat, ");
                     }
 
-                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(unitVM.name)))
+                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(unitVM.Name)))
                     {
                         ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                     }
@@ -211,18 +211,18 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
-                    unitVM.division._id = division.Id;
-                    unitVM.division.code = division.Code;
+                    unitVM.Division.Id = division.Id;
+                    unitVM.Division.Code = division.Code;
                 }
                 else
                 {
                     ErrorMessage = ErrorMessage.Remove(ErrorMessage.Length - 2);
                     var Error = new ExpandoObject() as IDictionary<string, object>;
 
-                    Error.Add("Kode Unit", unitVM.code);
-                    Error.Add("Divisi", unitVM.name);
-                    Error.Add("Nama", unitVM.name);
-                    Error.Add("Deskripsi", unitVM.description);
+                    Error.Add("Kode Unit", unitVM.Code);
+                    Error.Add("Divisi", unitVM.Name);
+                    Error.Add("Nama", unitVM.Name);
+                    Error.Add("Deskripsi", unitVM.Description);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);

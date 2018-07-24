@@ -37,6 +37,6 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
 
         public string name { get; set; }
 
-        public UnitDivisionViewModel division { get; set; }
+        public DivisionViewModel division { get; set; }
     }
 }

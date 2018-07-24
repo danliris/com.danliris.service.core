@@ -87,42 +87,19 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public DivisionViewModel MapToViewModel(Division division)
         {
-            DivisionViewModel divisionVM = new DivisionViewModel();
 
-            divisionVM._id = division.Id;
-            divisionVM._deleted = division._IsDeleted;
-            divisionVM._active = division.Active;
-            divisionVM._createdDate = division._CreatedUtc;
-            divisionVM._createdBy = division._CreatedBy;
-            divisionVM._createAgent = division._CreatedAgent;
-            divisionVM._updatedDate = division._LastModifiedUtc;
-            divisionVM._updatedBy = division._LastModifiedBy;
-            divisionVM._updateAgent = division._LastModifiedAgent;
-            divisionVM.code = division.Code;
-            divisionVM.name = division.Name;
-            divisionVM.description = division.Description;
+            DivisionViewModel viewModel = new DivisionViewModel();
+            PropertyCopier<Division, DivisionViewModel>.Copy(division, viewModel);
 
-            return divisionVM;
+            return viewModel;
         }
 
         public Division MapToModel(DivisionViewModel divisionVM)
         {
-            Division division = new Division();
+            Division model = new Division();
+            PropertyCopier<DivisionViewModel, Division>.Copy(divisionVM, model);
+            return model;
 
-            division.Id = divisionVM._id;
-            division._IsDeleted = divisionVM._deleted;
-            division.Active = divisionVM._active;
-            division._CreatedUtc = divisionVM._createdDate;
-            division._CreatedBy = divisionVM._createdBy;
-            division._CreatedAgent = divisionVM._createAgent;
-            division._LastModifiedUtc = divisionVM._updatedDate;
-            division._LastModifiedBy = divisionVM._updatedBy;
-            division._LastModifiedAgent = divisionVM._updateAgent;
-            division.Code = divisionVM.code;
-            division.Name = divisionVM.name;
-            division.Description = divisionVM.description;
-
-            return division;
         }
 
         /* Upload CSV */
@@ -137,8 +114,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             public DivisionMap()
             {
-                Map(b => b.name).Index(0);
-                Map(b => b.description).Index(1);
+                Map(b => b.Name).Index(0);
+                Map(b => b.Description).Index(1);
             }
         }
 
@@ -152,11 +129,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 ErrorMessage = "";
 
-                if (string.IsNullOrWhiteSpace(divisionVM.name))
+                if (string.IsNullOrWhiteSpace(divisionVM.Name))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh kosong, ");
                 }
-                else if(Data.Any(d => d != divisionVM && d.name.Equals(divisionVM.name)))
+                else if(Data.Any(d => d != divisionVM && d.Name.Equals(divisionVM.Name)))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                 }
@@ -164,7 +141,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
                     /* Service Validation */
-                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(divisionVM.name)))
+                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(divisionVM.Name)))
                     {
                         ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                     }
@@ -175,8 +152,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     ErrorMessage = ErrorMessage.Remove(ErrorMessage.Length - 2);
                     var Error = new ExpandoObject() as IDictionary<string, object>;
 
-                    Error.Add("Nama", divisionVM.name);
-                    Error.Add("Deskripsi", divisionVM.description);
+                    Error.Add("Nama", divisionVM.Name);
+                    Error.Add("Deskripsi", divisionVM.Description);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);
