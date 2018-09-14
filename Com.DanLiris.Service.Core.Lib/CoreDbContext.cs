@@ -60,6 +60,7 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<Role> Roles { get; set; }
         public DbSet<LampStandard> LampStandard { get; set; }
         public DbSet<ColorTypes> ColorTypes { get; set; }
+        public DbSet<GarmentProduct> GarmentProducts { get; set; }
         public DbSet<GarmentCategory> GarmentCategories { get; set; }
 		public DbSet<GarmentSupplier> GarmentSuppliers { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

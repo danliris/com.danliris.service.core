@@ -53,6 +53,8 @@ namespace Com.DanLiris.Service.Core.Test
                 .AddTransient<ProductServiceDataUtil>()
                 .AddTransient<AccountBankDataUtil>()
                 .AddTransient<AccountBankService>(provider => new AccountBankService(provider))
+                .AddTransient<GarmentProductService>(provider => new GarmentProductService(provider))
+                .AddTransient<GarmentProductServiceDataUtil>()
                 .AddTransient<GarmentCategoryDataUtil>()
                 .AddTransient<GarmentCategoryService>(provider => new GarmentCategoryService(provider))
                 .AddTransient<GarmentBuyerService>(provider => new GarmentBuyerService(provider))
