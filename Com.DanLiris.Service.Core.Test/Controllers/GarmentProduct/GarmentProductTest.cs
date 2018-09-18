@@ -41,6 +41,8 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentProduct
                 Const = "const",
                 Yarn = "yarn",
                 Tags = "tags",
+                ProductType = "FABRIC",
+                Composition = "Composition",
                 UOM = new GarmentProductUomViewModel { Unit = "unit", Id = 1 },
             };
         }

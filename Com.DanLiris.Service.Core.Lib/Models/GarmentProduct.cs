@@ -42,13 +42,31 @@ namespace Com.DanLiris.Service.Core.Lib.Models
             if (string.IsNullOrWhiteSpace(this.UomUnit))
                 validationResult.Add(new ValidationResult("Uom is required", new List<string> { "uom" }));
 
+            if (this.ProductType == "FABRIC")
+            {
+                if (string.IsNullOrWhiteSpace(this.Composition))
+                    validationResult.Add(new ValidationResult("Composition is required", new List<string> { "composition" }));
+                if (string.IsNullOrWhiteSpace(this.Const))
+                    validationResult.Add(new ValidationResult("Const is required", new List<string> { "const" }));
+                if (string.IsNullOrWhiteSpace(this.Yarn))
+                    validationResult.Add(new ValidationResult("Yarn is required", new List<string> { "yarn" }));
+                if (string.IsNullOrWhiteSpace(this.Width))
+                    validationResult.Add(new ValidationResult("Width is required", new List<string> { "width" }));
+            }
+
             if (validationResult.Count.Equals(0))
             {
                 /* Service Validation */
                 GarmentProductService service = (GarmentProductService)validationContext.GetService(typeof(GarmentProductService));
 
-                if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0) /* Code Unique */
-                    validationResult.Add(new ValidationResult("Code already exists", new List<string> { "code" }));
+                if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Code.Equals(this.Code)) > 0)
+                    validationResult.Add(new ValidationResult("Code is already exist", new List<string> { "code" }));
+
+                if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Name.Equals(this.Name) && r.ProductType.Equals("NON FABRIC")) > 0) /* Name Unique */
+                    validationResult.Add(new ValidationResult("Name already exists", new List<string> { "name" }));
+
+                if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.ProductType.Equals("FABRIC") && r.Name.Equals("FABRIC") && r.Composition.Equals(this.Composition) && r.Const.Equals(this.Const) && r.Yarn.Equals(this.Yarn) && r.Width.Equals(this.Width)) >0)
+                    validationResult.Add(new ValidationResult("Product with same Composition, Const, Yarn, Width already exists", new List<string> { "name" }));
             }
 
             return validationResult;

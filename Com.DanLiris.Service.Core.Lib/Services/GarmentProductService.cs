@@ -113,7 +113,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Const = garmentProduct.Const,
                 Yarn = garmentProduct.Yarn,
                 Width = garmentProduct.Width,
-                Remark = garmentProduct.Remark
+                Remark = garmentProduct.Remark,
+                ProductType = garmentProduct.ProductType,
+                Composition = garmentProduct.Composition
             };
 
             return garmentProductVM;
@@ -138,7 +140,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Const = garmentProductVM.Const,
                 Yarn = garmentProductVM.Yarn,
                 Width = garmentProductVM.Width,
-                Remark = garmentProductVM.Remark
+                Remark = garmentProductVM.Remark,
+                ProductType = garmentProductVM.ProductType,
+                Composition = garmentProductVM.Composition
             };
             if (!Equals(garmentProductVM.UOM, null))
             {
@@ -159,7 +163,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         /* Upload CSV */
         private readonly List<string> Header = new List<string>()
         {
-            "Kode Barang", "Nama Barang", "Satuan", "Const", "Yarn", "Width", "Tags", "Keterangan"
+            "Jenis Produk", "Kode Barang", "Nama Barang", "Satuan", "Komposisi", "Const", "Yarn", "Width", "Tags", "Keterangan"
         };
 
         public List<string> CsvHeader => Header;
@@ -168,14 +172,16 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             public GarmentProductMap()
             {
-                Map(p => p.Code).Index(0);
-                Map(p => p.Name).Index(1);
-                Map(p => p.UOM.Unit).Index(2);
-                Map(p => p.Const).Index(3);
-                Map(p => p.Yarn).Index(4);
-                Map(p => p.Width).Index(5);
-                Map(p => p.Tags).Index(6);
-                Map(p => p.Remark).Index(7);
+                Map(p => p.ProductType).Index(0);
+                Map(p => p.Code).Index(1);
+                Map(p => p.Name).Index(2);
+                Map(p => p.UOM.Unit).Index(3);
+                Map(p => p.Composition).Index(4);
+                Map(p => p.Const).Index(5);
+                Map(p => p.Yarn).Index(6);
+                Map(p => p.Width).Index(7);
+                Map(p => p.Tags).Index(8);
+                Map(p => p.Remark).Index(9);
             }
         }
 
@@ -223,9 +229,14 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                         ErrorMessage = string.Concat(ErrorMessage, "Kode tidak boleh duplikat, ");
                     }
 
-                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(garmentProductVM.Name)))
+                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(garmentProductVM.Name) && d.ProductType.Equals("NON FABRIC")))
                     {
                         ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
+                    }
+
+                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.ProductType.Equals("FABRIC") && d.ProductType.Equals("FABRIC") && d.Composition.Equals(garmentProductVM.Composition) && d.Const.Equals(garmentProductVM.Const) && d.Yarn.Equals(garmentProductVM.Yarn) && d.Width.Equals(garmentProductVM.Width)))
+                    {
+                        ErrorMessage = string.Concat(ErrorMessage, "Product dengan komposisi, const, yarn, width yang sama tidak boleh duplikat, ");
                     }
 
                     if (uom == null)
@@ -243,9 +254,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     ErrorMessage = ErrorMessage.Remove(ErrorMessage.Length - 2);
                     var Error = new ExpandoObject() as IDictionary<string, object>;
 
+                    Error.Add("Jenis Produk", garmentProductVM.ProductType);
                     Error.Add("Kode Barang", garmentProductVM.Code);
                     Error.Add("Nama Barang", garmentProductVM.Name);
                     Error.Add("Satuan", garmentProductVM.UOM.Unit);
+                    Error.Add("Komposisi", garmentProductVM.Composition);
                     Error.Add("Const", garmentProductVM.Const);
                     Error.Add("Yarn", garmentProductVM.Yarn);
                     Error.Add("Width", garmentProductVM.Width);

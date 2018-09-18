@@ -26,6 +26,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             model.Code = string.Empty;
             model.Name = string.Empty;
             model.UomUnit = string.Empty;
+            model.ProductType = "FABRIC";
             model.UomId = 0;
         }
 
@@ -34,6 +35,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             model.Code = string.Empty;
             model.Name = string.Empty;
             model.UomUnit = string.Empty;
+            model.ProductType = "FABRIC";
             model.UomId = 0;
         }
 
@@ -46,7 +48,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
                 Code = guid,
                 Name = string.Format("TEST {0}", guid),
                 Active = true,
-               
+                ProductType = "FABRIC", 
                 UomId = 1,
                 UomUnit = "uom",
             };
