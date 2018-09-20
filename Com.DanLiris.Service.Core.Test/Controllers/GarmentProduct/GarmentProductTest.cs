@@ -47,11 +47,11 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentProduct
             };
         }
 
-        public string GeneratePackingModel()
-        {
-            string content = "{\"PackingDetails\":[{\"Weight\":3,\"Quantity\":2,\"Length\":4,\"Lot\":\"2\",\"Grade\":\"BS FINISH\",\"Remark\":\"1\"},{\"Weight\":11,\"Quantity\":22,\"Length\":11,\"Lot\":\"321\",\"Grade\":\"A\"}],\"DeliveryType\":\"BARU\",\"FinishedProductType\":\"WHITE\",\"OrderTypeName\":\"YARN DYED\",\"ColorName\":\"black\",\"Material\":\"MATERIAL 02\",\"MaterialWidthFinish\":\"3\",\"Date\":\"2018 - 09 - 03T17: 00:00.000Z\",\"PackingUom\":\"ROLL\",\"BuyerId\":25,\"BuyerCode\":\"A000A\",\"BuyerName\":\"ALI IMRON\",\"BuyerAddress\":\"S O L O\",\"BuyerType\":\"Lokal\",\"ProductionOrderId\":43,\"ProductionOrderNo\":\"F / 2018 / 0001\",\"OrderTypeId\":6,\"OrderTypeCode\":\"GH9YFUL5\",\"SalesContractNo\":\"0001 / FPL / 9 / 2018\",\"DesignNumber\":null,\"DesignCode\":null,\"ColorType\":null,\"MaterialId\":2,\"MaterialConstructionFinishId\":2,\"MaterialConstructionFinishName\":\"118x84\"}";
-            return content;
-        }
+        //public string GeneratePackingModel()
+        //{
+        //    string content = "{\"PackingDetails\":[{\"Weight\":3,\"Quantity\":2,\"Length\":4,\"Lot\":\"2\",\"Grade\":\"BS FINISH\",\"Remark\":\"1\"},{\"Weight\":11,\"Quantity\":22,\"Length\":11,\"Lot\":\"321\",\"Grade\":\"A\"}],\"DeliveryType\":\"BARU\",\"FinishedProductType\":\"WHITE\",\"OrderTypeName\":\"YARN DYED\",\"ColorName\":\"black\",\"Material\":\"MATERIAL 02\",\"MaterialWidthFinish\":\"3\",\"Date\":\"2018 - 09 - 03T17: 00:00.000Z\",\"PackingUom\":\"ROLL\",\"BuyerId\":25,\"BuyerCode\":\"A000A\",\"BuyerName\":\"ALI IMRON\",\"BuyerAddress\":\"S O L O\",\"BuyerType\":\"Lokal\",\"ProductionOrderId\":43,\"ProductionOrderNo\":\"F / 2018 / 0001\",\"OrderTypeId\":6,\"OrderTypeCode\":\"GH9YFUL5\",\"SalesContractNo\":\"0001 / FPL / 9 / 2018\",\"DesignNumber\":null,\"DesignCode\":null,\"ColorType\":null,\"MaterialId\":2,\"MaterialConstructionFinishId\":2,\"MaterialConstructionFinishName\":\"118x84\"}";
+        //    return content;
+        //}
 
         [Fact]
         public async Task Get()
