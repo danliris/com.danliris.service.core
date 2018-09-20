@@ -27,10 +27,10 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             model.Name = string.Empty;
             model.UomUnit = string.Empty;
             model.ProductType = "FABRIC";
-            model.Composition = string.Empty;
-            model.Const = string.Empty;
-            model.Yarn = string.Empty;
-            model.Width = string.Empty;
+            model.Composition = "test";
+            model.Const = "test";
+            model.Yarn = "test";
+            model.Width = "test";
             model.UomId = 0;
         }
 
@@ -40,10 +40,10 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             model.Name = string.Empty;
             model.UomUnit = string.Empty;
             model.ProductType = "FABRIC";
-            model.Composition = string.Empty;
-            model.Const = string.Empty;
-            model.Yarn = string.Empty;
-            model.Width = string.Empty;
+            model.Composition = "test";
+            model.Const = "test";
+            model.Yarn = "test";
+            model.Width = "test";
             model.UomId = 0;
         }
 
