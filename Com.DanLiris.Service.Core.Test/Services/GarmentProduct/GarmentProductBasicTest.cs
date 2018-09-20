@@ -26,7 +26,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             model.Code = string.Empty;
             model.Name = string.Empty;
             model.UomUnit = string.Empty;
-            model.ProductType = "FABRIC";
+            model.ProductType = "NON FABRIC";
             model.Composition = string.Empty;
             model.Const = string.Empty;
             model.Yarn = string.Empty;
