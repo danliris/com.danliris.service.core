@@ -215,6 +215,31 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     ErrorMessage = string.Concat(ErrorMessage, "Satuan tidak boleh kosong, ");
                 }
 
+                if (string.IsNullOrWhiteSpace(garmentProductVM.Composition) && garmentProductVM.ProductType.Equals("FABRIC"))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Komposisi tidak boleh kosong, ");
+                }
+
+                if (string.IsNullOrWhiteSpace(garmentProductVM.Const) && garmentProductVM.ProductType.Equals("FABRIC"))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Const tidak boleh kosong, ");
+                }
+
+                if (string.IsNullOrWhiteSpace(garmentProductVM.Width) && garmentProductVM.ProductType.Equals("FABRIC"))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Width tidak boleh kosong, ");
+                }
+
+                if (string.IsNullOrWhiteSpace(garmentProductVM.Yarn) && garmentProductVM.ProductType.Equals("FABRIC"))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Yarn tidak boleh kosong, ");
+                }
+
+                if (garmentProductVM.ProductType!="FABRIC" && garmentProductVM.ProductType!="NON FABRIC")
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Jenis produk harus FABRIC atau NON FABRIC, ");
+                }
+
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
                     /* Service Validation */
@@ -230,7 +255,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                         ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                     }
 
-                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && garmentProductVM.ProductType.Equals("NON FABRIC") && d.Composition.Equals(garmentProductVM.Composition) && d.Const.Equals(garmentProductVM.Const) && d.Yarn.Equals(garmentProductVM.Yarn) && d.Width.Equals(garmentProductVM.Width)))
+                    if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && garmentProductVM.ProductType.Equals("FABRIC") && d.Composition.Equals(garmentProductVM.Composition) && d.Const.Equals(garmentProductVM.Const) && d.Yarn.Equals(garmentProductVM.Yarn) && d.Width.Equals(garmentProductVM.Width)))
                     {
                         ErrorMessage = string.Concat(ErrorMessage, "Product dengan komposisi, const, yarn, width yang sama tidak boleh duplikat, ");
                     }
