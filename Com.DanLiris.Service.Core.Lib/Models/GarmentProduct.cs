@@ -65,7 +65,7 @@ namespace Com.DanLiris.Service.Core.Lib.Models
                 if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Name.Equals(this.Name) && this.ProductType.Equals("NON FABRIC")) > 0) /* Name Unique */
                     validationResult.Add(new ValidationResult("Name already exists", new List<string> { "name" }));
 
-                if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.ProductType.Equals("FABRIC") && r.Name.Equals("FABRIC") && r.Composition.Equals(this.Composition) && r.Const.Equals(this.Const) && r.Yarn.Equals(this.Yarn) && r.Width.Equals(this.Width)) >0)
+                if (service.DbContext.Set<GarmentProduct>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && this.ProductType.Equals("FABRIC") && this.Name.Equals("FABRIC") && r.Composition.Equals(this.Composition) && r.Const.Equals(this.Const) && r.Yarn.Equals(this.Yarn) && r.Width.Equals(this.Width)) >0)
                     validationResult.Add(new ValidationResult("Product with same Composition, Const, Yarn, Width already exists", new List<string> { "name" }));
             }
 
