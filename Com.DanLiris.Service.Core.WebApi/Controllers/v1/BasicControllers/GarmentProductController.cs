@@ -25,7 +25,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
         }
 
         [HttpGet("byId")]
-        public IActionResult GetByIds([Bind(Prefix = "garmentProductList[]")]List<string> garmentProductList)
+        public IActionResult GetByIds([Bind(Prefix = "garmentProductList[]")]List<int> garmentProductList)
         {
             try
             {
