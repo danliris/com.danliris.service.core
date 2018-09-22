@@ -2,6 +2,7 @@
 using Com.DanLiris.Service.Core.Lib;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.Services;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
 using Com.DanLiris.Service.Core.Test.DataUtils;
 using Com.Moonlay.NetCore.Lib.Service;
 using System;
@@ -112,6 +113,15 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
         public override async Task TestCreateModel_Exist()
         {
             Skip.If(true);
+        }
+
+        [Fact]
+        public async void Should_Error_Upload_CSV_Data_with_false_UOM()
+        {
+            GarmentProductViewModel Vmodel1 = await DataUtil.GetNewData4();
+            GarmentProductViewModel Vmodel2 = await DataUtil.GetNewData4();
+            var Response = Services.UploadValidate(new List<GarmentProductViewModel> { Vmodel1, Vmodel2 }, null);
+            Assert.Equal(Response.Item1, false);
         }
     }
 }
