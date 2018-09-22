@@ -228,6 +228,16 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     ErrorMessage = string.Concat(ErrorMessage, "Jenis produk harus FABRIC atau NON FABRIC, ");
                 }
 
+                if (garmentProductVM.ProductType == "FABRIC" && garmentProductVM.Name != "FABRIC")
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Nama Barang Harus FABRIC jika jenis produk FABRIC, ");
+                }
+
+                if (Data.Any(d => d != garmentProductVM && d.Composition.Equals(garmentProductVM.Composition) && d.Const.Equals(garmentProductVM.Const) && d.Yarn.Equals(garmentProductVM.Yarn) && d.Width.Equals(garmentProductVM.Width) && garmentProductVM.ProductType.Equals("FABRIC")))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Product dengan komposisi, const, yarn, width yang sama tidak boleh duplikat, ");
+                }
+
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
                     /* Service Validation */
