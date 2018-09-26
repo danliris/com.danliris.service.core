@@ -63,7 +63,8 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<GarmentProduct> GarmentProducts { get; set; }
         public DbSet<GarmentCategory> GarmentCategories { get; set; }
 		public DbSet<GarmentSupplier> GarmentSuppliers { get; set; }
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<GarmentBuyerBrand> GarmentBuyerBrands { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 

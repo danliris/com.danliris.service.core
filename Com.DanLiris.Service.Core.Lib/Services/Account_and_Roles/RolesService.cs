@@ -159,7 +159,6 @@ namespace Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles
             return DbSet.Where(d => d.Id.Equals(Id)).Include(i => i.Permissions).FirstOrDefault();
         }
 
-
         public async override Task<int> CreateModel(Role role)
         {
             //PermissionService permissionService = this.ServiceProvider.GetService<PermissionService>();
