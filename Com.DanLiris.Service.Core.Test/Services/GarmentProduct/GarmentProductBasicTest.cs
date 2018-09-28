@@ -75,6 +75,13 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
                 UomUnit = "uom",
             };
         }
+        [Fact]
+        public async void Should_Success_Get_Data()
+        {
+            GarmentProduct model = await DataUtil.GetNewData2();
+            var Response = Services.ReadModel(1, 25, "{\"Code\":\"desc\"}", null, "", "{}");
+            Assert.NotNull(Response);
+        }
 
         [Fact]
         public async void Should_Success_Get_Data_By_Id()
