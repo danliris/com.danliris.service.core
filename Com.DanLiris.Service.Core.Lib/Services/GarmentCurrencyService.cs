@@ -34,7 +34,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "Code", "Symbol"
+                    "Code"
                 };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
@@ -147,7 +147,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             DateTime Date;
             string DateString = Body.SingleOrDefault(s => s.Key.Equals(DATE_KEYWORD)).Value;
-            bool ValidDate = DateTime.TryParseExact(DateString, General.ASIA_DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out Date);
+            bool ValidDate = DateTime.TryParseExact(DateString, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out Date);
 
             List<object> ErrorList = new List<object>();
             string ErrorMessage;
@@ -232,5 +232,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             return Tuple.Create(Valid, ErrorList);
         }
-    }
+
+		public List<GarmentCurrency> GetByIds(List<int> ids)
+		{
+			return this.DbSet.Where(p => ids.Contains(p.Id) && p._IsDeleted == false)
+				.ToList();
+		}
+	}
 }

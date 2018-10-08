@@ -16,7 +16,10 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         [StringLength(100)]
         public string Code { get; set; }
 
-        public DateTime Date { get; set; }
+	//	[StringLength(100)]
+//		public string Symbol { get; set; }
+
+		public DateTime Date { get; set; }
 
         public double? Rate { get; set; }
 

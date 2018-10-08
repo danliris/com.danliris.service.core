@@ -11,9 +11,10 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181004085945_Add_Garment_Currency_Symbol")]
+    partial class Add_Garment_Currency_Symbol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1568,8 +1569,22 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<string>("BuyerAddress")
+                        .HasMaxLength(250);
+
+                    b.Property<int>("BuyerId");
+
+                    b.Property<string>("BuyerName")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Code")
                         .HasMaxLength(100);
+
+                    b.Property<string>("ColorName")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Construction")
+                        .HasMaxLength(300);
 
                     b.Property<string>("CurrencyCode");
 
@@ -1579,9 +1594,36 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DesignCode")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("DesignNumber")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Grade")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Length");
+
+                    b.Property<string>("Lot")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Name");
 
+                    b.Property<string>("OrderTypeCode")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("OrderTypeId");
+
+                    b.Property<string>("OrderTypeName")
+                        .HasMaxLength(25);
+
                     b.Property<decimal>("Price");
+
+                    b.Property<int>("ProductionOrderId");
+
+                    b.Property<string>("ProductionOrderNo")
+                        .HasMaxLength(25);
 
                     b.Property<string>("Tags")
                         .HasMaxLength(500);
@@ -1593,6 +1635,8 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
 
                     b.Property<string>("UomUnit")
                         .HasMaxLength(500);
+
+                    b.Property<int>("Weight");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -1629,94 +1673,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.ProductSPPProperty", b =>
-                {
-                    b.Property<int>("ProductId");
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("BuyerAddress")
-                        .HasMaxLength(250);
-
-                    b.Property<int>("BuyerId");
-
-                    b.Property<string>("BuyerName")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("ColorName")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Construction")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("DesignCode")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("DesignNumber")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Grade")
-                        .HasMaxLength(100);
-
-                    b.Property<int>("Id");
-
-                    b.Property<int>("Length");
-
-                    b.Property<string>("Lot")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("OrderTypeCode")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("OrderTypeId");
-
-                    b.Property<string>("OrderTypeName")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("ProductionOrderId");
-
-                    b.Property<string>("ProductionOrderNo")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("Weight");
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("ProductSPPProperties");
                 });
 
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Quality", b =>
@@ -2185,14 +2141,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", "Role")
                         .WithMany("Permissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.ProductSPPProperty", b =>
-                {
-                    b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Product", "Product")
-                        .WithOne("SPPProperties")
-                        .HasForeignKey("Com.DanLiris.Service.Core.Lib.Models.ProductSPPProperty", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

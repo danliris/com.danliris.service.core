@@ -16,6 +16,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.UploadControllers
 
         public GarmentCurrenciesUploadController(GarmentCurrencyService service) : base(service, ApiVersion)
         {
+
         }
     }
 }
