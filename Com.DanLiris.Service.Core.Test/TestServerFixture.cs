@@ -65,7 +65,8 @@ namespace Com.DanLiris.Service.Core.Test
                         .AddTransient<GarmentBuyerDataUtil>()
                         .AddTransient<GarmentBuyerBrandDataUtil>()
                         .AddTransient<GarmentSupplierDataUtil>()
-						.AddTransient<GarmentCurrencyDataUtil>();
+						.AddTransient<GarmentCurrencyDataUtil>()
+						.AddTransient<BudgetCurrencyDataUtil>();
                 })
                 .UseStartup<Startup>();
 

@@ -30,6 +30,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentCurrency
 		public GarmentCurrencyBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
 		{
 		}
+
 		public override void EmptyCreateModel(Models.GarmentCurrency model)
 		{
 			model.Code = string.Empty;

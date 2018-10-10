@@ -15,7 +15,9 @@ namespace Com.DanLiris.Service.Core.Lib
 
         public DbSet<Budget> Budgets { get; set; }
 
-        public DbSet<Buyer> Buyers { get; set; }
+		public DbSet<BudgetCurrency> BudgetCurrencies { get; set; }
+
+		public DbSet<Buyer> Buyers { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
