@@ -87,15 +87,15 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             GarmentCurrencyViewModel garmentCurrencyVM = new GarmentCurrencyViewModel();
 
-            garmentCurrencyVM._id = garmentCurrency.Id;
-            garmentCurrencyVM._deleted = garmentCurrency._IsDeleted;
-            garmentCurrencyVM._active = garmentCurrency.Active;
-            garmentCurrencyVM._createdDate = garmentCurrency._CreatedUtc;
-            garmentCurrencyVM._createdBy = garmentCurrency._CreatedBy;
-            garmentCurrencyVM._createAgent = garmentCurrency._CreatedAgent;
-            garmentCurrencyVM._updatedDate = garmentCurrency._LastModifiedUtc;
-            garmentCurrencyVM._updatedBy = garmentCurrency._LastModifiedBy;
-            garmentCurrencyVM._updateAgent = garmentCurrency._LastModifiedAgent;
+            garmentCurrencyVM.Id = garmentCurrency.Id;
+            garmentCurrencyVM._IsDeleted = garmentCurrency._IsDeleted;
+            garmentCurrencyVM.Active = garmentCurrency.Active;
+            garmentCurrencyVM._CreatedUtc = garmentCurrency._CreatedUtc;
+            garmentCurrencyVM._CreatedBy = garmentCurrency._CreatedBy;
+            garmentCurrencyVM._CreatedAgent = garmentCurrency._CreatedAgent;
+            garmentCurrencyVM._LastModifiedUtc = garmentCurrency._LastModifiedUtc;
+            garmentCurrencyVM._LastModifiedBy = garmentCurrency._LastModifiedBy;
+            garmentCurrencyVM._LastModifiedAgent = garmentCurrency._LastModifiedAgent;
             garmentCurrencyVM.code = garmentCurrency.Code;
             garmentCurrencyVM.date = garmentCurrency.Date.ToLocalTime();
             garmentCurrencyVM.rate = garmentCurrency.Rate;
@@ -107,15 +107,15 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             GarmentCurrency garmentCurrency = new GarmentCurrency();
 
-            garmentCurrency.Id = garmentCurrencyVM._id;
-            garmentCurrency._IsDeleted = garmentCurrencyVM._deleted;
-            garmentCurrency.Active = garmentCurrencyVM._active;
-            garmentCurrency._CreatedUtc = garmentCurrencyVM._createdDate;
-            garmentCurrency._CreatedBy = garmentCurrencyVM._createdBy;
-            garmentCurrency._CreatedAgent = garmentCurrencyVM._createAgent;
-            garmentCurrency._LastModifiedUtc = garmentCurrencyVM._updatedDate;
-            garmentCurrency._LastModifiedBy = garmentCurrencyVM._updatedBy;
-            garmentCurrency._LastModifiedAgent = garmentCurrencyVM._updateAgent;
+            garmentCurrency.Id = garmentCurrencyVM.Id;
+            garmentCurrency._IsDeleted = garmentCurrencyVM._IsDeleted;
+            garmentCurrency.Active = garmentCurrencyVM.Active;
+            garmentCurrency._CreatedUtc = garmentCurrencyVM._CreatedUtc;
+            garmentCurrency._CreatedBy = garmentCurrencyVM._CreatedBy;
+            garmentCurrency._CreatedAgent = garmentCurrencyVM._CreatedAgent;
+            garmentCurrency._LastModifiedUtc = garmentCurrencyVM._LastModifiedUtc;
+            garmentCurrency._LastModifiedBy = garmentCurrencyVM._LastModifiedBy;
+            garmentCurrency._LastModifiedAgent = garmentCurrencyVM._LastModifiedAgent;
             garmentCurrency.Code = garmentCurrencyVM.code;
             garmentCurrency.Date = garmentCurrencyVM.date;
             garmentCurrency.Rate = !Equals(garmentCurrencyVM.rate, null) ? Convert.ToDouble(garmentCurrencyVM.rate) : null; /* Check Null */

@@ -15,38 +15,14 @@ using System.Collections.Generic;
 namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentCurrency
 {
 	[Collection("TestFixture Collection")]
-	public class BasicTests 
+	public class BasicTests : BasicControllerTest<CoreDbContext, GarmentCurrencyService, Models.GarmentCurrency, GarmentCurrencyViewModel, GarmentCurrencyDataUtil>
 	{
-		private const string URI = "v1/master/garment-currencies";
-		protected TestServerFixture TestFixture { get; set; }
+		private const string URI = "v1/master/budget-currencies";
+		private static List<string> CreateValidationAttributes = new List<string> { };
+		private static List<string> UpdateValidationAttributes = new List<string> { };
 
-		protected HttpClient Client
+		public BasicTests(TestServerFixture fixture) : base(fixture, URI, CreateValidationAttributes, UpdateValidationAttributes)
 		{
-			get { return this.TestFixture.Client; }
-		}
-
-		public BasicTests(TestServerFixture fixture)
-		{
-			TestFixture = fixture;
-		}
-
-		public GarmentCurrencyViewModel GenerateTestModel()
-		{
-			string guid = Guid.NewGuid().ToString();
-
-			return new GarmentCurrencyViewModel()
-			{
-				code = guid,
-				date = DateTime.Now,
-				rate = guid,
-			};
-		}
-
-		[Fact]
-		public async Task Should_Success_GetById()
-		{
-			var response = await this.Client.GetAsync(string.Concat(URI, "/"));
-			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 		}
 
 
