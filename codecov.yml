@@ -2,3 +2,5 @@ ignore:
   - "Com.DanLiris.Service.Core.Lib/Migrations"
   - "Com.Danliris.Service.Core.Data.Migration"
   - "Com.Danliris.Service.Core.Mongo"
+  - "Com.DanLiris.Service.Core.WebApi/Startup.cs"
+  - "Com.DanLiris.Service.Core.WebApi/Controllers/DataMigrations"

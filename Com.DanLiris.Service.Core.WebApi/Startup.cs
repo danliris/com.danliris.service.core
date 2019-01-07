@@ -107,6 +107,8 @@ namespace Com.DanLiris.Service.Core.WebApi
             services.AddTransient<ICurrencyMigrationService, CurrencyMigrationService>();
             services.AddTransient<IProductMongoRepository, ProductMongoRepository>();
             services.AddTransient<IProductMigrationService, ProductMigrationService>();
+            services.AddTransient<ISupplierMongoRepository, SupplierMongoRepository>();
+            services.AddTransient<ISupplierMigrationService, SupplierMigrationService>();
 
             RegisterServices(services);
 

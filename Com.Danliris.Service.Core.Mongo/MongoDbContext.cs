@@ -18,5 +18,7 @@ namespace Com.Danliris.Service.Core.Mongo
         public IMongoCollection<CurrencyMongo> Currencies => _db.GetCollection<CurrencyMongo>("currencies");
 
         public IMongoCollection<ProductMongo> Products => _db.GetCollection<ProductMongo>("products");
+
+        public IMongoCollection<SupplierMongo> Suppliers => _db.GetCollection<SupplierMongo>("suppliers");
     }
 }

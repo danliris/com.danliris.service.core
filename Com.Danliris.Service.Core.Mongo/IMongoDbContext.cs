@@ -8,5 +8,6 @@ namespace Com.Danliris.Service.Core.Mongo
         IMongoCollection<UnitOfMeasurementMongo> UnitOfMeasurements { get; }
         IMongoCollection<CurrencyMongo> Currencies { get; }
         IMongoCollection<ProductMongo> Products { get; }
+        IMongoCollection<SupplierMongo> Suppliers { get; }
     }
 }
