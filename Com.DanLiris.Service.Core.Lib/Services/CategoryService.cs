@@ -88,6 +88,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             CategoryViewModel categoryVM = new CategoryViewModel();
 
             categoryVM._id = category.Id;
+            categoryVM.UId = category.UId;
             categoryVM._deleted = category._IsDeleted;
             categoryVM._active = category.Active;
             categoryVM._createdDate = category._CreatedUtc;
@@ -108,6 +109,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Category category = new Category();
 
             category.Id = categoryVM._id;
+            category.UId = categoryVM.UId;
             category._IsDeleted = categoryVM._deleted;
             category.Active = categoryVM._active;
             category._CreatedUtc = categoryVM._createdDate;

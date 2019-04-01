@@ -88,6 +88,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             holidayVM.division = new HolidayDivisionViewModel();
 
             holidayVM._id = holiday.Id;
+            holidayVM.UId = holiday.UId;
             holidayVM._deleted = holiday._IsDeleted;
             holidayVM._active = holiday.Active;
             holidayVM._createdDate = holiday._CreatedUtc;
@@ -111,6 +112,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Holiday holiday = new Holiday();
 
             holiday.Id = holidayVM._id;
+            holiday.UId = holidayVM.UId;
             holiday._IsDeleted = holidayVM._deleted;
             holiday.Active = holidayVM._active;
             holiday._CreatedUtc = holidayVM._createdDate;

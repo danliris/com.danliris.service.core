@@ -98,6 +98,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             BuyerViewModel buyerVM = new BuyerViewModel();
 
             buyerVM.Id = buyer.Id;
+            buyerVM.UId = buyer.UId;
             buyerVM._IsDeleted = buyer._IsDeleted;
             buyerVM.Active = buyer.Active;
             buyerVM._CreatedUtc = buyer._CreatedUtc;
@@ -124,6 +125,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Buyer buyer = new Buyer();
 
             buyer.Id = buyerVM.Id;
+            buyer.UId = buyerVM.UId;
             buyer._IsDeleted = buyerVM._IsDeleted;
             buyer.Active = buyerVM.Active;
             buyer._CreatedUtc = buyerVM._CreatedUtc;

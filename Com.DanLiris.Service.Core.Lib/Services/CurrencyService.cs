@@ -92,6 +92,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             CurrencyViewModel currencyVM = new CurrencyViewModel();
 
             currencyVM.Id = currency.Id;
+            currencyVM.UId = currency.UId;
             currencyVM._IsDeleted = currency._IsDeleted;
             currencyVM.Active = currency.Active;
             currencyVM._CreatedUtc = currency._CreatedUtc;
@@ -113,6 +114,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Currency currency = new Currency();
 
             currency.Id = currencyVM.Id;
+            currency.UId = currencyVM.UId;
             currency._IsDeleted = currencyVM._IsDeleted;
             currency.Active = currencyVM.Active;
             currency._CreatedUtc = currencyVM._CreatedUtc;

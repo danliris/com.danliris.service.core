@@ -99,6 +99,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			Models.BudgetCurrency budgetCurrency = new Models.BudgetCurrency();
 
 			budgetCurrency.Id = budgetCurrencyVM.Id;
+			budgetCurrency.UId = budgetCurrencyVM.UId;
 			budgetCurrency._IsDeleted = budgetCurrencyVM._IsDeleted;
 			budgetCurrency.Active = budgetCurrencyVM.Active;
 			budgetCurrency._CreatedUtc = budgetCurrencyVM._CreatedUtc;
@@ -120,6 +121,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			BudgetCurrencyViewModel budgetCurrencyVM = new BudgetCurrencyViewModel();
 
 			budgetCurrencyVM.Id = budgetCurrency.Id;
+			budgetCurrencyVM.UId = budgetCurrency.UId;
 			budgetCurrencyVM._IsDeleted = budgetCurrency._IsDeleted;
 			budgetCurrencyVM.Active = budgetCurrency.Active;
 			budgetCurrencyVM._CreatedUtc = budgetCurrency._CreatedUtc;

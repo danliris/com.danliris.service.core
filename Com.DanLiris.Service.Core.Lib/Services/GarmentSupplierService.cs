@@ -99,6 +99,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			GarmentSupplierViewModel GarmentSupplierVM = new GarmentSupplierViewModel();
 
 			GarmentSupplierVM.Id = GarmentSupplier.Id;
+			GarmentSupplierVM.UId = GarmentSupplier.UId;
 			GarmentSupplierVM._IsDeleted = GarmentSupplier._IsDeleted;
 			GarmentSupplierVM.Active = GarmentSupplier.Active;
 			GarmentSupplierVM._CreatedUtc = GarmentSupplier._CreatedUtc;
@@ -132,6 +133,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			GarmentSupplier GarmentSupplier = new GarmentSupplier();
 
 			GarmentSupplier.Id = GarmentSupplierVM.Id;
+			GarmentSupplier.UId = GarmentSupplierVM.UId;
 			GarmentSupplier._IsDeleted = GarmentSupplierVM._IsDeleted;
 			GarmentSupplier.Active = GarmentSupplierVM.Active;
 			GarmentSupplier._CreatedUtc = GarmentSupplierVM._CreatedUtc;

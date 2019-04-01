@@ -88,6 +88,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             storageVM.unit.division = new DivisionViewModel();
 
             storageVM._id = storage.Id;
+            storageVM.UId = storage.UId;
             storageVM._deleted = storage._IsDeleted;
             storageVM._active = storage.Active;
             storageVM._createdDate = storage._CreatedUtc;
@@ -111,6 +112,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Storage storage = new Storage();
 
             storage.Id = storageVM._id;
+            storage.UId = storageVM.UId;
             storage._IsDeleted = storageVM._deleted;
             storage.Active = storageVM._active;
             storage._CreatedUtc = storageVM._createdDate;

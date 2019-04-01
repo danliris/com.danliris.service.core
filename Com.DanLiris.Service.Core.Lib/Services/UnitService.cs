@@ -94,6 +94,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             unitVM.Division = new DivisionViewModel();
 
             unitVM.Id = unit.Id;
+            unitVM.UId = unit.UId;
             unitVM._IsDeleted = unit._IsDeleted;
             unitVM.Active = unit.Active;
             unitVM._CreatedUtc = unit._CreatedUtc;
@@ -117,6 +118,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Unit unit = new Unit();
 
             unit.Id = unitVM.Id;
+            unit.UId = unitVM.UId;
             unit._IsDeleted = unitVM._IsDeleted;
             unit.Active = unitVM.Active;
             unit._CreatedUtc = unitVM._CreatedUtc;

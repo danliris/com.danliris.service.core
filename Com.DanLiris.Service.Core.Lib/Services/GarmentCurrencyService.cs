@@ -88,6 +88,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentCurrencyViewModel garmentCurrencyVM = new GarmentCurrencyViewModel();
 
             garmentCurrencyVM.Id = garmentCurrency.Id;
+            garmentCurrencyVM.UId = garmentCurrency.UId;
             garmentCurrencyVM._IsDeleted = garmentCurrency._IsDeleted;
             garmentCurrencyVM.Active = garmentCurrency.Active;
             garmentCurrencyVM._CreatedUtc = garmentCurrency._CreatedUtc;
@@ -108,6 +109,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentCurrency garmentCurrency = new GarmentCurrency();
 
             garmentCurrency.Id = garmentCurrencyVM.Id;
+            garmentCurrency.UId = garmentCurrencyVM.UId;
             garmentCurrency._IsDeleted = garmentCurrencyVM._IsDeleted;
             garmentCurrency.Active = garmentCurrencyVM.Active;
             garmentCurrency._CreatedUtc = garmentCurrencyVM._CreatedUtc;

@@ -119,6 +119,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             ProductViewModel productVM = new ProductViewModel
             {
                 Id = product.Id,
+                UId = product.UId,
                 _IsDeleted = product._IsDeleted,
                 Active = product.Active,
                 _CreatedUtc = product._CreatedUtc,
@@ -175,6 +176,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Product product = new Product
             {
                 Id = productVM.Id,
+                UId = productVM.UId,
                 _IsDeleted = productVM._IsDeleted,
                 Active = productVM.Active,
                 _CreatedUtc = productVM._CreatedUtc,
@@ -505,7 +507,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Name = x.Product.Name,
                 Price = x.Product.Price,
                 Tags = x.Product.Tags,
-                Uid = x.Product.UId,
+                UId = x.Product.UId,
                 UOM = new ProductUomViewModel()
                 {
                     Id = x.Product.UomId,

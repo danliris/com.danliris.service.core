@@ -97,6 +97,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentProductViewModel garmentProductVM = new GarmentProductViewModel
             {
                 Id = garmentProduct.Id,
+                UId = garmentProduct.UId,
                 _IsDeleted = garmentProduct._IsDeleted,
                 Active = garmentProduct.Active,
                 _CreatedUtc = garmentProduct._CreatedUtc,
@@ -130,6 +131,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentProduct garmentProduct = new GarmentProduct
             {
                 Id = garmentProductVM.Id,
+                UId = garmentProductVM.UId,
                 _IsDeleted = garmentProductVM._IsDeleted,
                 Active = garmentProductVM.Active,
                 _CreatedUtc = garmentProductVM._CreatedUtc,

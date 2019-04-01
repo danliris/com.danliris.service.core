@@ -90,6 +90,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             IncomeTaxViewModel incomeTaxVM = new IncomeTaxViewModel();
 
             incomeTaxVM.Id = incomeTax.Id;
+            incomeTaxVM.UId = incomeTax.UId;
             incomeTaxVM._IsDeleted = incomeTax._IsDeleted;
             incomeTaxVM.Active = incomeTax.Active;
             incomeTaxVM._CreatedUtc = incomeTax._CreatedUtc;
@@ -110,6 +111,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             IncomeTax incomeTax = new IncomeTax();
 
             incomeTax.Id = incomeTaxVM.Id;
+            incomeTax.UId = incomeTaxVM.UId;
             incomeTax._IsDeleted = incomeTaxVM._IsDeleted;
             incomeTax.Active = incomeTaxVM.Active;
             incomeTax._CreatedUtc = incomeTaxVM._CreatedUtc;

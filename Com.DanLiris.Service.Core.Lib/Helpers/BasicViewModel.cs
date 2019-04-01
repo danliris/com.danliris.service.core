@@ -6,7 +6,7 @@ namespace Com.DanLiris.Service.Core.Lib.Helpers
 {
     public class BasicViewModel
     {
-        public string Uid { get; set; }
+        public string UId { get; set; }
         public int Id { get; set; }
         public bool _IsDeleted { get; set; }
         public bool Active { get; set; }

@@ -5,6 +5,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
     public class CategoryViewModel
     {
         public int _id { get; set; }
+        public string UId { get; set; }
 
         public bool _deleted { get; set; }
 

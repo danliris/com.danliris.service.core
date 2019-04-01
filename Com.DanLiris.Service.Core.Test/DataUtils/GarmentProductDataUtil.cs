@@ -109,7 +109,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 Const = string.Format("TEST {0}", guid),
                 Yarn = string.Format("TEST {0}", guid),
                 Width = string.Format("TEST {0}", guid),
-                Uid = guid
+                UId = guid
             };
 
             return TestData;
@@ -132,7 +132,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 Const = "test",
                 Yarn = "test",
                 Width = "test",
-                Uid = guid
+                UId = guid
             };
 
             return TestData;
