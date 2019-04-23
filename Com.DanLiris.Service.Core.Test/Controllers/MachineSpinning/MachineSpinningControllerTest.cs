@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Com.DanLiris.Service.Core.Lib.AutoMapperProfiles;
+using Com.DanLiris.Service.Core.Lib.Helpers;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.Services.MachineSpinning;
 using Com.DanLiris.Service.Core.Lib.ViewModels;
@@ -29,6 +30,27 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.MachineSpinning
         protected HttpClient Client
         {
             get { return this.TestFixture.Client; }
+        }
+
+        [Fact]
+        public void GetBlowingFiltered_WithoutException_ReturnOK()
+        {
+            var mocks = GetMocks();
+            mocks.Service.Setup(f => f.Read(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new ReadResponse<MachineSpinningModel>(new List<MachineSpinningModel>(), 0, new Dictionary<string, string>(), new List<string>()));
+            mocks.Mapper.Setup(f => f.Map<List<MachineSpinningViewModel>>(It.IsAny<List<MachineSpinningModel>>())).Returns(ViewModels);
+
+            int statusCode = GetStatusCode(GetController(mocks).GetLoaderByUnitType());
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void GetBlowingFiltered_ReadThrowException_ReturnInternalServerError()
+        {
+            var mocks = GetMocks();
+            mocks.Service.Setup(f => f.Read(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
+
+            int statusCode = GetStatusCode(GetController(mocks).GetLoaderByUnitType());
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
 
         [Fact]

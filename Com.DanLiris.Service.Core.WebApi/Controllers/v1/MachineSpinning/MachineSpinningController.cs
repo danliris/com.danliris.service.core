@@ -32,6 +32,31 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.MachineSpinning
 
         }
 
+        [HttpGet("blowing-unit-filtered")]
+        public IActionResult GetLoaderByUnitType(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")]List<string> select = null, string keyword = null, string filter = "{}")
+        {
+            try
+            {
+                Lib.Helpers.ReadResponse<MachineSpinningModel> read = Service.Read(page, size, order, select, keyword, filter);
+
+                List<MachineSpinningViewModel> dataVM = Mapper.Map<List<MachineSpinningViewModel>>(read.Data);
+
+                dataVM = dataVM.Where(x => x.Types.Any(y => y.Type.Equals("Blowing", StringComparison.OrdinalIgnoreCase))).ToList();
+
+                Dictionary<string, object> Result =
+                    new Utils.ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(Mapper, dataVM, page, size, read.Count, dataVM.Count, read.Order, read.Selected);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new Utils.ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpPost("upload")]
         public async Task<IActionResult> PostCSVFileAsync()
         {
