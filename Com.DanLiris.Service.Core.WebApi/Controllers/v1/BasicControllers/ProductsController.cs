@@ -220,9 +220,15 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
 
                 var product = await service.GetProductLoader(keyword, filter);
 
+                var result = new List<ProductViewModel>();
+                if (product.Count() > 0)
+                {
+                    result = product.Select(s => service.MapToViewModel(s)).ToList();
+                }
+
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
-                    .Ok(product);
+                    .Ok(result);
 
                 return Ok(Result);
             }

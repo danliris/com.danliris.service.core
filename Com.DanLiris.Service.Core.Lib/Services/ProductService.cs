@@ -652,7 +652,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 Id = s.Id,
                 Code = s.Code,
-                Name = s.Name
+                Name = s.Name,
+                UomId = s.UomId,
+                UomUnit = s.UomUnit
             });
 
             return query.ToListAsync();
