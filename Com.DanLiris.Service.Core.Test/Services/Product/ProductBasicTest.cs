@@ -126,6 +126,14 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
         {
             var createdData = await this.GetCreatedTestData(Service);
             var data = await Service.GetProductLoader(keyword: createdData.Code);
+            Assert.NotNull(data);
+        }
+
+        [Fact]
+        public async Task TestGetForLoader2()
+        {
+            var createdData = await this.GetCreatedTestData(Service);
+            var data = await Service.GetProductLoader();
             Assert.NotEmpty(data);
         }
     }

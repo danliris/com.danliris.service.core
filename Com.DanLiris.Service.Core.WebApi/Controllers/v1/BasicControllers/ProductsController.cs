@@ -218,12 +218,12 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
             {
                 service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
 
-                var product = await service.GetProductLoader(keyword, filter);
+                var products = await service.GetProductLoader(keyword, filter);
 
                 var result = new List<ProductViewModel>();
-                if (product.Count() > 0)
+                if (products.Count() > 0)
                 {
-                    result = product.Select(s => new ProductViewModel()
+                    result = products.Select(s => new ProductViewModel()
                     {
                         Code = s.Code,
                         Name = s.Name,

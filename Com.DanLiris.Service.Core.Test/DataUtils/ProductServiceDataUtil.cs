@@ -25,7 +25,6 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
             Data.Code = "";
             Data.Description = "desc";
             Data.Price = 0;
-            Data.Tags = null;
             return Data;
         }
 
@@ -42,7 +41,6 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 CurrencyId = 1,
                 Description = "desc",
                 Price = 0,
-                Tags = null,
                 UomId = 1,
                 UomUnit = "uom",
                 UId = guid

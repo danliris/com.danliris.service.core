@@ -639,10 +639,10 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 query = query.Where(General.BuildSearch(searchAttributes), keyword);
             }
 
-            List<string> selectedFields = new List<string>()
-            {
-                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
-            };
+            //List<string> selectedFields = new List<string>()
+            //{
+            //    "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
+            //};
 
             query = query.OrderByDescending(o => o._LastModifiedUtc);
             var totalData = query.Count();
