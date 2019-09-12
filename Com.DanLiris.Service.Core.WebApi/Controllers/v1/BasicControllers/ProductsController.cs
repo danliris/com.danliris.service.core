@@ -223,7 +223,17 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                 var result = new List<ProductViewModel>();
                 if (product.Count() > 0)
                 {
-                    result = product.Select(s => service.MapToViewModel(s)).ToList();
+                    result = product.Select(s => new ProductViewModel()
+                    {
+                        Code = s.Code,
+                        Name = s.Name,
+                        Id = s.Id,
+                        UOM = new ProductUomViewModel()
+                        {
+                            Id = s.UomId,
+                            Unit = s.UomUnit
+                        }
+                    }).ToList();
                 }
 
                 Dictionary<string, object> Result =
