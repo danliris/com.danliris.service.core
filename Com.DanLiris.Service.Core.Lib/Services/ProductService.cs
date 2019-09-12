@@ -625,6 +625,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         public Task<List<Product>> GetProductLoader(string keyword = null, string filter = "{}")
         {
             var query = DbContext.Products.AsNoTracking();
+            query = query.Where(w => string.IsNullOrWhiteSpace(w.Tags));
 
             Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
             query = ConfigureFilter(query, filterDictionary);
