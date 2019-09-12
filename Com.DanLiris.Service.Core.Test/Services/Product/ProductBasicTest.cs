@@ -120,5 +120,13 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             var data = await Service.GetProductForSpinning(createdData.Id);
             Assert.NotNull(data);
         }
+
+        [Fact]
+        public async Task TestGetForLoader()
+        {
+            var createdData = await this.GetCreatedTestData(Service);
+            var data = await Service.GetProductLoader(keyword: createdData.Code);
+            Assert.NotEmpty(data);
+        }
     }
 }

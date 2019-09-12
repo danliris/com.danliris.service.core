@@ -621,5 +621,41 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             return DbContext.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
         }
+
+        public Task<List<Product>> GetProductLoader(string keyword = null, string filter = "{}")
+        {
+            var query = DbContext.Products.AsNoTracking();
+
+            Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+            query = ConfigureFilter(query, filterDictionary);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                List<string> searchAttributes = new List<string>()
+                {
+                    "Code", "Name"
+                };
+
+                query = query.Where(General.BuildSearch(searchAttributes), keyword);
+            }
+
+            List<string> selectedFields = new List<string>()
+            {
+                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
+            };
+
+            query = query.OrderByDescending(o => o._LastModifiedUtc);
+            var totalData = query.Count();
+            query = query.Take(20);
+
+            query.Select(s => new Product()
+            {
+                Id = s.Id,
+                Code = s.Code,
+                Name = s.Name
+            });
+
+            return query.ToListAsync();
+        }
     }
 }

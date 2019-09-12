@@ -124,5 +124,12 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
+        [Fact]
+        public async Task GetForLoader()
+        {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/for-loader"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
     }
 }
