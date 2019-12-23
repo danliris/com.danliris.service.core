@@ -53,7 +53,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Id = v.Id,
                     Name = v.Name,
                     Rate = v.Rate,
-                    Description = v.Description
+                    Description = v.Description,
+                    COACodeCredit = v.COACodeCredit
                 });
 
             /* Order */
@@ -87,42 +88,46 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public IncomeTaxViewModel MapToViewModel(IncomeTax incomeTax)
         {
-            IncomeTaxViewModel incomeTaxVM = new IncomeTaxViewModel();
-
-            incomeTaxVM.Id = incomeTax.Id;
-            incomeTaxVM.UId = incomeTax.UId;
-            incomeTaxVM._IsDeleted = incomeTax._IsDeleted;
-            incomeTaxVM.Active = incomeTax.Active;
-            incomeTaxVM._CreatedUtc = incomeTax._CreatedUtc;
-            incomeTaxVM._CreatedBy = incomeTax._CreatedBy;
-            incomeTaxVM._CreatedAgent = incomeTax._CreatedAgent;
-            incomeTaxVM._LastModifiedUtc = incomeTax._LastModifiedUtc;
-            incomeTaxVM._LastModifiedBy = incomeTax._LastModifiedBy;
-            incomeTaxVM._LastModifiedAgent = incomeTax._LastModifiedAgent;
-            incomeTaxVM.name = incomeTax.Name;
-            incomeTaxVM.rate = incomeTax.Rate;
-            incomeTaxVM.description = incomeTax.Description;
+            IncomeTaxViewModel incomeTaxVM = new IncomeTaxViewModel
+            {
+                Id = incomeTax.Id,
+                UId = incomeTax.UId,
+                _IsDeleted = incomeTax._IsDeleted,
+                Active = incomeTax.Active,
+                _CreatedUtc = incomeTax._CreatedUtc,
+                _CreatedBy = incomeTax._CreatedBy,
+                _CreatedAgent = incomeTax._CreatedAgent,
+                _LastModifiedUtc = incomeTax._LastModifiedUtc,
+                _LastModifiedBy = incomeTax._LastModifiedBy,
+                _LastModifiedAgent = incomeTax._LastModifiedAgent,
+                name = incomeTax.Name,
+                rate = incomeTax.Rate,
+                description = incomeTax.Description,
+                COACodeCredit = incomeTax.COACodeCredit
+            };
 
             return incomeTaxVM;
         }
 
         public IncomeTax MapToModel(IncomeTaxViewModel incomeTaxVM)
         {
-            IncomeTax incomeTax = new IncomeTax();
-
-            incomeTax.Id = incomeTaxVM.Id;
-            incomeTax.UId = incomeTaxVM.UId;
-            incomeTax._IsDeleted = incomeTaxVM._IsDeleted;
-            incomeTax.Active = incomeTaxVM.Active;
-            incomeTax._CreatedUtc = incomeTaxVM._CreatedUtc;
-            incomeTax._CreatedBy = incomeTaxVM._CreatedBy;
-            incomeTax._CreatedAgent = incomeTaxVM._CreatedAgent;
-            incomeTax._LastModifiedUtc = incomeTaxVM._LastModifiedUtc;
-            incomeTax._LastModifiedBy = incomeTaxVM._LastModifiedBy;
-            incomeTax._LastModifiedAgent = incomeTaxVM._LastModifiedAgent;
-            incomeTax.Name = incomeTaxVM.name;
-            incomeTax.Rate = !Equals(incomeTaxVM.rate, null) ? Convert.ToDouble(incomeTaxVM.rate) : null;
-            incomeTax.Description = incomeTaxVM.description;
+            IncomeTax incomeTax = new IncomeTax
+            {
+                Id = incomeTaxVM.Id,
+                UId = incomeTaxVM.UId,
+                _IsDeleted = incomeTaxVM._IsDeleted,
+                Active = incomeTaxVM.Active,
+                _CreatedUtc = incomeTaxVM._CreatedUtc,
+                _CreatedBy = incomeTaxVM._CreatedBy,
+                _CreatedAgent = incomeTaxVM._CreatedAgent,
+                _LastModifiedUtc = incomeTaxVM._LastModifiedUtc,
+                _LastModifiedBy = incomeTaxVM._LastModifiedBy,
+                _LastModifiedAgent = incomeTaxVM._LastModifiedAgent,
+                Name = incomeTaxVM.name,
+                Rate = !Equals(incomeTaxVM.rate, null) ? Convert.ToDouble(incomeTaxVM.rate) : null,
+                Description = incomeTaxVM.description,
+                COACodeCredit = incomeTaxVM.COACodeCredit
+            };
 
             return incomeTax;
         }
