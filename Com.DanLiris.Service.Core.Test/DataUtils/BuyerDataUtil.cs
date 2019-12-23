@@ -31,7 +31,6 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
             {
                 Name = string.Format("TEST {0}", guid),
                 Id = 0,
-                UId = "UId",
                 Active = true,
                 Address = "Address",
                 Code = string.Format("TEST {0}", guid),
