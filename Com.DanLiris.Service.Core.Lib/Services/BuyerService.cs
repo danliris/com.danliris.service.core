@@ -46,7 +46,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "Address", "City", "Country", "Contact", "Tempo", "_LastModifiedUtc", "Type", "NPWP"
+                "Id", "Code", "Name", "Address", "City", "Country", "Contact", "Tempo", "_LastModifiedUtc", "Type"
             };
 
             Query = Query
@@ -61,7 +61,6 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Contact = b.Contact,
                     Tempo = b.Tempo,
                     Type = b.Type,
-                    NPWP = b. NPWP,
                     _LastModifiedUtc = b._LastModifiedUtc
                 });
 
