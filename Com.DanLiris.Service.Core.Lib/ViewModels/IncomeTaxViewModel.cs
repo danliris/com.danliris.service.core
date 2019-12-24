@@ -13,5 +13,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public dynamic rate { get; set; }
 
         public string description { get; set; }
+
+        public string COACodeCredit { get; set; }
     }
 }
