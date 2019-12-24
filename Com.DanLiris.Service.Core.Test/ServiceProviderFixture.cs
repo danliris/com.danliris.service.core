@@ -34,13 +34,8 @@ namespace Com.DanLiris.Service.Core.Test
                 {
                     options.UseSqlServer(connectionString);
                 }, ServiceLifetime.Transient)
-<<<<<<< HEAD
-                .AddTransient<TermOfPaymentService>(provider => new TermOfPaymentService(provider))
-                .AddTransient<TermOfPaymentDataUtil>()
-=======
                 .AddTransient<DesignMotiveService>(provider => new DesignMotiveService(provider))
                 .AddTransient<DesignMotiveDataUtil>()
->>>>>>> parent of 5e26cb7a... Revert "Design Motive Test"
                 .AddTransient<HolidayService>(provider => new HolidayService(provider))
                 .AddTransient<HolidayDataUtil>()
                 .AddTransient<DesignMotiveService>(provider => new DesignMotiveService(provider))
