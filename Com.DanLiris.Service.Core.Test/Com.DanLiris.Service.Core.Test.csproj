@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\OrderType\**" />
+    <EmbeddedResource Remove="Controllers\OrderType\**" />
+    <None Remove="Controllers\OrderType\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,10 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Com.DanLiris.Service.Core.Lib\Com.DanLiris.Service.Core.Lib.csproj" />
     <ProjectReference Include="..\Com.DanLiris.Service.Core.WebApi\Com.DanLiris.Service.Core.WebApi.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\OrderType\" />
   </ItemGroup>
 
 </Project>
