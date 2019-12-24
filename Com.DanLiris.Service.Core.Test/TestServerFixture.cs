@@ -52,7 +52,11 @@ namespace Com.DanLiris.Service.Core.Test
                 .ConfigureServices(services =>
                 {
                     services
+<<<<<<< HEAD
                         .AddTransient<TermOfPaymentDataUtil>()
+=======
+                        .AddTransient<DesignMotiveDataUtil>()
+>>>>>>> parent of 5e26cb7a... Revert "Design Motive Test"
                         .AddTransient<HolidayDataUtil>()
                         .AddTransient<BuyerDataUtil>()
                         .AddTransient<BudgetServiceDataUtil>()

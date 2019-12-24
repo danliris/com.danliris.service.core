@@ -1,4 +1,6 @@
-﻿using Com.DanLiris.Service.Core.Lib.Helpers;
+﻿using Com.DanLiris.Service.Core.Lib;
+using Com.DanLiris.Service.Core.Lib.Helpers;
+using Com.DanLiris.Service.Core.Lib.Services;
 using Com.Moonlay.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,6 +16,9 @@ namespace Com.DanLiris.Service.Core.Test.Helpers
         where TService : BasicService<TDbContext, TModel>
         where TModel : StandardEntity, IValidatableObject
     {
+        private CoreDbContext dbContext;
+        private BuyerService service;
+
         public TDbContext DbContext { get; set; }
         public TService Service { get; set; }
 
@@ -22,6 +27,12 @@ namespace Com.DanLiris.Service.Core.Test.Helpers
             DbContext = dbContext;
             Service = service;
             Service.Username = "Unit Test";
+        }
+
+        protected BasicDataUtil(CoreDbContext dbContext, BuyerService service)
+        {
+            this.dbContext = dbContext;
+            this.service = service;
         }
 
         public abstract TModel GetNewData();
