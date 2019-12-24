@@ -1460,8 +1460,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("COACodeCredit");
-
                     b.Property<string>("Description");
 
                     b.Property<string>("Name")

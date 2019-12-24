@@ -21,7 +21,6 @@ namespace Com.DanLiris.Service.Core.Test.Services.BuyerTest
             model.Name = string.Empty;
             model.Country = string.Empty;
             model.Type = string.Empty;
-            model.NPWP = string.Empty;
             model.Tempo = -1;
         }
 
@@ -31,7 +30,6 @@ namespace Com.DanLiris.Service.Core.Test.Services.BuyerTest
             model.Name = string.Empty;
             model.Country = string.Empty;
             model.Type = string.Empty;
-            model.NPWP = string.Empty;
             model.Tempo = -1;
         }
 
@@ -45,7 +43,6 @@ namespace Com.DanLiris.Service.Core.Test.Services.BuyerTest
                 Name = string.Format("BuyerName {0}", guid),
                 Country = string.Format("BuyerCountry {0}", guid),
                 Type = string.Format("BuyerType {0}", guid),
-                NPWP = string.Format("BuyerNPWP {0}", guid),
             };
         }
     }
