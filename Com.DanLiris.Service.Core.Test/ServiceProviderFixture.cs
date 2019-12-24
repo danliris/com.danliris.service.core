@@ -37,7 +37,6 @@ namespace Com.DanLiris.Service.Core.Test
                 .AddTransient<HolidayService>(provider => new HolidayService(provider))
                 .AddTransient<HolidayDataUtil>()
                 .AddTransient<DesignMotiveService>(provider => new DesignMotiveService(provider))
-                .AddTransient<DesignMotiveDataUtil>()
                 .AddTransient<BudgetService>(provider => new BudgetService(provider))
                 .AddTransient<BudgetServiceDataUtil>()
                 .AddTransient<ComodityService>(provider => new ComodityService(provider))
