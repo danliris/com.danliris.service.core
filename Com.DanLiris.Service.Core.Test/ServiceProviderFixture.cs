@@ -55,6 +55,7 @@ namespace Com.DanLiris.Service.Core.Test
                 .AddTransient<StandardTestsService>(provider => new StandardTestsService(provider))
                 .AddTransient<StandardTestDataUtil>()
                 .AddTransient<DivisionService>(provider => new DivisionService(provider))
+                .AddTransient<DivisionDataUtil>()
                 .AddTransient<ProductService>(provider => new ProductService(provider))
                 .AddTransient<ProductServiceDataUtil>()
                 .AddTransient<AccountBankDataUtil>()

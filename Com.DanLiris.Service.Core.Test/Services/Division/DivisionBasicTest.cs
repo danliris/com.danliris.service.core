@@ -7,38 +7,40 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Com.DanLiris.Service.Core.Test.Services.Division
+namespace Com.DanLiris.Service.Core.Test.Services.DivisionTest
 {
     [Collection("ServiceProviderFixture Collection")]
-    public class DivisionBasicTest : BasicServiceTest<CoreDbContext, DivisionService, Lib.Models.Division>
+    public class DivisionBasicTest : BasicServiceTest<CoreDbContext, DivisionService, Division>
     {
-        private static readonly string[] createAttrAssertions = { "Name" };
-        private static readonly string[] updateAttrAssertions = { "Name" };
-        private static readonly string[] existAttrCriteria = { "Name" };
+        private static readonly string[] createAttrAssertions = { "Name", "Code", "COACode", "Description", "UId" };
+        private static readonly string[] updateAttrAssertions = { "Name", "Code", "COACode", "Description", "UId" };
+        private static readonly string[] existAttrCriteria = { "Code" };
 
         public DivisionBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
         }
 
-        public override void EmptyCreateModel(Lib.Models.Division model)
+        public override void EmptyCreateModel(Division model)
         {
             model.Code = string.Empty;
             model.Name = string.Empty;
         }
 
-        public override void EmptyUpdateModel(Lib.Models.Division model)
+        public override void EmptyUpdateModel(Division model)
         {
             model.Code = string.Empty;
             model.Name = string.Empty;
         }
 
-        public override Lib.Models.Division GenerateTestModel()
+        public override Division GenerateTestModel()
         {
             string guid = Guid.NewGuid().ToString();
 
-            return new Lib.Models.Division()
+            return new Division()
             {
-                Name = String.Concat("TEST DIVISION ", guid),
+                Name = string.Format("Division {0}", guid),
+                Code = string.Format("Division {0}", guid),
+                
             };
         }
     }
