@@ -81,7 +81,8 @@ namespace Com.DanLiris.Service.Core.Test
                         .AddTransient<SupplierDataUtil>()
                         .AddTransient<CurrencyDataUtil>()
                         .AddTransient<CategoryDataUtil>()
-                        .AddTransient<SizeDataUtil>();
+                        .AddTransient<SizeDataUtil>()
+                        .AddTransient<TermOfPaymentDataUtil>();
                 })
                 .UseStartup<Startup>();
 

@@ -34,6 +34,8 @@ namespace Com.DanLiris.Service.Core.Test
                 {
                     options.UseSqlServer(connectionString);
                 }, ServiceLifetime.Transient)
+                .AddTransient<TermOfPaymentService>(provider => new TermOfPaymentService(provider))
+                .AddTransient<TermOfPaymentDataUtil>()
                 .AddTransient<HolidayService>(provider => new HolidayService(provider))
                 .AddTransient<HolidayDataUtil>()
                 .AddTransient<DesignMotiveService>(provider => new DesignMotiveService(provider))
