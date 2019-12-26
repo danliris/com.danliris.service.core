@@ -12,7 +12,7 @@ using Xunit;
 namespace Com.DanLiris.Service.Core.Test.Controllers.TermOfPaymentTest
 {
     [Collection("TestFixture Collection")]
-    public class TermOfPaymentBasicTest : BasicControllerTest<CoreDbContext, TermOfPaymentService, TermOfPayment, TermOfPaymentViewModel, TermOfPaymentDataUtil>
+    public class TermOfPaymentBasicTest : BasicControllerTestOldVM<CoreDbContext, TermOfPaymentService, TermOfPayment, TermOfPaymentViewModel, TermOfPaymentDataUtil>
     {
         private const string URI = "v1/master/term-of-payments";
 
@@ -21,7 +21,6 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.TermOfPaymentTest
 
         public TermOfPaymentBasicTest(TestServerFixture fixture) : base(fixture, URI, CreateValidationAttributes, UpdateValidationAttributes)
         {
-
         }
 
     }
