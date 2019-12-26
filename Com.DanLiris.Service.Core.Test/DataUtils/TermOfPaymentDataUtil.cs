@@ -25,11 +25,11 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
         public override TermOfPayment GetNewData()
         {
             string guid = Guid.NewGuid().ToString();
-
             return new TermOfPayment()
             {
                 Code = string.Format("TEST {0})",guid),
                 Name = string.Format("Test {0}", guid),
+                IsExport = false,
             };
         }
 
