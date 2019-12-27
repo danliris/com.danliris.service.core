@@ -41,6 +41,8 @@ namespace Com.DanLiris.Service.Core.Test
                 .AddTransient<BudgetServiceDataUtil>()
                 .AddTransient<ComodityService>(provider => new ComodityService(provider))
                 .AddTransient<ComodityServiceDataUtil>()
+                .AddTransient<DivisionDataUtil>()
+                .AddTransient<DivisionService>(provider => new DivisionService(provider))
                 .AddTransient<QualityService>(provider => new QualityService(provider))
                 .AddTransient<QualityServiceDataUtil>()
                 .AddTransient<YarnMaterialService>(provider => new YarnMaterialService(provider))
