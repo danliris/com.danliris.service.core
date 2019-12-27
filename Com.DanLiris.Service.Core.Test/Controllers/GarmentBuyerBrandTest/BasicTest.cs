@@ -25,5 +25,12 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentBuyerBrandTest
         public BasicTests(TestServerFixture fixture) : base(fixture, URI, CreateValidationAttributes, UpdateValidationAttributes)
         {
         }
+
+        [Fact]
+        public async Task GetByName()
+        {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }
