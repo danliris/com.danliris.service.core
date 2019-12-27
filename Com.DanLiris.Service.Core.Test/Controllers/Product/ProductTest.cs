@@ -71,20 +71,6 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
         }
 
         [Fact]
-        public async Task GetByIds()
-        {
-            var response = await this.Client.GetAsync(string.Concat(URI, "/"));
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task GetByProductName()
-        {
-            var response = await this.Client.GetAsync(string.Concat(URI, "/"));
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-
-        [Fact]
         public async Task GetByIdForSpinning()
         {
             var Model = await DataUtil.GetTestDataAsync();
@@ -129,6 +115,20 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
         public async Task GetSimple()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/simple"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetByIds()
+        {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/byId"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetByProductName()
+        {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/by-name"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
