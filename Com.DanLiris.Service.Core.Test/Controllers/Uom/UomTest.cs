@@ -5,6 +5,7 @@ using Com.DanLiris.Service.Core.Test.DataUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -52,6 +53,8 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.UomTest
         [Fact]
         public async Task GetSimple()
         {
+            List<Uom> Data = Service.GetSimple();
+            var result = Data.Select(x => Service.MapToViewModel(x));
             var response = await this.Client.GetAsync(string.Concat(URI, "/simple"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
