@@ -71,7 +71,14 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
         }
 
         [Fact]
-        public async Task GetById()
+        public async Task GetByIds()
+        {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetByProductName()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
