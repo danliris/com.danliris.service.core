@@ -1,4 +1,7 @@
-﻿using Com.DanLiris.Service.Core.Lib.ViewModels;
+﻿using Com.DanLiris.Service.Core.Lib.Models;
+using Com.DanLiris.Service.Core.Lib.Services;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.DanLiris.Service.Core.Test.DataUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Com.DanLiris.Service.Core.Test.Controllers.Uom
+namespace Com.DanLiris.Service.Core.Test.Controllers.UomTest
 {
     [Collection("TestFixture Collection")]
     public class UomTest
@@ -19,6 +22,16 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Uom
         protected HttpClient Client
         {
             get { return this.TestFixture.Client; }
+        }
+
+        protected UomService Service
+        {
+            get { return (UomService)this.TestFixture.Service.GetService(typeof(UomService)); }
+        }
+
+        protected UomServiceDataUtil DataUtil
+        {
+            get { return (UomServiceDataUtil)this.TestFixture.Service.GetService(typeof(UomServiceDataUtil)); }
         }
 
         public UomTest(TestServerFixture fixture)
@@ -44,12 +57,20 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Uom
         }
 
         [Fact]
-        public async Task Post()
+        public async Task GetById()
         {
-            UomViewModel uomViewModel = GenerateTestModel();
-            var response = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(uomViewModel).ToString(), Encoding.UTF8, "application/json"));
+            var response = await this.Client.GetAsync(string.Concat(URI, "/"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
 
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        [Fact]
+        public async Task Delete()
+        {
+            Uom uom = await DataUtil.GetTestDataAsync();
+            UomViewModel VM = Service.MapToViewModel(uom);
+            var response = await this.Client.DeleteAsync(string.Concat(URI, "/", VM.Id));
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
     }
 }
