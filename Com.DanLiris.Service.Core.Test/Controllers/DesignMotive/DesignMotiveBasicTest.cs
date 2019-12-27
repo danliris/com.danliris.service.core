@@ -14,7 +14,7 @@ using Xunit;
 namespace Com.DanLiris.Service.Core.Test.Controllers.DesignMotiveTest
 {
     [Collection("TestFixture Collection")]
-    class DesignMotiveBasicTest
+    public class DesignMotiveBasicTest
     {
         private const string URI = "v1/master/design-motives";
 
@@ -74,7 +74,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.DesignMotiveTest
         public async Task Post_Failed_Bad_Request()
         {
             DesignMotiveViewModel VM = GenerateTestModel();
-            VM.Code = null;
+            VM.Name = null;
             var response = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(VM).ToString(), Encoding.UTF8, "application/json"));
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
