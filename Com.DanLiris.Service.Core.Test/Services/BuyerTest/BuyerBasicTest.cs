@@ -4,6 +4,7 @@ using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.Services;
 using System;
 using Xunit;
+
 namespace Com.DanLiris.Service.Core.Test.Services.BuyerTest
 {
     [Collection("ServiceProviderFixture Collection")]
@@ -12,9 +13,11 @@ namespace Com.DanLiris.Service.Core.Test.Services.BuyerTest
         private static readonly string[] createAttrAssertions = { "Name", "Code", "Country", "Type", "Tempo" };
         private static readonly string[] updateAttrAssertions = { "Name", "Code", "Country", "Type", "Tempo" };
         private static readonly string[] existAttrCriteria = { "Code" };
+
         public BuyerBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
         }
+
         public override void EmptyCreateModel(Buyer model)
         {
             model.Code = string.Empty;
