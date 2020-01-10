@@ -29,11 +29,29 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Upload
         public async Task Should_Success_Upload_CSV()
         {
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
+            string guid = Guid.NewGuid().ToString();
+            string header = "Kode,Simbol,Rate,Keterangan";
+            string content = $"{guid},Simbol,1,Keterangan {guid}";
 
-            var payload = Encoding.UTF8.GetBytes("Kode,Simbol,Rate,Keterangan");
+            var payload = Encoding.UTF8.GetBytes(header + "\n" + content);
             multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
             var response = await Client.PostAsync(URI, multiContent);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Success_Upload_CSV_Using_Memory_Stream()
+        {
+            MultipartFormDataContent multiContent = new MultipartFormDataContent();
+            string guid = Guid.NewGuid().ToString();
+            string header = "Kode,Simbol,Rate,Keterangan";
+            string content1 = "Kode,Simbol,Rate,Keterangan";
+            string content2 = "Kode,Simbol,Rate,Keterangan";
+
+            var payload = Encoding.UTF8.GetBytes(header + "\n" + content1 + "\n" + content2);
+            multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
+            var response = await Client.PostAsync(URI, multiContent);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
