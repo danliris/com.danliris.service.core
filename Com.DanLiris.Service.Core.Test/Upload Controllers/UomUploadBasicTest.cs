@@ -24,15 +24,33 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Upload
         {
             get { return this.TestFixture.Client; }
         }
+
         [Fact]
         public async Task Should_Success_Upload_CSV()
         {
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
+            string guid = Guid.NewGuid().ToString();
+            string header = "Unit";
+            string content = guid;
 
-            var payload = Encoding.UTF8.GetBytes("Unit");
+            var payload = Encoding.UTF8.GetBytes(header + "\n" + content);
             multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
             var response = await Client.PostAsync(URI, multiContent);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Success_Upload_CSV_Using_Memory_Stream()
+        {
+            MultipartFormDataContent multiContent = new MultipartFormDataContent();
+            string header = "Unit";
+            string content1 = "Unit";
+            string content2 = "Unit";
+
+            var payload = Encoding.UTF8.GetBytes(header + "\n" + content1 + "\n" + content2);
+            multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
+            var response = await Client.PostAsync(URI, multiContent);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
