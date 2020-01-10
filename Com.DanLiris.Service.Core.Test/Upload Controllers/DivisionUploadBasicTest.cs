@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -11,28 +9,30 @@ using Xunit;
 namespace Com.DanLiris.Service.Core.Test.Controllers.Upload
 {
     [Collection("TestFixture Collection")]
-    public class BudgetCurrencyUploadTest
+    public class DivisionUploadBasicTest
     {
-        private const string URI = "v1/master/upload-budget-currencies";
+        private const string URI = "v1/master/upload-divisions";
 
         protected TestServerFixture TestFixture { get; set; }
-
-        public BudgetCurrencyUploadTest(TestServerFixture fixture)
-        {
-            TestFixture = fixture;
-        }
 
         protected HttpClient Client
         {
             get { return this.TestFixture.Client; }
         }
 
+        public DivisionUploadBasicTest(TestServerFixture fixture)
+        {
+            TestFixture = fixture;
+        }
+
         [Fact]
         public async Task Should_Success_Upload_CSV()
         {
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
+            string header = "Nama,Deskripsi";
+            string content = "Ini Nama,Ini Deskripsi";
 
-            var payload = Encoding.UTF8.GetBytes("Mata Uang,Kurs,Keterangan");
+            var payload = Encoding.UTF8.GetBytes(header+"\n"+content);
             multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
             var response = await Client.PostAsync(URI, multiContent);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
