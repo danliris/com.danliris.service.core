@@ -29,8 +29,10 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Upload
         public async Task Should_Success_Upload_CSV()
         {
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
+
+            string guid = Guid.NewGuid().ToString();
             string header = "Nama,Deskripsi";
-            string content = "Ini Nama,Ini Deskripsi";
+            string content = $"Name {guid},Ini Deskripsi";
 
             var payload = Encoding.UTF8.GetBytes(header+"\n"+content);
             multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
