@@ -80,6 +80,14 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentProduct
         }
 
         [Fact]
+        public async Task Should_Exception_GetById()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/byId"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        [Fact]
         public async Task GetByName()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/byName"));
@@ -87,37 +95,70 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentProduct
         }
 
         [Fact]
-        public async Task Post()
+        public async Task Should_Exception_GetByName()
         {
-
-            GarmentProductViewModel garmentProductViewModel = GenerateTestModel();
-            var response = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(garmentProductViewModel).ToString(), Encoding.UTF8, "application/json"));
-
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/byName"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
+
         [Fact]
         public async Task GetdistinctComposition()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-description"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Fact]
+        public async Task Should_Exception_GetdistinctComposition()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-description"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
         [Fact]
         public async Task GetdistinctConst()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-const"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Fact]
+        public async Task Should_Exception_GetdistinctConst()
+        {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-const"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
         [Fact]
         public async Task GetdistinctYarn()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-yarn"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Fact]
+        public async Task Should_Exception_GetdistinctYarn()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-yarn"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
         [Fact]
         public async Task GetdistinctWidth()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-width"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Exception_GetdistinctWidth()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-width"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
     }
 }
