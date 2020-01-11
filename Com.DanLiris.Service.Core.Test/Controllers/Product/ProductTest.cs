@@ -100,6 +100,15 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
         }
 
         [Fact]
+        public async Task GetByIdForSpinning_BadRequest()
+        {
+            var Model = await DataUtil.GetTestDataAsync();
+            Model.Id = -1;
+            var response = await this.Client.GetAsync(string.Concat(URI, "/spinning/", Model.Id));
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
         public async Task Post()
         {
 
@@ -119,10 +128,37 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
         }
 
         [Fact]
+        public async Task Should_Exception_PostPacking()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            string content = GeneratePackingModel();
+            var response = await this.Client.PostAsync(URI + "/packing/create", new StringContent(content, Encoding.UTF8, "application/json"));
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Failed_PostPacking()
+        {
+            string content = "";
+            var response = await this.Client.PostAsync(URI + "/packing/create", new StringContent(content, Encoding.UTF8, "application/json"));
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        [Fact]
         public async Task GetByProductionOrderNo()
         {
             var response = await this.Client.GetAsync(string.Concat(URI, "/byProductionOrderNo"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Exception_GetByProductionOrderNo()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/byProductionOrderNo"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
         [Fact]
@@ -140,8 +176,24 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Product
         }
 
         [Fact]
+        public async Task Should_Exception_GetById()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/byId"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        [Fact]
         public async Task Should_Success_GetByName()
         {
+            var response = await this.Client.GetAsync(string.Concat(URI, "/by-name"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Exception_GetByName()
+        {
+            Client.DefaultRequestHeaders.Clear();
             var response = await this.Client.GetAsync(string.Concat(URI, "/by-name"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }

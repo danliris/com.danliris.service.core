@@ -37,5 +37,13 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.BudgetCurrencyTest
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Should_Exception_GetByCode()
+        {
+            Client.DefaultRequestHeaders.Clear();
+            var response = await this.Client.GetAsync(string.Concat(URI, "/by-code"));
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
     }
 }
