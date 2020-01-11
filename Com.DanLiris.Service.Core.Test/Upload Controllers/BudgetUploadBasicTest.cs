@@ -31,7 +31,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.Upload
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
             string guid = Guid.NewGuid().ToString();
             string header = "Kode,Nama";
-            string content = $"Kode {guid},Name";
+            string content = $"Kode {guid},Name {guid}";
 
             var payload = Encoding.UTF8.GetBytes(header + "\n" + content);
             multiContent.Add(new ByteArrayContent(payload), "files", "data.csv"); // name must be "files"
