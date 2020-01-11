@@ -127,6 +127,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentProduct
         [Fact]
         public async Task Should_Exception_GetdistinctConst()
         {
+            Client.DefaultRequestHeaders.Clear();
             var response = await this.Client.GetAsync(string.Concat(URI, "/distinct-product-const"));
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
