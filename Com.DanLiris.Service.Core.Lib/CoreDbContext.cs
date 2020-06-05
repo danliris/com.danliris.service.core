@@ -74,6 +74,8 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<MappingCategory> MappingCategories { get; set; }
         public DbSet<SizeModel> Sizes { get; set; }
         public DbSet<GarmentLeftoverWarehouseBuyerModel> GarmentLeftoverWarehouseBuyers { get; set; }
+        public DbSet<ShippingStaff> ShippingStaffs { get; set; }
+        public DbSet<FabricType> FabricTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
