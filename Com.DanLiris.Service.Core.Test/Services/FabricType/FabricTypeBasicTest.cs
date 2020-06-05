@@ -39,12 +39,12 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             };
         }
         
-        [Fact]
-        public void TestSimple()
-        {
-            var data = Service.GetSimple();
-            Assert.NotNull(data);
-        }
+        //[Fact]
+        //public void TestSimple()
+        //{
+        //    var data = Service.GetSimple();
+        //    Assert.NotNull(data);
+        //}
         
     }
 }
