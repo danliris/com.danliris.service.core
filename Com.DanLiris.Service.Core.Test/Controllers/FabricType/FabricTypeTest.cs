@@ -14,7 +14,7 @@ using Xunit;
 namespace Com.DanLiris.Service.Core.Test.Controllers.FabricTypeTest
 {
     [Collection("TestFixture Collection")]
-    public class ShippingGuyTest
+    public class FabricTypeTest
     {
         private const string URI = "v1/master/fabrictypes";
         protected TestServerFixture TestFixture { get; set; }
@@ -24,7 +24,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.FabricTypeTest
             get { return this.TestFixture.Client; }
         }
 
-        public ShippingGuyTest(TestServerFixture fixture)
+        public FabricTypeTest(TestServerFixture fixture)
         {
             TestFixture = fixture;
         }
