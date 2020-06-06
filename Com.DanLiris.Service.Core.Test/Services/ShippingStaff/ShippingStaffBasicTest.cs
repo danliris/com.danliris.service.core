@@ -38,13 +38,13 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
                 Name = string.Format("TEST {0}", guid),
             };
         }
-        
-        //[Fact]
-        //public void TestSimple()
-        //{
-        //    var data = Service.GetSimple();
-        //    Assert.NotNull(data);
-        //}
-        
+
+        [Fact]
+        public void TestSimple()
+        {
+            var data = Service.GetSimple();
+            Assert.NotNull(data);
+        }
+
     }
 }
