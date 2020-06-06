@@ -95,8 +95,8 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.ShippingStaffTest
         [Fact]
         public async Task Delete()
         {
-            ShippingStaff shipingstaff = await DataUtil.GetTestDataAsync();
-            ShippingStaffViewModel VM = Service.MapToViewModel(shipingstaff);
+            ShippingStaff shippingstaff = await DataUtil.GetTestDataAsync();
+            ShippingStaffViewModel VM = Service.MapToViewModel(shippingstaff);
             var response = await this.Client.DeleteAsync(string.Concat(URI, "/", VM.Id));
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -105,8 +105,8 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.ShippingStaffTest
         [Fact]
         public async Task Update()
         {
-            ShippingStaff shipingstaff = await DataUtil.GetTestDataAsync();
-            ShippingStaffViewModel VM = Service.MapToViewModel(shipingstaff);
+            ShippingStaff shippingstaff = await DataUtil.GetTestDataAsync();
+            ShippingStaffViewModel VM = Service.MapToViewModel(shippingstaff);
             var response = await this.Client.PutAsync(string.Concat(URI, "/", VM.Id), new StringContent(JsonConvert.SerializeObject(VM).ToString(), Encoding.UTF8, "application/json"));
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
