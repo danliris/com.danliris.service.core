@@ -11,8 +11,8 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20200723045218_Alter-Column-Garment-Category-Category-Type")]
-    partial class AlterColumnGarmentCategoryCategoryType
+    [Migration("20200723054614_Alter-Garment-Categories")]
+    partial class AlterGarmentCategories
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

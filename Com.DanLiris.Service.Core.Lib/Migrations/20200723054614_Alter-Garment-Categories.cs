@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
-    public partial class AlterColumnGarmentCategoryCategoryType : Migration
+    public partial class AlterGarmentCategories : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
