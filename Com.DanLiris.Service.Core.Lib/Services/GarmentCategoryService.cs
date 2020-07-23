@@ -114,11 +114,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 garmentCategory.UomId = categoryVM.UOM.Id;
                 garmentCategory.UomUnit = categoryVM.UOM.Unit;
             }
-            else
-            {
-                garmentCategory.UomId = null;
-                garmentCategory.UomUnit = null;
-            }
+            //else
+            // {
+            //     garmentCategory.UomId = null;
+            //    garmentCategory.UomUnit = null;
+            //}
             garmentCategory.Name = categoryVM.name;
             garmentCategory.Code = categoryVM.code;
             garmentCategory.CodeRequirement = categoryVM.codeRequirement;
@@ -136,6 +136,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         public GarmentCategory GetByName(string name)
         {
             return this.DbSet.FirstOrDefault(p => (p.Name == name) && p._IsDeleted == false);
+
         }
 
         //public override void OnCreating(GarmentCategory model)
