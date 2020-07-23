@@ -24,8 +24,9 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             Data.name = "";
             Data.codeRequirement = "";
+            Data.categoryType = "";
             Data.code = "";
-            Data.uom = null;
+            Data.UOM = null;
             return Data;
         }
 
@@ -34,11 +35,68 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
             string guid = Guid.NewGuid().ToString();
             GarmentCategory TestData = new GarmentCategory
             {
-                Name = "TEST",
-                CodeRequirement = "TEST",
-                UomId=1,
+                Name = string.Format("TEST {0}", guid),
+                Active = true,
+                CodeRequirement = string.Format("TEST {0}", guid),
+                CategoryType = string.Format("TEST {0}", guid),
+                UomId =1,
                 UomUnit = "TEST",
-                Code = guid
+                Code = string.Format("TEST {0}", guid),
+                UId = guid
+            };
+
+            return TestData;
+        }
+
+        public GarmentCategory GetNewData2()
+        {
+            string guid = Guid.NewGuid().ToString();
+            GarmentCategory TestData = new GarmentCategory
+            {
+                Name = string.Format("TEST {0}", guid),
+                Active = true,
+                CodeRequirement = string.Format("TEST {0}", guid),
+                CategoryType = string.Format("TEST {0}", guid),
+                UomId = 1,
+                UomUnit = "TEST",
+                Code = string.Format("TEST {0}", guid),
+                UId = guid
+            };
+
+            return TestData;
+        }
+
+        public GarmentCategory GetNewData3()
+        {
+            string guid = Guid.NewGuid().ToString();
+            GarmentCategory TestData = new GarmentCategory
+            {
+                Name = string.Format("TEST {0}", guid),
+                Active = true,
+                CodeRequirement = string.Format("TEST {0}", guid),
+                CategoryType = string.Format("TEST {0}", guid),
+                UomId = 1,
+                UomUnit = "TEST",
+                Code = string.Format("TEST {0}", guid),
+                UId = guid
+            };
+
+            return TestData;
+        }
+
+        public GarmentCategory GetNewData4()
+        {
+            string guid = Guid.NewGuid().ToString();
+            GarmentCategory TestData = new GarmentCategory
+            {
+                Name = string.Format("TEST {0}", guid),
+                Active = true,
+                CodeRequirement = string.Format("TEST {0}", guid),
+                CategoryType = string.Format("TEST {0}", guid),
+                UomId = 1,
+                UomUnit = "TEST",
+                Code = string.Format("TEST {0}", guid),
+                UId = guid
             };
 
             return TestData;
