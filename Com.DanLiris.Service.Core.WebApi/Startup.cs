@@ -31,6 +31,9 @@ using Com.DanLiris.Service.Core.Lib.Services.GarmentInsurance;
 using Com.DanLiris.Service.Core.Lib.Services.BICurrency;
 using Com.DanLiris.Service.Core.Lib.Services.AccountingCategory;
 using Com.DanLiris.Service.Core.Lib.Services.AccountingUnit;
+using StackExchange.Redis;
+using System;
+using Com.DanLiris.Service.Core.Lib.Helpers;
 
 namespace Com.DanLiris.Service.Core.WebApi
 {
@@ -58,6 +61,7 @@ namespace Com.DanLiris.Service.Core.WebApi
             string authority = Configuration["Authority"];
             string clientId = Configuration["ClientId"];
             string secret = Configuration["Secret"];
+            string redisConnString = Configuration.GetConnectionString("Redis");
 
             services
                 .AddDbContext<CoreDbContext>(options => options.UseSqlServer(connectionString))
@@ -117,8 +121,9 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddScoped<RolesService>()
                 .AddScoped<SizeService>();
 
-
             RegisterServices(services);
+
+            services.AddSingleton<IRedisCache>(prov => new RedisCache(redisConnString));
 
             services
                 .AddApiVersioning(options =>
@@ -221,5 +226,6 @@ namespace Com.DanLiris.Service.Core.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
         }
+
     }
 }

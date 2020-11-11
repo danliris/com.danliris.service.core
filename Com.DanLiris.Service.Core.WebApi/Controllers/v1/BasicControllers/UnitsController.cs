@@ -7,6 +7,7 @@ using Com.DanLiris.Service.Core.Lib;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
 {
@@ -81,6 +82,50 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                     .Ok(result);
 
                 return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("get-redis")]
+        public async Task<IActionResult> GetRedis([FromQuery] string key)
+        {
+            try
+            {
+
+                var data = await service.GetRedis(key);
+                var res = data == null ? null : service.MapToViewModel(data);
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(res);
+
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPost("set-redis")]
+        public async Task<IActionResult> SetRedis()
+        {
+            try
+            {
+
+                await service.SetRedis();
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok();
+                return Created(String.Concat(HttpContext.Request.Path), Result);
             }
             catch (Exception e)
             {

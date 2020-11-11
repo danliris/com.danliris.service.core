@@ -12,6 +12,9 @@ using CsvHelper.Configuration;
 using System.Dynamic;
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using Microsoft.Extensions.Primitives;
+using MongoDB.Driver.Core.Servers;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -266,6 +269,34 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             var _dbset = this.DbSet;
 
             return _dbset.Where(x => x.AccountingUnitId == id).ToList();
+        }
+
+        public async Task<Unit> GetRedis(string key)
+        {
+            var cache = ServiceProvider.GetService<IRedisCache>();
+
+            var res = await cache.StringGetAsync(key);
+
+            if (res == null)
+                return null;
+
+            var data = JsonConvert.DeserializeObject<Unit>(res);
+
+            return data;
+        }
+
+        public Task SetRedis()
+        {
+            var cache = ServiceProvider.GetService<IRedisCache>();
+
+            var unit = DbSet.ToList();
+            List<Task<string>> s = new List<Task<string>>();
+            foreach(var item in unit)
+            {
+                var r =  cache.StringSetAsync($"unit-{item.Id}", JsonConvert.SerializeObject(item));
+                s.Add(r);
+            }
+            return Task.WhenAll(s.ToArray());
         }
     }
 }
