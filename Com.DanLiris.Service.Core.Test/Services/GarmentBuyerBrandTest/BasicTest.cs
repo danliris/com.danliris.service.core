@@ -64,7 +64,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentBuyerBrandTest
             Assert.NotNull(Response);
         }
         [Fact]
-        public async void Upload()
+        public void Upload()
         {
             GarmentBuyerBrandViewModel model =  DataUtil.GetUploadData();
             List<GarmentBuyerBrandViewModel> viewModel = new List<GarmentBuyerBrandViewModel>();

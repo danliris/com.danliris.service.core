@@ -1,0 +1,4 @@
+exclude_patterns:
+- "Com.DanLiris.Service.Core.Lib/Migrations/"
+- "Com.DanLiris.Service.Core.WebApi/Startup.cs"
+- "Com.DanLiris.Service.Core.Test/"

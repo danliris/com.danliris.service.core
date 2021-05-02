@@ -39,16 +39,23 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             };
         }
 
-        [SkippableFact]
-        public override async Task TestCreateModel_Exist()
-        {
-            Skip.If(true);
-        }
+        // [SkippableFact]
+        // public override async Task TestCreateModel_Exist()
+        // {
+        //     Skip.If(true);
+        // }
 
         [Fact]
         public void TestSimple()
         {
             var data = Service.GetSimple();
+            Assert.NotNull(data);
+        }
+
+        [Fact]
+        public void TestSimpleWarpingWeaving()
+        {
+            var data = Service.GetSimpleWarpingWeaving();
             Assert.NotNull(data);
         }
     }

@@ -1,4 +1,9 @@
-﻿using Com.DanLiris.Service.Core.Lib.ViewModels;
+﻿using Com.DanLiris.Service.Core.Lib;
+using Com.DanLiris.Service.Core.Lib.Models;
+using Com.DanLiris.Service.Core.Lib.Services;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.DanLiris.Service.Core.Test.DataUtils;
+using Com.DanLiris.Service.Core.Test.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,52 +16,16 @@ using Xunit;
 namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentUnitControllerTests
 {
 
-	[Collection("TestFixture Collection")]
-	public class BasicTests
-	{
-		private const string URI = "v1/master/garment-units";
+    [Collection("TestFixture Collection")]
+    public class BasicTests : BasicControllerTest<CoreDbContext, GarmentUnitService, Unit, UnitViewModel, GarmentUnitDataUtil>
+    {
+        private const string URI = "v1/master/garment-units";
 
-		protected TestServerFixture TestFixture { get; set; }
+        private static List<string> CreateValidationAttributes = new List<string> { "Name", "Code" };
+        private static List<string> UpdateValidationAttributes = new List<string> { "Name", "Code" };
 
-		protected HttpClient Client
-		{
-			get { return this.TestFixture.Client; }
-		}
-
-		public BasicTests(TestServerFixture fixture)
-		{
-			TestFixture = fixture;
-
-		}
-
-		public  UnitViewModel GenerateTestModel()
-		{
-			string guid = Guid.NewGuid().ToString();
-
-			return new UnitViewModel()
-			{
-				Name = String.Concat("TEST G-Unit ", guid),
-				Code = "TEST CODE",
-				Description="DESC",
-				Division= new DivisionViewModel()
-				{
-					Id=1,
-					Name="DIV",
-					Code="DIV_Name"
-				}
-				
-				 
-			};
-		}
-
-		[Fact]
-		public async Task Post()
-		{
-			UnitViewModel unitViewModel = GenerateTestModel();
-			var response = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(unitViewModel).ToString(), Encoding.UTF8, "application/json"));
-
-			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-		}
-
-	}
+        public BasicTests(TestServerFixture fixture) : base(fixture, URI, CreateValidationAttributes, UpdateValidationAttributes)
+        {
+        }
+    }
 }

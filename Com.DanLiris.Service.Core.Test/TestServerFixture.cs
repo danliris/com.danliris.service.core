@@ -40,9 +40,10 @@ namespace Com.DanLiris.Service.Core.Test
                     */
                     new KeyValuePair<string, string>("Secret", "DANLIRISTESTENVIRONMENT"),
 					new KeyValuePair<string, string>("ASPNETCORE_ENVIRONMENT", "Test"),
-					new KeyValuePair<string, string>("DefaultConnection", "Server=localhost,1401;Database=com.danliris.db.core.controller.test;User=sa;password=Standar123.;MultipleActiveResultSets=true;")
+                    new KeyValuePair<string, string>("DefaultConnection", "Server=localhost,1401;Database=com.danliris.db.core.controller.test;User=sa;password=Standar123.;MultipleActiveResultSets=true;")
+                    //new KeyValuePair<string, string>("DefaultConnection", "Server=(localdb)\\mssqllocaldb;Database=com-danliris-db-test;Trusted_Connection=True;MultipleActiveResultSets=true"),
 
-				})
+                })
                 .Build();
 
 
@@ -51,6 +52,14 @@ namespace Com.DanLiris.Service.Core.Test
                 .ConfigureServices(services =>
                 {
                     services
+                        .AddTransient<DivisionDataUtil>()
+                        .AddTransient<DesignMotiveDataUtil>()
+                        .AddTransient<UnitDataUtil>()
+                        .AddTransient<OrderTypeDataUtil>()
+                        .AddTransient<ProcessTypeDataUtil>()
+                        .AddTransient<TermOfPaymentDataUtil>()
+                        .AddTransient<HolidayDataUtil>()
+                        .AddTransient<BuyerDataUtil>()
                         .AddTransient<BudgetServiceDataUtil>()
                         .AddTransient<MaterialConstructionServiceDataUtil>()
                         .AddTransient<QualityServiceDataUtil>()
@@ -59,11 +68,13 @@ namespace Com.DanLiris.Service.Core.Test
                         .AddTransient<IncomeTaxDataUtil>()
                         .AddTransient<LampStandardDataUtil>()
                         .AddTransient<StandardTestDataUtil>()
+                        .AddTransient<StandardMinuteValueDataUtil>()
                         .AddTransient<GarmentCategoryDataUtil>()
                         .AddTransient<ProductServiceDataUtil>()
                         .AddTransient<AccountBankDataUtil>()
                         .AddTransient<GarmentProductServiceDataUtil>()
                         .AddTransient<GarmentBuyerDataUtil>()
+                        .AddTransient<GarmentComodityDataUtil>()
                         .AddTransient<GarmentBuyerBrandDataUtil>()
                         .AddTransient<GarmentSupplierDataUtil>()
 						.AddTransient<GarmentCurrencyDataUtil>()
@@ -71,7 +82,13 @@ namespace Com.DanLiris.Service.Core.Test
                         .AddTransient<UomServiceDataUtil>()
                         .AddTransient<MachineSpinningDataUtil>()
                         .AddTransient<ColorTypeDataUtil>()
-                        .AddTransient<FinishTypeDataUtil>();
+                        .AddTransient<FinishTypeDataUtil>()
+                        .AddTransient<StorageDataUtil>()
+                        .AddTransient<GarmentUnitDataUtil>()
+                        .AddTransient<SupplierDataUtil>()
+                        .AddTransient<CurrencyDataUtil>()
+                        .AddTransient<CategoryDataUtil>()
+                        .AddTransient<SizeDataUtil>();
                 })
                 .UseStartup<Startup>();
 

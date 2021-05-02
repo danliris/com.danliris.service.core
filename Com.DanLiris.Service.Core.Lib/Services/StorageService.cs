@@ -9,6 +9,8 @@ using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using Com.DanLiris.Service.Core.Lib.ViewModels;
 using Com.DanLiris.Service.Core.Lib.Interfaces;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -18,7 +20,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
         }
 
-        public override Tuple<List<Storage>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null,string Filter="{}")
+        public override Tuple<List<Storage>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<Storage> Query = this.DbContext.Storages;
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
@@ -30,7 +32,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "Code", "Name"
+                    "Code", "Name", "UnitName"
                 };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
@@ -88,6 +90,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             storageVM.unit.division = new DivisionViewModel();
 
             storageVM._id = storage.Id;
+            storageVM.UId = storage.UId;
             storageVM._deleted = storage._IsDeleted;
             storageVM._active = storage.Active;
             storageVM._createdDate = storage._CreatedUtc;
@@ -111,6 +114,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Storage storage = new Storage();
 
             storage.Id = storageVM._id;
+            storage.UId = storageVM.UId;
             storage._IsDeleted = storageVM._deleted;
             storage.Active = storageVM._active;
             storage._CreatedUtc = storageVM._createdDate;
@@ -123,7 +127,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             storage.Name = storageVM.name;
             storage.Description = storageVM.description;
 
-            if(!Equals(storageVM.unit, null))
+            if (!Equals(storageVM.unit, null))
             {
                 storage.UnitId = storageVM.unit._id;
                 storage.UnitName = storageVM.unit.name;
@@ -150,6 +154,31 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
+        }
+
+        public Task<List<StorageByNameViewModel>> GetStorageByName(string keyword, int page, int size)
+        {
+            var query = DbSet.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.Where(entity => entity.Name.Contains(keyword));
+            }
+
+            return query.Skip((page - 1) * size).Take(size).Select(entity => new StorageByNameViewModel()
+            {
+                Code = entity.Code,
+                Id = entity.Id,
+                Name = entity.Name,
+                Unit = new UnitStorage()
+                {
+                    Division = new DivisionStorage()
+                    {
+                        Name = entity.DivisionName
+                    },
+                    Name = entity.UnitName
+                }
+            }).ToListAsync();
         }
     }
 }

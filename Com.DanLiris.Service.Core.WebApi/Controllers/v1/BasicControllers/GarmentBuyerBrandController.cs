@@ -17,7 +17,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/garment-buyer-brands")]
     public class GarmentBuyerBrandController : BasicController<GarmentBuyerBrandService, GarmentBuyerBrand, GarmentBuyerBrandViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
         GarmentBuyerBrandService service;
         public GarmentBuyerBrandController(GarmentBuyerBrandService service) : base(service, ApiVersion)
         {

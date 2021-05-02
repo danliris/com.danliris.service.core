@@ -35,41 +35,48 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.AccountBankControllerTests
             return new AccountBankViewModel()
             {
                 Code = guid,
-                BankName = string.Format("TEST Bank {0}", guid),
-                BankAddress = string.Format("TEST Bank {0}", guid),
-                AccountName = string.Format("TEST Bank {0}", guid),
-                AccountNumber = string.Format("TEST Bank {0}", guid),
-                Fax = string.Format("TEST Bank {0}", guid),
-                Phone = string.Format("TEST Bank {0}", guid),
-                SwiftCode = string.Format("TEST Bank {0}", guid),
+                BankCode = guid,
+                BankName = "TestBank",
+                BankAddress = "TestBank",
+                AccountName = "TestBank",
+                AccountNumber = "TestBank",
+                Fax = "TestBank",
+                Phone = "TestBank",
+                SwiftCode = "TestBank",
                 Division= new DivisionViewModel
                 {
-                    Name = string.Format("TEST Bank {0}", guid),
-                    Code= string.Format("TEST Bank {0}", guid),
+                    Name = "DivisionName",
+                    Code= "DivisionCode",
                     Id=1
                 },
                 Currency= new CurrencyViewModel
                 {
-                    Code = string.Format("TEST Bank {0}", guid),
+                    Code = "IDR",
                     Id=1,
                     Description = string.Format("TEST Bank {0}", guid),
                     Rate=1,
-                    Symbol = string.Format("TEST Bank {0}", guid),
+                    Symbol = "IDR",
                 },
                 
             };
         }
 
-        //[Fact]
-        //public async Task Get()
-        //{
-        //    var response = await this.Client.GetAsync(URI);
-        //    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        //}
+        [Fact]
+        public async Task Get()
+        {
+            AccountBankViewModel bankVM = GenerateTestModel();
+            var post = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(bankVM).ToString(), Encoding.UTF8, "application/json"));
+
+            var response = await this.Client.GetAsync(URI);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
 
         //[Fact]
         //public async Task GetById()
         //{
+        //    AccountBankViewModel bankVM = GenerateTestModel();
+        //    var post = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(bankVM).ToString(), Encoding.UTF8, "application/json"));
+
         //    var response = await this.Client.GetAsync(string.Concat(URI, "/"));
         //    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         //}
@@ -82,6 +89,16 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.AccountBankControllerTests
             var response = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(bankVM).ToString(), Encoding.UTF8, "application/json"));
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetByDivisionName()
+        {
+            AccountBankViewModel bankVM = GenerateTestModel();
+            //var post = await this.Client.PostAsync(URI, new StringContent(JsonConvert.SerializeObject(bankVM).ToString(), Encoding.UTF8, "application/json"));
+
+            var response = await this.Client.GetAsync(URI + "/division/" + bankVM.Division.Name);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

@@ -14,6 +14,7 @@ using System.Dynamic;
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using CsvHelper.TypeConversion;
 using Microsoft.Extensions.Primitives;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -97,6 +98,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentProductViewModel garmentProductVM = new GarmentProductViewModel
             {
                 Id = garmentProduct.Id,
+                UId = garmentProduct.UId,
                 _IsDeleted = garmentProduct._IsDeleted,
                 Active = garmentProduct.Active,
                 _CreatedUtc = garmentProduct._CreatedUtc,
@@ -130,6 +132,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentProduct garmentProduct = new GarmentProduct
             {
                 Id = garmentProductVM.Id,
+                UId = garmentProductVM.UId,
                 _IsDeleted = garmentProductVM._IsDeleted,
                 Active = garmentProductVM.Active,
                 _CreatedUtc = garmentProductVM._CreatedUtc,
@@ -328,9 +331,16 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return this.DbSet.Where(p => ids.Contains(p.Id) && p._IsDeleted == false)
                 .ToList();
         }
-		public GarmentProduct GetByName( string name)
+
+        public List<GarmentProduct> GetByCode(string code)
+        {
+            var codes = code.Split(",");
+            //return this.DbSet.IgnoreQueryFilters().FirstOrDefault(p => code == p.Code);
+            return this.DbSet.IgnoreQueryFilters().Where(x => codes.Contains(x.Code)).Select(x => x).ToList();
+        }
+        public GarmentProduct GetByName(string name)
 		{
-			return this.DbSet.FirstOrDefault(p => (p.Name.ToString()==name) && p._IsDeleted == false);
+			return this.DbSet.FirstOrDefault(p => (p.Name==name) && p._IsDeleted == false);
 			
 		}
 		public IQueryable<GarmentProduct> GetDistinctProductComposition(string Keyword, string Filter)
@@ -529,8 +539,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Name = p.Name,
                     Width = p.Width ,
                     Code=p.Code,
-                    Id=p.Id
-
+                    Id=p.Id,
+                    UomId = p.UomId,
+                    UomUnit = p.UomUnit
                 });
 
             /* Order */

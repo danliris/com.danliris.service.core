@@ -2,6 +2,9 @@
 using Com.DanLiris.Service.Core.Lib;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.Services;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.DanLiris.Service.Core.Test.DataUtils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +21,15 @@ namespace Com.DanLiris.Service.Core.Test.Services.AccountBankTests
 
         public Basic(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
+        }
+
+        private AccountBankDataUtil DataUtil
+        {
+            get { return (AccountBankDataUtil)ServiceProvider.GetService(typeof(AccountBankDataUtil)); }
+        }
+        private AccountBankService Services
+        {
+            get { return (AccountBankService)ServiceProvider.GetService(typeof(AccountBankService)); }
         }
 
         public override void EmptyCreateModel(AccountBank model)
@@ -43,6 +55,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.AccountBankTests
             return new AccountBank()
             {
                 Code = guid,
+                BankCode = guid,
                 AccountName = "TEST BANK" + guid,
                 BankName = "TEST BANK" + guid,
                 AccountNumber = "TEST BANK" + guid,
@@ -53,12 +66,39 @@ namespace Com.DanLiris.Service.Core.Test.Services.AccountBankTests
                 DivisionName = "TEST BANK",
                 Fax = "TEST BANK",
                 Phone = "TEST BANK",
-                CurrencySymbol = "TEST BANK",
+                CurrencySymbol = "IDR",
                 CurrencyRate=1,
                 SwiftCode = "TEST BANK",
                 DivisionId=1,
-                CurrencyId=1
+                CurrencyId=1,
+                AccountCOA = "COA"
             };
         }
+
+        [Fact]
+        public async void Should_Success_ReadModel()
+        {
+            AccountBank model = await DataUtil.GetTestDataAsync();
+            
+            var orderData = new
+            {
+                Code = "asc"
+            };
+            string order = JsonConvert.SerializeObject(orderData);
+
+            var Response = Services.ReadModel(1, 25, order, new List<string>(), "", "{}");
+            Assert.NotNull(Response);
+        }
+
+
+        [Fact]
+        public void Should_Success_MapToModel()
+        {
+            AccountBankViewModel viewModel =  DataUtil.GetEmptyData();
+
+            var Response = Services.MapToModel(viewModel);
+            Assert.NotNull(Response);
+        }
+
     }
 }

@@ -46,8 +46,8 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public string Lot { get; set; }
         [StringLength(100)]
         public string Grade { get; set; }
-        public int Weight { get; set; }
-        public int Length { get; set; }
+        public double Weight { get; set; }
+        public double Length { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

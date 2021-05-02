@@ -13,7 +13,9 @@ using Com.DanLiris.Service.Core.Lib.Interfaces;
 using CsvHelper.Configuration;
 using System.Dynamic;
 using CsvHelper.TypeConversion;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -21,6 +23,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
     {
         public CurrencyService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+            _cache = serviceProvider.GetService<IDistributedCache>();
         }
 
         public override Tuple<List<Currency>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -84,7 +87,15 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             int TotalData = pageable.TotalCount;
 
+            SetCache();
+
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+
+        protected override void SetCache()
+        {
+            var data = DbContext.Currencies.ToList();
+            _cache.SetString("Currency", JsonConvert.SerializeObject(data));
         }
 
         public CurrencyViewModel MapToViewModel(Currency currency)
@@ -92,6 +103,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             CurrencyViewModel currencyVM = new CurrencyViewModel();
 
             currencyVM.Id = currency.Id;
+            currencyVM.UId = currency.UId;
             currencyVM._IsDeleted = currency._IsDeleted;
             currencyVM.Active = currency.Active;
             currencyVM._CreatedUtc = currency._CreatedUtc;
@@ -113,6 +125,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Currency currency = new Currency();
 
             currency.Id = currencyVM.Id;
+            currency.UId = currencyVM.UId;
             currency._IsDeleted = currencyVM._IsDeleted;
             currency.Active = currencyVM.Active;
             currency._CreatedUtc = currencyVM._CreatedUtc;
@@ -134,6 +147,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             "Kode", "Simbol", "Rate", "Keterangan"
         };
+        private readonly IDistributedCache _cache;
 
         public List<string> CsvHeader => Header;
 

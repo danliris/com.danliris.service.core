@@ -28,7 +28,11 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         [StringLength(500)]
         public string Name { get; set; }
 
-        public string Description { get; set; }         
+        public string Description { get; set; }
+        [MaxLength(50)]
+        public string COACode { get; set; }
+        public int VBDocumentLayoutOrder { get; set; }
+        public int AccountingUnitId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -40,7 +44,10 @@ namespace Com.DanLiris.Service.Core.Lib.Models
             if (string.IsNullOrWhiteSpace(this.Name))
                 validationResult.Add(new ValidationResult("Name is required", new List<string> { "name" }));
 
-            if(validationResult.Count.Equals(0))
+            if (AccountingUnitId <= 0)
+                validationResult.Add(new ValidationResult("Unit Pembukuan is required", new List<string> { "AccountingUnitId" }));
+
+            if (validationResult.Count.Equals(0))
             {
                 UnitService service = (UnitService)validationContext.GetService(typeof(UnitService));
 
@@ -50,6 +57,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
                 if (service.DbContext.Set<Unit>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Name.Equals(this.Name)) > 0) /* Code Unique */
                     validationResult.Add(new ValidationResult("Name already exists", new List<string> { "name" }));
             }
+
+            if (!string.IsNullOrWhiteSpace(COACode) && COACode.Count() != 1)
+                validationResult.Add(new ValidationResult("Kode COA tidak valid.", new List<string> { "COACode" }));
 
             return validationResult;
         }

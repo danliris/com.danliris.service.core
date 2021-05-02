@@ -12,7 +12,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/holidays")]
     public class HolidaysController : BasicController<HolidayService, Holiday, HolidayViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
 
         public HolidaysController(HolidayService service) : base(service, ApiVersion)
         {

@@ -67,7 +67,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
                 Code = guid,
                 Name = string.Format("TEST {0}", guid),
                 Active = true,
-                ProductType = "FABRIC", 
+                ProductType = "FABRIC",
                 Composition = string.Format("TEST {0}", guid),
                 Const = string.Format("TEST {0}", guid),
                 Yarn = string.Format("TEST {0}", guid),
@@ -77,33 +77,33 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             };
         }
         [Fact]
-        public async void Should_Success_Get_Data()
+        public void Should_Success_Get_Data()
         {
-            GarmentProduct model = await DataUtil.GetNewData2();
+            GarmentProduct model = DataUtil.GetNewData2();
             var Response = Services.ReadModel(1, 25, "{\"Code\":\"desc\"}", null, "", "{}");
             Assert.NotNull(Response);
         }
 
         [Fact]
-        public async void Should_Success_Get_Data_By_Id()
+        public async Task Should_Success_Get_Data_By_Id()
         {
             GarmentProduct model1 = await DataUtil.GetTestDataAsync();
             GarmentProduct model2 = await DataUtil.GetTestDataAsync();
-            var Response = Services.GetByIds(new List<int> { model1.Id,model2.Id});
+            var Response = Services.GetByIds(new List<int> { model1.Id, model2.Id });
             Assert.NotNull(Response);
         }
 
         [Fact]
-        public async void Should_Success_Create_Data()
+        public async Task Should_Success_Create_Data()
         {
             GarmentProduct model1 = await DataUtil.GetTestDataAsync();
-            GarmentProduct model2 = await DataUtil.GetNewData2();
+            GarmentProduct model2 = DataUtil.GetNewData2();
             var Response = Services.Create(model2);
             Assert.NotEqual(Response, 0);
         }
 
         [Fact]
-        public async void Should_Error_Create_Data_With_Same_Combination_of_Composition()
+        public async Task Should_Error_Create_Data_With_Same_Combination_of_Composition()
         {
             GarmentProduct model1 = await DataUtil.GetTestDataAsync2();
             try
@@ -116,59 +116,71 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
             }
         }
 
-        //Assert.NotNull(Response);
+        // Assert.NotNull(Response);
         [SkippableFact]
         public override async Task TestCreateModel_Exist()
         {
+            await Task.FromResult(1);
             Skip.If(true);
         }
 
         [Fact]
-        public async void Should_Error_Upload_CSV_Data_with_false_UOM()
+        public void Should_Error_Upload_CSV_Data_with_false_UOM()
         {
-            GarmentProductViewModel Vmodel1 = await DataUtil.GetNewData4();
-            GarmentProductViewModel Vmodel2 = await DataUtil.GetNewData4();
-            GarmentProductViewModel Vmodel3 = await DataUtil.GetNewData5();
-            GarmentProductViewModel Vmodel4 = await DataUtil.GetNewData5();
+            GarmentProductViewModel Vmodel1 = DataUtil.GetNewData4();
+            GarmentProductViewModel Vmodel2 = DataUtil.GetNewData4();
+            GarmentProductViewModel Vmodel3 = DataUtil.GetNewData5();
+            GarmentProductViewModel Vmodel4 = DataUtil.GetNewData5();
             var Response = Services.UploadValidate(new List<GarmentProductViewModel> { Vmodel1, Vmodel2, Vmodel3, Vmodel4 }, null);
             Assert.Equal(Response.Item1, false);
         }
 
-		[Fact]
-		public async void Should_Success_Get_Data_By_Name()
-		{
-			GarmentProduct model = await DataUtil.GetTestDataAsync();
-			var Response = Services.GetByName(model.Name);
-			Assert.NotNull(Response);
-		}
         [Fact]
-        public async void GetDistinctProductConst()
+        public async Task Should_Success_Get_Data_By_Name()
+        {
+            GarmentProduct model = await DataUtil.GetTestDataAsync();
+            var Response = Services.GetByName(model.Name);
+            Assert.NotNull(Response);
+        }
+
+        [Fact]
+        public async Task Should_Success_Get_Data_By_Code()
+        {
+            GarmentProduct model1 = await DataUtil.GetTestDataAsync();
+            GarmentProduct model2 = await DataUtil.GetTestDataAsync();
+
+            var codes = string.Format("{0},{1}", model1.Code, model2.Code);
+            var Response = Services.GetByCode(codes);
+            Assert.NotNull(Response);
+        }
+        [Fact]
+        public async Task GetDistinctProductConst()
         {
             GarmentProduct model = await DataUtil.GetTestDataAsync();
             var Response = Services.GetDistinctProductConst(model.Const, "{\"Const\":\"test\"}");
             Assert.NotNull(Response);
         }
         [Fact]
-        public async void GetDistinctProductComposition()
+        public async Task GetDistinctProductComposition()
         {
             GarmentProduct model = await DataUtil.GetTestDataAsync();
             var Response = Services.GetDistinctProductComposition(model.Composition, "{\"Composition\":\"test\"}");
             Assert.NotNull(Response);
         }
         [Fact]
-        public async void GetDistinctProductYarn()
+        public async Task GetDistinctProductYarn()
         {
             GarmentProduct model = await DataUtil.GetTestDataAsync();
-            var Response = Services.GetDistinctProductYarn(model.Yarn , "{\"Yarn\":\"test\"}");
+            var Response = Services.GetDistinctProductYarn(model.Yarn, "{\"Yarn\":\"test\"}");
             Assert.NotNull(Response);
         }
         [Fact]
-        public async void GetDistinctProductwidth()
+        public async Task GetDistinctProductwidth()
         {
             GarmentProduct model = await DataUtil.GetTestDataAsync();
             var Response = Services.GetDistinctProductWidth(model.Width, "{\"Width\":\"test\"}");
             Assert.NotNull(Response);
         }
-      
+
     }
 }

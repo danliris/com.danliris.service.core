@@ -1,21 +1,32 @@
-﻿using Com.DanLiris.Service.Core.Lib.Models;
+﻿using Com.DanLiris.Service.Core.Lib.Helpers;
+using Com.DanLiris.Service.Core.Lib.Interfaces;
+using Com.DanLiris.Service.Core.Lib.Models;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.Moonlay.NetCore.Lib;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Com.DanLiris.Service.Core.Lib.Helpers;
-using Newtonsoft.Json;
 using System.Reflection;
-using Com.Moonlay.NetCore.Lib;
-using Com.DanLiris.Service.Core.Lib.ViewModels;
-using Com.DanLiris.Service.Core.Lib.Interfaces;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
     public class AccountBankService : BasicService<CoreDbContext, AccountBank>, IMap<AccountBank, AccountBankViewModel>
     {
+        private readonly IDistributedCache _cache;
+
         public AccountBankService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+            _cache = serviceProvider.GetService<IDistributedCache>();
+        }
+
+        protected override void SetCache()
+        {
+            var data = DbContext.AccountBanks.ToList();
+            _cache.SetString("AccountBank", JsonConvert.SerializeObject(data));
         }
 
         public override Tuple<List<AccountBank>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -32,7 +43,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "BankName", "BankAddress", "AccountName", "AccountNumber"
+                    "BankName", "BankAddress", "AccountName", "AccountNumber", "BankCode"
                 };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
@@ -41,7 +52,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "BankName", "BankAddress", "AccountName", "AccountNumber", "SwiftCode", "Currency","Division"
+                "Id", "Code", "BankCode", "BankName", "BankAddress", "AccountName", "AccountNumber", "SwiftCode", "Currency","Division", "AccountCOA"
             };
 
             Query = Query
@@ -49,6 +60,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 {
                     Id = a.Id,
                     Code = a.Code,
+                    BankCode = a.BankCode,
                     BankName = a.BankName,
                     BankAddress = a.BankAddress,
                     AccountName = a.AccountName,
@@ -56,10 +68,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     SwiftCode = a.SwiftCode,
                     CurrencyId = a.CurrencyId,
                     CurrencyCode = a.CurrencyCode,
-                    DivisionCode=a.DivisionCode,
-                    DivisionId=a.DivisionId,
-                    DivisionName=a.DivisionName,
-                    _LastModifiedUtc=a._LastModifiedUtc
+                    DivisionCode = a.DivisionCode,
+                    DivisionId = a.DivisionId,
+                    DivisionName = a.DivisionName,
+                    _LastModifiedUtc = a._LastModifiedUtc,
+                    AccountCOA = a.AccountCOA
                 });
 
             /* Order */
@@ -88,7 +101,41 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             int TotalData = pageable.TotalCount;
 
+            SetCache();
+
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+
+        public Tuple<List<AccountBank>> ReadModelByDivisionName(string divisionName)
+        {
+            IQueryable<AccountBank> Query = this.DbContext.AccountBanks;
+
+
+            Query = Query.Where(bank => bank.DivisionName == divisionName);
+
+            Query = Query
+                .Select(a => new AccountBank
+                {
+                    Id = a.Id,
+                    Code = a.Code,
+                    BankCode = a.BankCode,
+                    BankName = a.BankName,
+                    BankAddress = a.BankAddress,
+                    AccountName = a.AccountName,
+                    AccountNumber = a.AccountNumber,
+                    SwiftCode = a.SwiftCode,
+                    CurrencyId = a.CurrencyId,
+                    CurrencyCode = a.CurrencyCode,
+                    DivisionCode = a.DivisionCode,
+                    DivisionId = a.DivisionId,
+                    DivisionName = a.DivisionName,
+                    _LastModifiedUtc = a._LastModifiedUtc,
+                    AccountCOA = a.AccountCOA
+                });
+
+            List<AccountBank> Data = new List<AccountBank>(Query);
+
+            return Tuple.Create(Data);
         }
 
         public AccountBankViewModel MapToViewModel(AccountBank accountBank)
@@ -98,17 +145,18 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             accountBankVM.Currency = new CurrencyViewModel
             {
-                Id = (int)accountBank.CurrencyId,
+                Id = accountBank.CurrencyId.GetValueOrDefault(),
                 Code = accountBank.CurrencyCode,
-                Rate = accountBank.CurrencyId,
-                Symbol = accountBank.CurrencySymbol
+                Rate = accountBank.CurrencyRate,
+                Symbol = accountBank.CurrencySymbol,
+                Description = accountBank.CurrencyDescription
             };
 
             accountBankVM.Division = new DivisionViewModel
             {
-                Id = (int)accountBank.DivisionId,
+                Id = accountBank.DivisionId.GetValueOrDefault(),
                 Code = accountBank.DivisionCode,
-                Name= accountBank.DivisionName
+                Name = accountBank.DivisionName
             };
             return accountBankVM;
         }
@@ -122,7 +170,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 accountBank.CurrencyId = accountBankVM.Currency.Id;
                 accountBank.CurrencyCode = accountBankVM.Currency.Code;
-                accountBank.CurrencyRate = accountBankVM.Currency.Rate; 
+                accountBank.CurrencyRate = accountBankVM.Currency.Rate;
                 accountBank.CurrencySymbol = accountBankVM.Currency.Symbol;
             }
             else

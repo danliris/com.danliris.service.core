@@ -15,7 +15,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/uoms")]
     public class UomsController : BasicController<UomService, Uom, UomViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
         UomService service;
 
         public UomsController(UomService service) : base(service, ApiVersion)
@@ -43,6 +43,18 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                     .Fail();
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
+        }
+
+        [HttpGet("simple-warping-weaving")]
+        public IActionResult GetSimpleWarpingWeaving()
+        {
+            List<Uom> Data = service.GetSimpleWarpingWeaving();
+            var result = Data.Select(x => service.MapToViewModel(x));
+            Dictionary<string, object> Result =
+                new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                .Ok(result);
+
+            return Ok(Result);
         }
     }
 }

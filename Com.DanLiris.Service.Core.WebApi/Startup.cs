@@ -2,11 +2,16 @@
 using Com.DanLiris.Service.Core.Lib;
 using Com.DanLiris.Service.Core.Lib.Helpers.IdentityService;
 using Com.DanLiris.Service.Core.Lib.Helpers.ValidateService;
-using Com.DanLiris.Service.Core.Lib.IntegrationService;
-using Com.DanLiris.Service.Core.Lib.MongoRepositories;
 using Com.DanLiris.Service.Core.Lib.Services;
 using Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentEMKL;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentFabricType;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentForwarder;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentLeftoverWarehouseBuyer;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentLeftoverWarehouseProduct;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentShippingStaff;
 using Com.DanLiris.Service.Core.Lib.Services.MachineSpinning;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentTransactionType;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +22,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentCourier;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentInsurance;
+using Com.DanLiris.Service.Core.Lib.Services.BICurrency;
+using Com.DanLiris.Service.Core.Lib.Services.AccountingCategory;
+using Com.DanLiris.Service.Core.Lib.Services.AccountingUnit;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentAdditionalCharges;
+using Com.DanLiris.Service.Core.Lib.Services.BudgetingCategory;
+using Com.DanLiris.Service.Core.Lib.Services.IBCurrency;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentLeftoverWarehouseComodity;
 
 namespace Com.DanLiris.Service.Core.WebApi
 {
@@ -89,7 +106,24 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddScoped<GarmentSectionService>()
                 .AddScoped<StandardMinuteValueService>()
                 .AddTransient<IMachineSpinningService, MachineSpinningService>()
-                .AddScoped<RolesService>();
+                .AddTransient<IGarmentLeftoverWarehouseBuyerService, GarmentLeftoverWarehouseBuyerService>()
+                .AddTransient<IGarmentShippingStaffService, GarmentShipingStaffService>()
+                .AddTransient<IGarmentFabricTypeService, GarmentFabricTypeService>()
+                .AddTransient<IGarmentEMKLService, GarmentEMKLService>()
+                .AddTransient<IGarmentForwarderService, GarmentForwarderService>()
+                .AddTransient<IGarmentTransactionTypeService, GarmentTransactionTypeService>()
+                .AddTransient<IGarmentLeftoverWarehouseProductService, GarmentLeftoverWarehouseProductService>()
+                .AddTransient<IGarmentLeftoverWarehouseComodityService, GarmentLeftoverWarehouseComodityService>()
+                .AddTransient<IGarmentCourierService, GarmentCourierService>()
+                .AddTransient<IGarmentInsuranceService, GarmentInsuranceService>()
+                .AddTransient<IBICurrencyService, BICurrencyService>()
+                .AddTransient<IAccountingCategoryService, AccountingCategoryService>()
+                .AddTransient<IAccountingUnitService, AccountingUnitService>()
+                .AddTransient<IBudgetingCategoryService, BudgetingCategoryService>()
+                .AddTransient<IGarmentAdditionalChargesService, GarmentAdditionalChargesService>()
+                .AddTransient<IIBCurrencyService, IBCurrencyService>()
+                .AddScoped<RolesService>()
+                .AddScoped<SizeService>();
 
 
             RegisterServices(services);
@@ -102,19 +136,9 @@ namespace Com.DanLiris.Service.Core.WebApi
                     options.DefaultApiVersion = new ApiVersion(1, 1);
                 });
 
-            services.Configure<MongoDbSettings>(
-               options =>
-               {
-                   options.ConnectionString = Configuration.GetConnectionString("MongoConnection") ?? Configuration["MongoConnection"];
-                   options.Database = Configuration.GetConnectionString("MongoDatabase") ?? Configuration["MongoDatabase"];
-               });
-
             services.AddSingleton<IMongoClient, MongoClient>(
                 _ => new MongoClient(Configuration.GetConnectionString("MongoConnection") ?? Configuration["MongoConnection"]));
 
-            services.AddTransient<IMongoDbContext, MongoDbContext>();
-            services.AddTransient<IProductMongoRepository, ProductMongoRepository>();
-            services.AddTransient<IProductIntegrationService, ProductIntegrationService>();
 
             services.AddAutoMapper();
 
@@ -143,6 +167,12 @@ namespace Com.DanLiris.Service.Core.WebApi
                     };
                 });
 
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetValue<string>("RedisConnection") ?? Configuration["RedisConnection"];
+                options.InstanceName = Configuration.GetValue<string>("RedisConnectionName") ?? Configuration["RedisConnectionName"];
+            });
+
             services.AddCors(o => o.AddPolicy("CorePolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -153,9 +183,32 @@ namespace Com.DanLiris.Service.Core.WebApi
 
             services
                 .AddMvcCore()
+                .AddApiExplorer()
                 .AddAuthorization()
                 .AddJsonFormatters()
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+            #region Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info() { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
+                {
+                    In = "header",
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = "apiKey",
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>()
+                {
+                    {
+                        "Bearer",
+                        Enumerable.Empty<string>()
+                    }
+                });
+                c.CustomSchemaIds(i => i.FullName);
+            });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -168,12 +221,19 @@ namespace Com.DanLiris.Service.Core.WebApi
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<CoreDbContext>();
+                context.Database.SetCommandTimeout(1000 * 60 * 10);
                 context.Database.Migrate();
             }
             app.UseAuthentication();
             app.UseCors("CorePolicy");
 
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+            });
         }
     }
 }

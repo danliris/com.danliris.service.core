@@ -88,6 +88,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             UomViewModel uomVM = new UomViewModel
             {
                 Id = uom.Id,
+                UId = uom.UId,
                 _IsDeleted = uom._IsDeleted,
                 Active = uom.Active,
                 _CreatedUtc = uom._CreatedUtc,
@@ -107,6 +108,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Uom uom = new Uom
             {
                 Id = uomVM.Id,
+                UId = uomVM.UId,
                 _IsDeleted = uomVM._IsDeleted,
                 Active = uomVM.Active,
                 _CreatedUtc = uomVM._CreatedUtc,
@@ -192,6 +194,15 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Id = x.Id,
                 Unit = x.Unit,
             }).ToList();
+        }
+
+        public List<Uom> GetSimpleWarpingWeaving()
+        {
+            return this.DbSet.Select(x => new Uom()
+            {
+                Id = x.Id,
+                Unit = x.Unit,
+            }).Where(o => o.Unit == "MTR" || o.Unit == "YARD").ToList();
         }
     }
 }

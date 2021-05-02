@@ -32,6 +32,31 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.MachineSpinning
 
         }
 
+        [HttpGet("blowing-unit-filtered")]
+        public IActionResult GetLoaderByUnitType(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")]List<string> select = null, string keyword = null, string filter = "{}")
+        {
+            try
+            {
+                Lib.Helpers.ReadResponse<MachineSpinningModel> read = Service.ReadNoOnly(page, size, order, select, keyword, filter);
+
+                List<MachineSpinningViewModel> dataVM = Mapper.Map<List<MachineSpinningViewModel>>(read.Data);
+
+                dataVM = dataVM.Where(x => x.Types.Any(y => y.Type.Equals("Blowing", StringComparison.OrdinalIgnoreCase))).ToList();
+
+                Dictionary<string, object> Result =
+                    new Utils.ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(Mapper, dataVM, page, size, read.Count, dataVM.Count, read.Order, read.Selected);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new Utils.ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpPost("upload")]
         public async Task<IActionResult> PostCSVFileAsync()
         {
@@ -65,7 +90,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.MachineSpinning
                         if (Validated.Item1) /* If Data Valid */
                         {
                             List<MachineSpinningModel> data = Service.MapFromCsv(Data);
-                            
+
                             await Service.UploadData(data);
 
 
@@ -106,10 +131,10 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.MachineSpinning
                     return BadRequest(Result);
                 }
             }
-            catch(TypeConverterException ex)
+            catch (TypeConverterException ex)
             {
                 Dictionary<string, object> Result =
-                  new Utils.ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, "Tahun, Delivery atau Kapasitas diisi huruf")
+                  new Utils.ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, "Tahun, Delivery atau Kapasitas diisi huruf\n" + ex.Message)
                   .Fail();
 
                 return StatusCode((int)HttpStatusCode.InternalServerError, Result);
@@ -183,7 +208,15 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.MachineSpinning
             try
             {
                 List<MachineSpinningModel> result = Service.GetFilteredSpinning(type, unitId);
-                result = result.OrderBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.No, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.UomUnit, StringComparer.OrdinalIgnoreCase).ToList();
+                if (type != null && type.Equals("Carding", StringComparison.OrdinalIgnoreCase))
+                {
+                    result = result.OrderBy(x => x.Line, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.No, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.UomUnit, StringComparer.OrdinalIgnoreCase).ToList();
+                }
+                else
+                {
+                    result = result.OrderBy(x => x.No, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.UomUnit, StringComparer.OrdinalIgnoreCase).ToList();
+                }
+
                 List<MachineSpinningViewModel> dataVM = Mapper.Map<List<MachineSpinningViewModel>>(result);
                 Dictionary<string, object> Result =
                     new Helpers.ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)

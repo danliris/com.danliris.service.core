@@ -16,7 +16,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/lamp-standard")]
     public class LampStandardController : BasicController<LampStandardService, LampStandard, LampStandardViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
         public LampStandardController(LampStandardService service) : base(service, ApiVersion)
         {
         }

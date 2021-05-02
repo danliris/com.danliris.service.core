@@ -12,7 +12,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/suppliers")]
     public class SuppliersController : BasicController<SupplierService, Supplier, SupplierViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
 
         public SuppliersController(SupplierService service) : base(service, ApiVersion)
         {

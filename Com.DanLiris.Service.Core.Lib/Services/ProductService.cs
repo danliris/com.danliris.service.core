@@ -24,11 +24,12 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public ProductService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+            DbContext.Database.SetCommandTimeout(1000 * 60 * 2);
         }
 
         public override Tuple<List<Product>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<Product> Query = this.DbContext.Products.Include(x => x.SPPProperties);
+            IQueryable<Product> Query = this.DbContext.Products.AsNoTracking();
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
             Query = ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
@@ -47,43 +48,43 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc", "SPPProperties"
+                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
             };
 
-            Query = Query
-                .Select(p => new Product
-                {
-                    Id = p.Id,
-                    Code = p.Code,
-                    Name = p.Name,
-                    UomId = p.UomId,
-                    UomUnit = p.UomUnit,
-                    CurrencyId = p.CurrencyId,
-                    CurrencyCode = p.CurrencyCode,
-                    CurrencySymbol = p.CurrencySymbol,
-                    Price = p.Price,
-                    Tags = p.Tags,
-                    SPPProperties = p.SPPProperties == null ? new ProductSPPProperty() : new ProductSPPProperty()
-                    {
-                        ColorName = p.SPPProperties.ColorName,
-                        DesignCode = p.SPPProperties.DesignCode,
-                        DesignNumber = p.SPPProperties.DesignNumber,
-                        ProductionOrderId = p.SPPProperties.ProductionOrderId,
-                        ProductionOrderNo = p.SPPProperties.ProductionOrderNo,
-                        BuyerAddress = p.SPPProperties.BuyerAddress,
-                        BuyerId = p.SPPProperties.BuyerId,
-                        BuyerName = p.SPPProperties.BuyerName,
-                        Weight = p.SPPProperties.Weight,
-                        Construction = p.SPPProperties.Construction,
-                        Grade = p.SPPProperties.Grade,
-                        Length = p.SPPProperties.Length,
-                        Lot = p.SPPProperties.Lot,
-                        OrderTypeCode = p.SPPProperties.OrderTypeCode,
-                        OrderTypeId = p.SPPProperties.OrderTypeId,
-                        OrderTypeName = p.SPPProperties.OrderTypeName
-                    },
-                    _LastModifiedUtc = p._LastModifiedUtc
-                });
+            //Query = Query
+            //    .Select(p => new Product
+            //    {
+            //        Id = p.Id,
+            //        Code = p.Code,
+            //        Name = p.Name,
+            //        UomId = p.UomId,
+            //        UomUnit = p.UomUnit,
+            //        CurrencyId = p.CurrencyId,
+            //        CurrencyCode = p.CurrencyCode,
+            //        CurrencySymbol = p.CurrencySymbol,
+            //        Price = p.Price,
+            //        Tags = p.Tags,
+            //        //SPPProperties = p.SPPProperties == null ? new ProductSPPProperty() : new ProductSPPProperty()
+            //        //{
+            //        //    ColorName = p.SPPProperties.ColorName,
+            //        //    DesignCode = p.SPPProperties.DesignCode,
+            //        //    DesignNumber = p.SPPProperties.DesignNumber,
+            //        //    ProductionOrderId = p.SPPProperties.ProductionOrderId,
+            //        //    ProductionOrderNo = p.SPPProperties.ProductionOrderNo,
+            //        //    BuyerAddress = p.SPPProperties.BuyerAddress,
+            //        //    BuyerId = p.SPPProperties.BuyerId,
+            //        //    BuyerName = p.SPPProperties.BuyerName,
+            //        //    Weight = p.SPPProperties.Weight,
+            //        //    Construction = p.SPPProperties.Construction,
+            //        //    Grade = p.SPPProperties.Grade,
+            //        //    Length = p.SPPProperties.Length,
+            //        //    Lot = p.SPPProperties.Lot,
+            //        //    OrderTypeCode = p.SPPProperties.OrderTypeCode,
+            //        //    OrderTypeId = p.SPPProperties.OrderTypeId,
+            //        //    OrderTypeName = p.SPPProperties.OrderTypeName
+            //        //},
+            //        _LastModifiedUtc = p._LastModifiedUtc
+            //    }).AsNoTracking();
 
             /* Order */
             if (OrderDictionary.Count.Equals(0))
@@ -106,12 +107,75 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             }
 
             /* Pagination */
-            Pageable<Product> pageable = new Pageable<Product>(Query, Page - 1, Size);
-            List<Product> Data = pageable.Data.ToList<Product>();
+            //Pageable<Product> pageable = new Pageable<Product>(Query, Page - 1, Size);
 
-            int TotalData = pageable.TotalCount;
+            var totalData = Query.Count();
+            Query = Query.Skip((Page - 1) * Size).Take(Size);
 
-            return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+            List<Product> Data = Query.ToList();
+
+            //int TotalData = Query.TotalCount;
+
+            return Tuple.Create(Data, totalData, OrderDictionary, SelectedFields);
+        }
+
+        public Tuple<List<Product>, int, Dictionary<string, string>, List<string>> ReadModelNullTags(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        {
+            IQueryable<Product> Query = this.DbContext.Products.Where(x => string.IsNullOrEmpty(x.Tags) || string.IsNullOrWhiteSpace(x.Tags)).AsNoTracking();
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
+
+            /* Search With Keyword */
+            if (Keyword != null)
+            {
+                List<string> SearchAttributes = new List<string>()
+                {
+                    "Code", "Name"
+                };
+
+                Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
+            }
+
+            /* Const Select */
+            List<string> SelectedFields = new List<string>()
+            {
+                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
+            };
+
+
+
+            /* Order */
+            if (OrderDictionary.Count.Equals(0))
+            {
+                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+
+                Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
+            }
+            else
+            {
+                string Key = OrderDictionary.Keys.First();
+                string OrderType = OrderDictionary[Key];
+                string TransformKey = General.TransformOrderBy(Key);
+
+                BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+
+                Query = OrderType.Equals(General.ASCENDING) ?
+                    Query.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
+                    Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
+            }
+
+            /* Pagination */
+            //Pageable<Product> pageable = new Pageable<Product>(Query, Page - 1, Size);
+
+            var totalData = Query.Count();
+            Query = Query.Skip((Page - 1) * Size).Take(Size);
+
+            List<Product> Data = Query.ToList();
+
+            //int TotalData = Query.TotalCount;
+
+            return Tuple.Create(Data, totalData, OrderDictionary, SelectedFields);
         }
 
         public ProductViewModel MapToViewModel(Product product)
@@ -119,6 +183,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             ProductViewModel productVM = new ProductViewModel
             {
                 Id = product.Id,
+                UId = product.UId,
                 _IsDeleted = product._IsDeleted,
                 Active = product.Active,
                 _CreatedUtc = product._CreatedUtc,
@@ -130,6 +195,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Code = product.Code,
                 Name = product.Name,
                 Price = product.Price,
+
                 Currency = new ProductCurrencyViewModel
                 {
                     Id = product.CurrencyId,
@@ -175,6 +241,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Product product = new Product
             {
                 Id = productVM.Id,
+                UId = productVM.UId,
                 _IsDeleted = productVM._IsDeleted,
                 Active = productVM.Active,
                 _CreatedUtc = productVM._CreatedUtc,
@@ -239,13 +306,10 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return product;
         }
 
-        /* Upload CSV */
-        private readonly List<string> Header = new List<string>()
+        public List<string> CsvHeader { get; } = new List<string>()
         {
             "Kode Barang", "Nama Barang", "Satuan", "Mata Uang", "Harga", "Tags", "Keterangan"
         };
-
-        public List<string> CsvHeader => Header;
 
         public sealed class ProductMap : ClassMap<ProductViewModel>
         {
@@ -400,90 +464,102 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public override Task<Product> ReadModelById(int Id)
         {
-            base.DbContext.Set<ProductSPPProperty>().Load();
-            return base.ReadModelById(Id);
+            //base.DbContext.Set<ProductSPPProperty>().Load();
+            return DbSet.Include(x => x.SPPProperties).AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
         }
 
         public async Task<bool> CreateProduct(PackingModel packings)
         {
-            var productNames = (from packingDetail in packings.PackingDetails
-                                select string.Format("{0}/{1}/{2}/{3}/{4}/{5}", packings.ProductionOrderNo, packings.ColorName, packings.Construction,
+            //DbContext.Database.SetCommandTimeout(1000 * 60 * 10);
+
+            var packingProducts = packings.PackingDetails.Select(packingDetail => string.Format("{0}/{1}/{2}/{3}/{4}/{5}", packings.ProductionOrderNo, packings.ColorName, packings.Construction,
                                 packingDetail.Lot, packingDetail.Grade, packingDetail.Length) +
-                                (string.IsNullOrWhiteSpace(packingDetail.Remark) ? "" : string.Format("/{0}", packingDetail.Remark)))
-                                .Except((from product in DbSet where product._IsDeleted == false select product.Name));
-            if (productNames.Count() > 0)
+                                (string.IsNullOrWhiteSpace(packingDetail.Remark) ? "" : string.Format("/{0}", packingDetail.Remark))).ToList();
+
+            //var productNames = (from packingDetail in packings.PackingDetails
+            //                    select )
+            //                    .Except((from product in DbSet where product._IsDeleted == false select product.Name));
+
+            var uom = DbContext.UnitOfMeasurements.FirstOrDefault(f => f.Unit.Equals(packings.PackingUom));
+            if (uom == null)
             {
-                var uomId = (from uom in DbContext.UnitOfMeasurements
-                             where uom.Unit == packings.PackingUom && uom._IsDeleted == false
-                             select uom.Id).FirstOrDefault();
-                if (uomId == 0)
+                uom = new Uom
                 {
-                    Uom uom = new Uom
+                    Active = true,
+                    Unit = packings.PackingUom,
+                    _IsDeleted = false,
+                    _CreatedBy = this.Username,
+                    _CreatedUtc = DateTimeOffset.Now.DateTime,
+                    _CreatedAgent = UserAgent
+                };
+                DbContext.UnitOfMeasurements.Add(uom);
+                await DbContext.SaveChangesAsync();
+
+                //uomId = uom.Id;
+            }
+
+            var tags = string.Format("sales contract #{0}", packings.SalesContractNo);
+            CodeGenerator codeGenerator = new CodeGenerator();
+            var listProductToCreate = new List<Product>();
+            foreach (var packingDetail in packings.PackingDetails)
+            {
+                var packingProduct = string.Format("{0}/{1}/{2}/{3}/{4}/{5}", packings.ProductionOrderNo, packings.ColorName, packings.Construction, packingDetail.Lot, packingDetail.Grade, packingDetail.Length) + (string.IsNullOrWhiteSpace(packingDetail.Remark) ? "" : string.Format("/{0}", packingDetail.Remark));
+
+                var existingProduct = DbContext.Products.FirstOrDefault(f => f.Name.Equals(packingProduct));
+
+                if (existingProduct == null)
+                {
+                    var productToCreate = new Product()
                     {
                         Active = true,
-                        Unit = packings.PackingUom,
+                        Code = codeGenerator.GenerateCode(),
+                        Name = packingProduct,
+                        UomId = uom.Id,
+                        UomUnit = packings.PackingUom,
+                        Tags = tags,
+                        SPPProperties = new ProductSPPProperty()
+                        {
+                            ProductionOrderId = packings.ProductionOrderId,
+                            ProductionOrderNo = packings.ProductionOrderNo,
+                            DesignCode = packings.DesignCode,
+                            DesignNumber = packings.DesignNumber,
+                            OrderTypeId = packings.OrderTypeId,
+                            OrderTypeCode = packings.OrderTypeCode,
+                            OrderTypeName = packings.OrderTypeName,
+                            BuyerId = packings.BuyerId,
+                            BuyerName = packings.BuyerName,
+                            BuyerAddress = packings.BuyerAddress,
+                            ColorName = packings.ColorName,
+                            Construction = packings.Construction,
+                            Lot = packingDetail.Lot,
+                            Grade = packingDetail.Grade,
+                            Weight = packingDetail.Weight,
+                            Length = packingDetail.Length
+                        },
                         _IsDeleted = false,
                         _CreatedBy = this.Username,
                         _CreatedUtc = DateTimeOffset.Now.DateTime,
                         _CreatedAgent = UserAgent
                     };
-                    await DbContext.UnitOfMeasurements.AddAsync(uom);
-                    await DbContext.SaveChangesAsync();
 
-                    uomId = uom.Id;
+                    listProductToCreate.Add(productToCreate);
                 }
-                var tags = string.Format("sales contract #{0}", packings.SalesContractNo);
-                CodeGenerator codeGenerator = new CodeGenerator();
-                IEnumerable<Product> products = from packingDetail in packings.PackingDetails
-                                                where productNames.Contains(string.Format("{0}/{1}/{2}/{3}/{4}/{5}", packings.ProductionOrderNo, packings.ColorName, packings.Construction,
-                                                    packingDetail.Lot, packingDetail.Grade, packingDetail.Length) +
-                                                    (string.IsNullOrWhiteSpace(packingDetail.Remark) ? "" : string.Format("/{0}", packingDetail.Remark)))
-                                                select new Product
-                                                {
-                                                    Active = true,
-                                                    Code = codeGenerator.GenerateCode(),
-                                                    Name = string.Format("{0}/{1}/{2}/{3}/{4}/{5}", packings.ProductionOrderNo, packings.ColorName, packings.Construction,
-                                                        packingDetail.Lot, packingDetail.Grade, packingDetail.Length) +
-                                                        (string.IsNullOrWhiteSpace(packingDetail.Remark) ? "" : string.Format("/{0}", packingDetail.Remark)),
-                                                    UomId = uomId,
-                                                    UomUnit = packings.PackingUom,
-                                                    Tags = tags,
-                                                    SPPProperties = new ProductSPPProperty()
-                                                    {
-                                                        ProductionOrderId = packings.ProductionOrderId,
-                                                        ProductionOrderNo = packings.ProductionOrderNo,
-                                                        DesignCode = packings.DesignCode,
-                                                        DesignNumber = packings.DesignNumber,
-                                                        OrderTypeId = packings.OrderTypeId,
-                                                        OrderTypeCode = packings.OrderTypeCode,
-                                                        OrderTypeName = packings.OrderTypeName,
-                                                        BuyerId = packings.BuyerId,
-                                                        BuyerName = packings.BuyerName,
-                                                        BuyerAddress = packings.BuyerAddress,
-                                                        ColorName = packings.ColorName,
-                                                        Construction = packings.Construction,
-                                                        Lot = packingDetail.Lot,
-                                                        Grade = packingDetail.Grade,
-                                                        Weight = packingDetail.Weight,
-                                                        Length = packingDetail.Length
-                                                    },
-                                                    _IsDeleted = false,
-                                                    _CreatedBy = this.Username,
-                                                    _CreatedUtc = DateTimeOffset.Now.DateTime,
-                                                    _CreatedAgent = UserAgent
-                                                };
-                await DbContext.AddRangeAsync(products);
-                var rowAffected = await DbContext.SaveChangesAsync();
-                if (rowAffected > 0)
-                {
-                    return true;
-                }
+
+            }
+
+            if (listProductToCreate.Count > 0)
+                await DbContext.AddRangeAsync(listProductToCreate);
+
+
+            var rowAffected = await DbContext.SaveChangesAsync();
+            if (rowAffected > 0)
+            {
+                return true;
             }
             else
             {
                 return true;
             }
-            return false;
         }
 
         public Task<List<ProductViewModel>> GetProductByProductionOrderNo(string productionOrderNo)
@@ -505,7 +581,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Name = x.Product.Name,
                 Price = x.Product.Price,
                 Tags = x.Product.Tags,
-                Uid = x.Product.UId,
+                UId = x.Product.UId,
                 UOM = new ProductUomViewModel()
                 {
                     Id = x.Product.UomId,
@@ -535,6 +611,16 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Weight = x.Weight
                 }
             }).ToListAsync();
+        }
+
+        public Task<Product> GetProductByName(string productName)
+        {
+            return DbSet.FirstOrDefaultAsync(f => f.Name.Equals(productName));
+        }
+
+        public Task<Product> GetProductForSpinning(int Id)
+        {
+            return DbContext.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
         }
     }
 }

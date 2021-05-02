@@ -33,7 +33,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 Name = guid,
                 Rate = 1,
                 Description="test",
-                
+                COACodeCredit = "1110"
             };
 
             return TestData;

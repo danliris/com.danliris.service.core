@@ -88,6 +88,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentCurrencyViewModel garmentCurrencyVM = new GarmentCurrencyViewModel();
 
             garmentCurrencyVM.Id = garmentCurrency.Id;
+            garmentCurrencyVM.UId = garmentCurrency.UId;
             garmentCurrencyVM._IsDeleted = garmentCurrency._IsDeleted;
             garmentCurrencyVM.Active = garmentCurrency.Active;
             garmentCurrencyVM._CreatedUtc = garmentCurrency._CreatedUtc;
@@ -99,6 +100,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             garmentCurrencyVM.code = garmentCurrency.Code;
             garmentCurrencyVM.date = garmentCurrency.Date.ToLocalTime();
             garmentCurrencyVM.rate = garmentCurrency.Rate;
+            garmentCurrencyVM.Code = garmentCurrency.Code;
+            garmentCurrencyVM.Date = garmentCurrency.Date;
+            garmentCurrencyVM.Rate = garmentCurrency.Rate;
 
             return garmentCurrencyVM;
         }
@@ -108,6 +112,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentCurrency garmentCurrency = new GarmentCurrency();
 
             garmentCurrency.Id = garmentCurrencyVM.Id;
+            garmentCurrency.UId = garmentCurrencyVM.UId;
             garmentCurrency._IsDeleted = garmentCurrencyVM._IsDeleted;
             garmentCurrency.Active = garmentCurrencyVM.Active;
             garmentCurrency._CreatedUtc = garmentCurrencyVM._CreatedUtc;
@@ -232,16 +237,79 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return Tuple.Create(Valid, ErrorList);
         }
 
-		public List<GarmentCurrency> GetByIds(List<int> ids)
-		{
-			return this.DbSet.Where(p => ids.Contains(p.Id) && p._IsDeleted == false)
-				.ToList();
-		}
+        public List<GarmentCurrency> GetByIds(List<int> ids)
+        {
+            return this.DbSet.Where(p => ids.Contains(p.Id) && p._IsDeleted == false)
+                .ToList();
+        }
 
         public List<GarmentCurrency> GetByCode(string code)
         {
             return this.DbSet.Where(p => code.Contains(p.Code) && p._IsDeleted == false)
                 .ToList();
         }
-	}
+
+        public GarmentCurrency GetSingleByCode(string code)
+        {
+            return DbSet.OrderByDescending(o => o._LastModifiedUtc).FirstOrDefault(f => f.Code == code);
+        }
+
+        public GarmentCurrency GetSingleByCodeDate(string code, DateTimeOffset date)
+        {
+            var currencyWithCodeYear = DbSet.Where(entity => entity.Code == code).OrderBy(o => (o.Date - date.DateTime).Duration()).FirstOrDefault();
+            //if (currencyWithCodeYear.Count() == 0)
+            //{
+            //    return GetSingleByCode(code);
+            //}
+            //else
+            //{
+            //    return date >= currencyWithCodeYear.Last().Date ? currencyWithCodeYear.Last() :
+            //        date <= currencyWithCodeYear.First().Date ? currencyWithCodeYear.First() :
+            //        currencyWithCodeYear.Last(d => d.Date <= date);
+
+            //}
+            return currencyWithCodeYear;
+        }
+
+        public List<GarmentCurrencyViewModel> GetByCodeBeforeDate(List<GarmentCurrencyViewModel> filters)
+        {
+            List<GarmentCurrencyViewModel> data = new List<GarmentCurrencyViewModel>();
+            foreach (var filter in filters)
+            {
+                var model = DbSet.Where(q => q.Code == filter.code && q.Date <= filter.date).OrderByDescending(o => o.Date).FirstOrDefault();
+
+                if (data.Count(ac => ac.Id == model.Id) == 0)
+                {
+                    data.Add(MapToViewModel(model));
+                }
+            }
+            return data;
+        }
+
+        public List<GarmentCurrency> GetByDate(int page, int size, string keyword, string filter)
+        {
+            try
+            {
+                Dictionary<string, string> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+
+                DateTime dateTime;
+                if (!filterDictionary.Any(x => x.Key.ToLower().Equals("date")) ||
+                    !DateTime.TryParse(filterDictionary.Where(x => x.Key.ToLower().Equals("date")).FirstOrDefault().Value, out dateTime))
+                    throw new Exception("Invalid date format.");
+
+                var query = this.DbSet.Where(x => x.Code.Contains(keyword) && x.Date.Date <= dateTime.Date && !x._IsDeleted)
+                    .GroupBy(x => x.Code)
+                    .Select(y => y.OrderByDescending(z => z.Date).FirstOrDefault());
+
+                Pageable<GarmentCurrency> pageable = new Pageable<GarmentCurrency>(query, page - 1, size);
+                List<GarmentCurrency> result = pageable.Data.ToList<GarmentCurrency>();
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+    }
 }

@@ -70,13 +70,35 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<MachineSpinningModel> MachineSpinnings { get; set; }
         public DbSet<GarmentSection> GarmentSections { get; set; }
         public DbSet<StandardMinuteValue> StandardMinuteValues { get; set; }
+        public DbSet<MachineSpinningProcessType> MachineSpinningProcessType { get; set; }
+        public DbSet<MappingCategory> MappingCategories { get; set; }
+        public DbSet<SizeModel> Sizes { get; set; }
+        public DbSet<GarmentLeftoverWarehouseBuyerModel> GarmentLeftoverWarehouseBuyers { get; set; }
+        public DbSet<GarmentShippingStaffModel> GarmentShippingStaffs { get; set; }
+        public DbSet<GarmentFabricTypeModel> GarmentFabricTypes { get; set; }
+        public DbSet<GarmentEMKLModel> GarmentEMKLs { get; set; }
+        public DbSet<GarmentForwarderModel> GarmentForwarders { get; set; }
+        public DbSet<GarmentTransactionTypeModel> GarmentTransactionTypes { get; set; }
+        public DbSet<GarmentLeftoverWarehouseProductModel> GarmentLeftoverWarehouseProducts { get; set; }
+        public DbSet<GarmentLeftoverWarehouseComodityModel> GarmentLeftoverWarehouseComodities { get; set; }
+        public DbSet<GarmentCourierModel> GarmentCouriers { get; set; }
+        public DbSet<GarmentInsuranceModel> GarmentInsurances { get; set; }
+        public DbSet<BICurrency> BICurrencies { get; set; }
+        public DbSet<AccountingUnit> AccountingUnits { get; set; }
+        public DbSet<AccountingCategory> AccountingCategories { get; set; }
+        public DbSet<BudgetingCategory> BudgetingCategories { get; set; }
+        public DbSet<GarmentAdditionalChargesModel> GarmentAdditionalCharges { get; set; }
+        public DbSet<IBCurrencyModel> IBCurrencies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Buyer>()
                 .HasIndex(b => b.Code);
-            
+
+            modelBuilder.Entity<MappingCategory>()
+                .HasKey(x => x.Id);
         }
     }
 }

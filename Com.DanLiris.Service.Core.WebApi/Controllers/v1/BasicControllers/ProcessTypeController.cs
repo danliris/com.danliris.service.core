@@ -16,7 +16,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/process-types")]
     public class ProcessTypeController : BasicController<ProcessTypeService, ProcessType, ProcessTypeViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
         public ProcessTypeController(ProcessTypeService service) : base(service, ApiVersion)
         {
         }

@@ -12,7 +12,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/income-taxes")]
     public class IncomeTaxesController : BasicController<IncomeTaxService, IncomeTax, IncomeTaxViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
 
         public IncomeTaxesController(IncomeTaxService service) : base(service, ApiVersion)
         {

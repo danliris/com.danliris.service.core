@@ -19,6 +19,8 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         
         public string Description { get; set; }        
 
+        public string COACodeCredit { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> validationResult = new List<ValidationResult>();

@@ -13,43 +13,43 @@ using Models = Com.DanLiris.Service.Core.Lib.Models;
 
 namespace Com.DanLiris.Service.Core.Test.Services.BudgetCurrency
 {
-	[Collection("ServiceProviderFixture Collection")]
-	public class BudgetCurrencyBasicTest : BasicServiceTest<CoreDbContext, BudgetCurrencyService, Models.BudgetCurrency>
-	{
-		private static readonly string[] createAttrAssertions = { "Code", "Date", "Rate" };
-		private static readonly string[] updateAttrAssertions = { "Code", "Date", "Rate" };
-		private static readonly string[] existAttrCriteria = { "Code", "Date" };
-		
-		public BudgetCurrencyBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
-		{
-		}
+    [Collection("ServiceProviderFixture Collection")]
+    public class BudgetCurrencyBasicTest : BasicServiceTest<CoreDbContext, BudgetCurrencyService, Models.BudgetCurrency>
+    {
+        private static readonly string[] createAttrAssertions = { "Code", "Date", "Rate" };
+        private static readonly string[] updateAttrAssertions = { "Code", "Date", "Rate" };
+        private static readonly string[] existAttrCriteria = { "Code", "Date" };
 
-		public override void EmptyCreateModel(Models.BudgetCurrency model)
+        public BudgetCurrencyBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
+        {
+        }
+
+        public override void EmptyCreateModel(Models.BudgetCurrency model)
         {
             model.Code = "Test";
             model.Date = DateTime.Now;
-			model.Rate = 1;
-		}
+            model.Rate = 1;
+        }
 
-		public override void EmptyUpdateModel(Models.BudgetCurrency model)
+        public override void EmptyUpdateModel(Models.BudgetCurrency model)
         {
             model.Code = "Test";
             model.Date = DateTime.Now;
-			model.Rate = 1;
-		}
+            model.Rate = 1;
+        }
 
-		public override Models.BudgetCurrency GenerateTestModel()
-		{
-			string guid = Guid.NewGuid().ToString();
+        public override Models.BudgetCurrency GenerateTestModel()
+        {
+            string guid = Guid.NewGuid().ToString();
 
-			return new Models.BudgetCurrency()
-			{
-				Code = guid,
-				Date = DateTime.Now,
-				Rate = 1,
-				Remark = guid
-			};
-		}
+            return new Models.BudgetCurrency()
+            {
+                Code = guid,
+                Date = DateTime.Now,
+                Rate = 1,
+                Remark = guid
+            };
+        }
 
         private BudgetCurrencyDataUtil DataUtil
         {
@@ -65,20 +65,20 @@ namespace Com.DanLiris.Service.Core.Test.Services.BudgetCurrency
         public async void GetByTags()
         {
             Models.BudgetCurrency model = await DataUtil.GetTestDataAsync();
-            var Response = Services.GetByCode(model.Code );
+            var Response = Services.GetByCode(model.Code);
             Assert.NotNull(Response);
         }
 
 
         [Fact]
-        public async void Should_Error_Upload_CSV_Data_DuplicateCode()
+        public void Should_Error_Upload_CSV_Data_DuplicateCode()
         {
-            BudgetCurrencyViewModel Vmodel5 = await DataUtil.GetNewData2();
-            BudgetCurrencyViewModel Vmodel6 = await DataUtil.GetNewData3();
-            var Response = Services.UploadValidate(new List<BudgetCurrencyViewModel> { Vmodel5, Vmodel6 }, new List<KeyValuePair<string, StringValues>>{});
+            BudgetCurrencyViewModel Vmodel5 = DataUtil.GetNewData2();
+            BudgetCurrencyViewModel Vmodel6 = DataUtil.GetNewData3();
+            var Response = Services.UploadValidate(new List<BudgetCurrencyViewModel> { Vmodel5, Vmodel6 }, new List<KeyValuePair<string, StringValues>> { });
             Assert.Equal(Response.Item1, false);
         }
-        
+
         //[Fact]
         //public async void Should_Success_Upload_CSV_Data_when_UseTax_False()
         //{

@@ -90,6 +90,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             BudgetViewModel budgetVM = new BudgetViewModel();
 
             budgetVM._id = budget.Id;
+            budgetVM.UId = budget.UId;
             budgetVM._deleted = budget._IsDeleted;
             budgetVM._active = budget.Active;
             budgetVM._createdDate = budget._CreatedUtc;
@@ -109,6 +110,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Budget budget = new Budget();
 
             budget.Id = budgetVM._id;
+            budget.UId = budgetVM.UId;
             budget._IsDeleted = budgetVM._deleted;
             budget.Active = budgetVM._active;
             budget._CreatedUtc = budgetVM._createdDate;

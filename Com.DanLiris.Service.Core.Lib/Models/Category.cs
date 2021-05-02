@@ -21,6 +21,23 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         [StringLength(500)]
         public string CodeRequirement { get; set; }
 
+        public int DivisionId { get; set; }
+
+        [MaxLength(50)]
+        public string PurchasingCOA { get; set; }
+        [MaxLength(50)]
+        public string StockCOA { get; set; }
+        [MaxLength(50)]
+        public string LocalDebtCOA { get; set; }
+        [MaxLength(50)]
+        public string ImportDebtCOA { get; set; }
+
+        public int AccountingCategoryId { get; set; }
+        public int BudgetingCategoryId { get; set; }
+        public int ReportLayoutIndex { get; set; }
+
+        //public Division Division { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> validationResult = new List<ValidationResult>();
@@ -30,6 +47,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 validationResult.Add(new ValidationResult("Name is required", new List<string> { "name" }));
+
+            if (AccountingCategoryId <= 0)
+                validationResult.Add(new ValidationResult("Kategori Pembukuan is required", new List<string> { "AccountingCategoryId" }));
 
             if (validationResult.Count.Equals(0))
             {
@@ -41,6 +61,66 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
                 if (service.DbContext.Set<Category>().Count(r => r._IsDeleted.Equals(false) && r.Id != this.Id && r.Name.Equals(this.Name)) > 0) /* Name Unique */
                     validationResult.Add(new ValidationResult("Name already exists", new List<string> { "name" }));
+            }
+
+            if (!string.IsNullOrWhiteSpace(PurchasingCOA))
+            {
+                var splittedString = PurchasingCOA.Split('.');
+                if (splittedString.Count() != 2)
+                    validationResult.Add(new ValidationResult("Kode COA harus dipisah menggunakan titik.", new List<string> { "PurchasingCOA" }));
+                else
+                {
+                    var firstCodeCount = splittedString[0].Count();
+                    var secondCodeCount = splittedString[1].Count();
+
+                    if (firstCodeCount != 4 || secondCodeCount != 2)
+                        validationResult.Add(new ValidationResult("Kode COA tidak valid.", new List<string> { "PurchasingCOA" }));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(StockCOA))
+            {
+                var splittedString = StockCOA.Split('.');
+                if (splittedString.Count() != 2)
+                    validationResult.Add(new ValidationResult("Kode COA harus dipisah menggunakan titik.", new List<string> { "StockCOA" }));
+                else
+                {
+                    var firstCodeCount = splittedString[0].Count();
+                    var secondCodeCount = splittedString[1].Count();
+
+                    if (firstCodeCount != 4 || secondCodeCount != 2)
+                        validationResult.Add(new ValidationResult("Kode COA tidak valid.", new List<string> { "StockCOA" }));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(LocalDebtCOA))
+            {
+                var splittedString = LocalDebtCOA.Split('.');
+                if (splittedString.Count() != 2)
+                    validationResult.Add(new ValidationResult("Kode COA harus dipisah menggunakan titik.", new List<string> { "LocalDebtCOA" }));
+                else
+                {
+                    var firstCodeCount = splittedString[0].Count();
+                    var secondCodeCount = splittedString[1].Count();
+
+                    if (firstCodeCount != 4 || secondCodeCount != 2)
+                        validationResult.Add(new ValidationResult("Kode COA tidak valid.", new List<string> { "LocalDebtCOA" }));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(ImportDebtCOA))
+            {
+                var splittedString = ImportDebtCOA.Split('.');
+                if (splittedString.Count() != 2)
+                    validationResult.Add(new ValidationResult("Kode COA harus dipisah menggunakan titik.", new List<string> { "ImportDebtCOA" }));
+                else
+                {
+                    var firstCodeCount = splittedString[0].Count();
+                    var secondCodeCount = splittedString[1].Count();
+
+                    if (firstCodeCount != 4 || secondCodeCount != 2)
+                        validationResult.Add(new ValidationResult("Kode COA tidak valid.", new List<string> { "ImportDebtCOA" }));
+                }
             }
 
             return validationResult;

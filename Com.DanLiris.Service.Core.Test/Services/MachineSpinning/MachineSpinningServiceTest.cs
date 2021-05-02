@@ -7,6 +7,7 @@ using Com.DanLiris.Service.Core.Test.DataUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -69,6 +70,13 @@ namespace Com.DanLiris.Service.Core.Test.Services.MachineSpinning
             var data = await _dataUtil(service).GetTestData(_dbContext(GetCurrentMethod()));
             var Response = service.Read(1, 25, "{}", null, data.Name, "{}");
             Assert.NotEmpty(Response.Data);
+
+            Dictionary<string, string> order = new Dictionary<string, string>()
+            {
+                {"No", "asc" }
+            };
+            var response2 = service.Read(1, 25, JsonConvert.SerializeObject(order), null, data.Name, "{}");
+            Assert.NotEmpty(response2.Data);
         }
 
         [Fact]
@@ -304,7 +312,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.MachineSpinning
         }
 
         [Fact]
-        public async void Should_Fail_Upload_Validate_NotExist_Type()
+        public void Should_Fail_Upload_Validate_NotExist_Type()
         {
             var service = new MachineSpinningService(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
 
@@ -329,6 +337,15 @@ namespace Com.DanLiris.Service.Core.Test.Services.MachineSpinning
             var service = new MachineSpinningService(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
             var Response = service.GetFilteredSpinning("","");
             Assert.NotNull(Response);
+        }
+
+        [Fact]
+        public async void Should_Success_Get_DataByNo()
+        {
+            var service = new MachineSpinningService(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
+            var data = await _dataUtil(service).GetTestData(_dbContext(GetCurrentMethod()));
+            var Response = service.ReadNoOnly(1, 25, "{}", null, data.No, "{}");
+            Assert.NotEmpty(Response.Data);
         }
     }
 }

@@ -94,6 +94,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             SupplierViewModel supplierVM = new SupplierViewModel();
 
             supplierVM._id = supplier.Id;
+            supplierVM.UId = supplier.UId;
             supplierVM._deleted = supplier._IsDeleted;
             supplierVM._active = supplier.Active;
             supplierVM._createdDate = supplier._CreatedUtc;
@@ -119,6 +120,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Supplier supplier = new Supplier();
 
             supplier.Id = supplierVM._id;
+            supplier.UId = supplierVM.UId;
             supplier._IsDeleted = supplierVM._deleted;
             supplier.Active = supplierVM._active;
             supplier._CreatedUtc = supplierVM._createdDate;

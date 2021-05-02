@@ -46,7 +46,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "Address", "City", "Country", "Contact", "Tempo", "_LastModifiedUtc", "Type"
+                "Id", "Code", "Name", "Address", "City", "Country", "Contact", "Tempo", "_LastModifiedUtc", "Type", "NPWP","NIK"
             };
 
             Query = Query
@@ -61,6 +61,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Contact = b.Contact,
                     Tempo = b.Tempo,
                     Type = b.Type,
+                    NPWP = b. NPWP,
+                    NIK = b.NIK,
                     _LastModifiedUtc = b._LastModifiedUtc
                 });
 
@@ -98,6 +100,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             BuyerViewModel buyerVM = new BuyerViewModel();
 
             buyerVM.Id = buyer.Id;
+            buyerVM.UId = buyer.UId;
             buyerVM._IsDeleted = buyer._IsDeleted;
             buyerVM.Active = buyer.Active;
             buyerVM._CreatedUtc = buyer._CreatedUtc;
@@ -115,7 +118,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             buyerVM.Tempo = buyer.Tempo;
             buyerVM.Type = buyer.Type;
             buyerVM.NPWP = buyer.NPWP;
-
+            buyerVM.NIK = buyer.NIK;
             return buyerVM;
         }
 
@@ -124,6 +127,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             Buyer buyer = new Buyer();
 
             buyer.Id = buyerVM.Id;
+            buyer.UId = buyerVM.UId;
             buyer._IsDeleted = buyerVM._IsDeleted;
             buyer.Active = buyerVM.Active;
             buyer._CreatedUtc = buyerVM._CreatedUtc;
@@ -141,6 +145,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             buyer.Tempo = !Equals(buyerVM.Tempo, null) ? Convert.ToInt32(buyerVM.Tempo) : null; /* Check Null */
             buyer.Type = buyerVM.Type;
             buyer.NPWP = buyerVM.NPWP;
+            buyer.NIK = buyerVM.NIK;
 
             return buyer;
         }
@@ -148,7 +153,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         /* Upload CSV */
         private readonly List<string> Header = new List<string>()
         {
-            "Kode Buyer", "Nama", "Alamat", "Kota", "Negara", "NPWP", "Jenis Buyer", "Kontak", "Tempo"
+            "Kode Buyer", "Nama", "Alamat", "Kota", "Negara", "NPWP", "Jenis Buyer", "Kontak", "Tempo","NIK"
         };
 
         public List<string> CsvHeader => Header;
@@ -166,6 +171,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Map(b => b.Type).Index(6);
                 Map(b => b.Contact).Index(7);
                 Map(b => b.Tempo).Index(8).TypeConverter<StringConverter>();
+                Map(b => b.NIK).Index(9);
             }
         }
 
@@ -178,6 +184,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             foreach (BuyerViewModel buyerVM in Data)
             {
                 ErrorMessage = "";
+
+                //if (string.IsNullOrEmpty(buyerVM.NIK))
+                //{
+                //    ErrorMessage = string.Concat(ErrorMessage, "NIK tidak boleh kosong, ");
+                //}
 
                 if (string.IsNullOrWhiteSpace(buyerVM.Code))
                 {
@@ -221,6 +232,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     ErrorMessage = string.Concat(ErrorMessage, "Tempo harus angka, ");
                 }
 
+                
+
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
                     /* Service Validation */
@@ -249,6 +262,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Error.Add("Jenis Buyer", buyerVM.Type);
                     Error.Add("Kontak", buyerVM.Contact);
                     Error.Add("Tempo", buyerVM.Tempo);
+                    Error.Add("NIK", buyerVM.NIK);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);

@@ -52,7 +52,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
 			return TestData;
 		}
-        public async Task<GarmentSupplierViewModel> GetNewData1()
+        public GarmentSupplierViewModel GetNewData1()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel
@@ -77,7 +77,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             return TestData;
         }
-        public async Task<GarmentSupplierViewModel> GetNewData2()
+        public GarmentSupplierViewModel GetNewData2()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel
@@ -102,7 +102,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             return TestData;
         }
-        public async Task<GarmentSupplierViewModel> GetNewData3()
+        public GarmentSupplierViewModel GetNewData3()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel
@@ -127,7 +127,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             return TestData;
         }
-        public async Task<GarmentSupplierViewModel> GetNewData4()
+        public GarmentSupplierViewModel GetNewData4()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel
@@ -152,7 +152,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             return TestData;
         }
-        public async Task<GarmentSupplierViewModel> GetNewData5()
+        public GarmentSupplierViewModel GetNewData5()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel
@@ -177,7 +177,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             return TestData;
         }
-        public async Task<GarmentSupplierViewModel> GetNewData6()
+        public GarmentSupplierViewModel GetNewData6()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel
@@ -202,7 +202,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 
             return TestData;
         }
-        public async Task<GarmentSupplierViewModel> GetNewData7()
+        public GarmentSupplierViewModel GetNewData7()
         {
             string guid = Guid.NewGuid().ToString();
             GarmentSupplierViewModel TestData = new GarmentSupplierViewModel

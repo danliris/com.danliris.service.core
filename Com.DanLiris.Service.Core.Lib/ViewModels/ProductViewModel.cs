@@ -49,7 +49,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         [MaxLength(100)]
         public string Grade { get; set; }
 
-        public int Length { get; set; }
+        public double Length { get; set; }
 
         [MaxLength(250)]
         public string Lot { get; set; }
@@ -61,7 +61,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         [MaxLength(25)]
         public string ProductionOrderNo { get; set; }
         
-        public int Weight { get; set; }
+        public double Weight { get; set; }
        
     }
 

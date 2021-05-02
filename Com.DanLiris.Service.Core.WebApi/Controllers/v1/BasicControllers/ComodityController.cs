@@ -16,7 +16,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/comodities")]
     public class ComodityController : BasicController<ComodityService, Comodity, ComodityViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
 
         public ComodityController(ComodityService service) : base(service, ApiVersion)
         {

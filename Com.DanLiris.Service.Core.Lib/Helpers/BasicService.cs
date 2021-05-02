@@ -22,51 +22,64 @@ namespace Com.DanLiris.Service.Core.Lib.Helpers
 
         public virtual async Task<int> CreateModel(TModel Model)
         {
-            return await this.CreateAsync(Model);
+            var result = await this.CreateAsync(Model);
+            SetCache();
+            return result;
+        }
+
+        protected virtual void SetCache()
+        {
+
         }
 
         public abstract Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}");
 
         public virtual async Task<TModel> ReadModelById(int Id)
         {
-            return await this.GetAsync(Id);
+            var result = await this.GetAsync(Id);
+            SetCache();
+            return result;
         }
 
         public virtual async Task<int> UpdateModel(int Id, TModel Model)
         {
-            return await this.UpdateAsync(Id, Model);
+            var result = await this.UpdateAsync(Id, Model);
+            SetCache();
+            return result;
         }
 
-        //public override void OnUpdating(int id, TModel model)
-        //{
-        //    base.OnUpdating(id, model);
-        //    model._LastModifiedAgent = "core-service";
-        //    model._LastModifiedBy = this.Username;
-        //}
+        public override void OnUpdating(int id, TModel model)
+        {
+            base.OnUpdating(id, model);
+            model._LastModifiedAgent = "core-service";
+            model._LastModifiedBy = this.Username ?? "";
+        }
 
-        //public override void OnCreating(TModel model)
-        //{
-        //    base.OnCreating(model);
-        //    model._CreatedAgent = "core-service";
-        //    model._CreatedBy = this.Username;
-        //    model._LastModifiedAgent = "core-service";
-        //    model._LastModifiedBy = this.Username;
-        //}
+        public override void OnCreating(TModel model)
+        {
+            base.OnCreating(model);
+            model._CreatedAgent = "core-service";
+            model._CreatedBy = this.Username ?? "";
+            model._LastModifiedAgent = "core-service";
+            model._LastModifiedBy = this.Username ?? "";
+        }
 
-        //public override void OnDeleting(TModel model)
-        //{
-        //    base.OnDeleting(model);
-        //    model._DeletedAgent = "core-service";
-        //    model._DeletedBy = this.Username;
-        //}
+        public override void OnDeleting(TModel model)
+        {
+            base.OnDeleting(model);
+            model._DeletedAgent = "core-service";
+            model._DeletedBy = this.Username ?? "";
+        }
 
         public virtual async Task<int> DeleteModel(int Id)
         {
-            return await this.DeleteAsync(Id);
+            var result = await this.DeleteAsync(Id);
+            SetCache();
+            return result;
         }
 
         public virtual IQueryable<TModel> ConfigureFilter(IQueryable<TModel> Query, Dictionary<string, object> FilterDictionary)
-       {
+        {
             if (FilterDictionary != null && !FilterDictionary.Count.Equals(0))
             {
                 foreach (var f in FilterDictionary)
@@ -80,5 +93,6 @@ namespace Com.DanLiris.Service.Core.Lib.Helpers
             }
             return Query;
         }
+
     }
 }

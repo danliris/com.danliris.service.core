@@ -74,7 +74,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
                     OrderTypeId = 1,
                     OrderTypeName = "otn",
                     ProductionOrderId = 1,
-                    
+
                 },
                 Code = string.Format("Code {0}", guid),
                 Name = string.Format("TEST {0}", guid),
@@ -87,21 +87,38 @@ namespace Com.DanLiris.Service.Core.Test.Services.StandardTest
                 Tags = "tags",
                 UomId = 1,
                 UomUnit = "uom",
-                
+
             };
         }
 
         [SkippableFact]
         public override async Task TestCreateModel_Exist()
         {
+            await Task.FromResult(1);
             Skip.If(true);
         }
 
         [Fact]
         public void TestSimple()
         {
-            
-           var data = Service.GetSimple();
+
+            var data = Service.GetSimple();
+            Assert.NotNull(data);
+        }
+
+        [Fact]
+        public void TestReadModelNullTags()
+        {
+
+            Tuple<List<Models.Product>, int, Dictionary<string, string>, List<string>> data = Service.ReadModelNullTags();
+            Assert.NotNull(data);
+        }
+
+        [Fact]
+        public async Task TestGetForSpinning()
+        {
+            var createdData = await this.GetCreatedTestData(Service);
+            var data = await Service.GetProductForSpinning(createdData.Id);
             Assert.NotNull(data);
         }
     }

@@ -98,6 +98,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentBuyerViewModel garmentBuyerVM = new GarmentBuyerViewModel();
 
             garmentBuyerVM.Id = garmentBuyer.Id;
+            garmentBuyerVM.UId = garmentBuyer.UId;
             garmentBuyerVM._IsDeleted = garmentBuyer._IsDeleted;
             garmentBuyerVM.Active = garmentBuyer.Active;
             garmentBuyerVM._CreatedUtc = garmentBuyer._CreatedUtc;
@@ -124,6 +125,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             GarmentBuyer garmentBuyer = new GarmentBuyer();
 
             garmentBuyer.Id = garmentBuyerVM.Id;
+            garmentBuyer.UId = garmentBuyerVM.UId;
             garmentBuyer._IsDeleted = garmentBuyerVM._IsDeleted;
             garmentBuyer.Active = garmentBuyerVM.Active;
             garmentBuyer._CreatedUtc = garmentBuyerVM._CreatedUtc;

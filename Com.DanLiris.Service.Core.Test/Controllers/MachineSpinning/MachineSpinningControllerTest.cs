@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Com.DanLiris.Service.Core.Lib.AutoMapperProfiles;
+using Com.DanLiris.Service.Core.Lib.Helpers;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.Services.MachineSpinning;
 using Com.DanLiris.Service.Core.Lib.ViewModels;
@@ -14,21 +15,41 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.DanLiris.Service.Core.Test.Controllers.MachineSpinning
 {
-    [Collection("TestFixture Collection")]
+
     public class MachineSpinningControllerTest : BaseControllerTest<MachineSpinningController, MachineSpinningModel, MachineSpinningViewModel, IMachineSpinningService>
     {
-        private const string URI = "v1/master/machine-spinnings";
-        protected TestServerFixture TestFixture { get; set; }
-        protected HttpClient Client
+        //private const string URI = "v1/master/machine-spinnings";
+        //protected TestServerFixture TestFixture { get; set; }
+        //protected HttpClient Client
+        //{
+        //    get { return this.TestFixture.Client; }
+        //}
+
+        [Fact]
+        public void GetBlowingFiltered_WithoutException_ReturnOK()
         {
-            get { return this.TestFixture.Client; }
+            var mocks = GetMocks();
+            mocks.Service.Setup(f => f.ReadNoOnly(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new ReadResponse<MachineSpinningModel>(new List<MachineSpinningModel>(), 0, new Dictionary<string, string>(), new List<string>()));
+            mocks.Mapper.Setup(f => f.Map<List<MachineSpinningViewModel>>(It.IsAny<List<MachineSpinningModel>>())).Returns(ViewModels);
+
+            int statusCode = GetStatusCode(GetController(mocks).GetLoaderByUnitType());
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void GetBlowingFiltered_ReadThrowException_ReturnInternalServerError()
+        {
+            var mocks = GetMocks();
+            mocks.Service.Setup(f => f.ReadNoOnly(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
+
+            int statusCode = GetStatusCode(GetController(mocks).GetLoaderByUnitType());
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
 
         [Fact]
@@ -188,7 +209,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.MachineSpinning
         }
 
         [Fact]
-        public async Task GetSimple()
+        public void GetSimple()
         {
             var mocks = GetMocks();
             mocks.Service.Setup(f => f.GetSimple()).Throws(new Exception());

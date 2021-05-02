@@ -11,42 +11,42 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 {
     public class AccountBank : StandardEntity, IValidatableObject
     {
-        [MaxLength(255)]
+        [MaxLength(128)]
         public string UId { get; set; }
-
-        [StringLength(100)]
+        [StringLength(64)]
         public string Code { get; set; }
-
-        [StringLength(500)]
+        [StringLength(64)]
+        public string BankCode { get; set; }
+        [StringLength(512)]
         public string BankName { get; set; }
-
+        [StringLength(512)]
         public string BankAddress { get; set; }
-
-        [StringLength(500)]
+        [StringLength(512)]
         public string AccountName { get; set; }
-
-        [StringLength(100)]
+        [StringLength(64)]
+        public string AccountCOA { get; set; }
+        [StringLength(128)]
         public string AccountNumber { get; set; }
-
-        [StringLength(100)]
+        [StringLength(256)]
         public string SwiftCode { get; set; }
-        
         public int? CurrencyId { get; set; }
-
+        [StringLength(32)]
         public string CurrencyCode { get; set; }
-
+        [StringLength(8)]
         public string CurrencySymbol { get; set; }
-
         /* Double */
         public double CurrencyRate { get; set; }
-
+        [StringLength(1024)]
         public string CurrencyDescription { get; set; }
-
+        [StringLength(64)]
         //Division
         public string DivisionName { get; set; }
+        [StringLength(32)]
         public string DivisionCode { get; set; }
         public int? DivisionId { get; set; }
+        [StringLength(128)]
         public string Phone { get; set; }
+        [StringLength(128)]
         public string Fax { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -62,7 +62,7 @@ namespace Com.DanLiris.Service.Core.Lib.Models
             if (string.IsNullOrWhiteSpace(this.AccountNumber))
                 validationResult.Add(new ValidationResult("Account Number is required", new List<string> { "AccountNumber" }));
 
-            if(CurrencyId.Equals(null))
+            if (CurrencyId.Equals(null))
                 validationResult.Add(new ValidationResult("Currency is required", new List<string> { "CurrencyID" }));
 
             if (validationResult.Count.Equals(0))

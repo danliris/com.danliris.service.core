@@ -12,7 +12,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Route("v{version:apiVersion}/master/budgets")]
     public class BudgetsController : BasicController<BudgetService, Budget, BudgetViewModel, CoreDbContext>
     {
-        private static readonly string ApiVersion = "1.0";
+        private new static readonly string ApiVersion = "1.0";
 
         public BudgetsController(BudgetService service) : base(service, ApiVersion)
         {

@@ -1,4 +1,7 @@
-﻿using Com.DanLiris.Service.Core.Lib.ViewModels;
+﻿using Com.DanLiris.Service.Core.Lib.Models;
+using Com.DanLiris.Service.Core.Lib.Services;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.DanLiris.Service.Core.Test.DataUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Com.DanLiris.Service.Core.Test.Controllers.StandardTest
+namespace Com.DanLiris.Service.Core.Test.Controllers.StandardTestTest
 {
     [Collection("TestFixture Collection")]
     public class StandardTestTest
@@ -25,6 +28,16 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.StandardTest
         public StandardTestTest(TestServerFixture fixture)
         {
             TestFixture = fixture;
+        }
+
+        protected StandardTestsService Service
+        {
+            get { return (StandardTestsService)this.TestFixture.Service.GetService(typeof(StandardTestsService)); }
+        }
+
+        protected StandardTestDataUtil DataUtil
+        {
+            get { return (StandardTestDataUtil)this.TestFixture.Service.GetService(typeof(StandardTestDataUtil)); }
         }
 
         public StandardTestsViewModel GenerateTestModel()
@@ -62,5 +75,24 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.StandardTest
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Delete()
+        {
+            StandardTests standard = await DataUtil.GetTestDataAsync();
+            StandardTestsViewModel VM = Service.MapToViewModel(standard);
+            var response = await this.Client.DeleteAsync(string.Concat(URI, "/", VM.Id));
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Update()
+        {
+            StandardTests standard = await DataUtil.GetTestDataAsync();
+            StandardTestsViewModel VM = Service.MapToViewModel(standard);
+            var response = await this.Client.PutAsync(string.Concat(URI, "/", VM.Id), new StringContent(JsonConvert.SerializeObject(VM).ToString(), Encoding.UTF8, "application/json"));
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
     }
 }

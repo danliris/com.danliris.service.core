@@ -37,7 +37,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
 			return model;
 		}
 
-        public async Task<BudgetCurrencyViewModel> GetNewData2()
+        public BudgetCurrencyViewModel GetNewData2()
         {
 
             string guid = Guid.NewGuid().ToString();
@@ -53,7 +53,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
             return TestData;
         }
 
-        public async Task<BudgetCurrencyViewModel> GetNewData3()
+        public BudgetCurrencyViewModel GetNewData3()
         {
 
             string guid = Guid.NewGuid().ToString();
@@ -70,7 +70,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
         }
 
 
-        public async Task<BudgetCurrencyViewModel> GetNewData4()
+        public BudgetCurrencyViewModel GetNewData4()
         {
 
             string guid = Guid.NewGuid().ToString();

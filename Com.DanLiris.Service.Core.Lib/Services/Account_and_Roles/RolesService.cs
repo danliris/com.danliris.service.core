@@ -156,10 +156,10 @@ namespace Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles
 
         public async override Task<Role> ReadModelById(int Id)
         {
-            return DbSet.Where(d => d.Id.Equals(Id)).Include(i => i.Permissions).FirstOrDefault();
+            return await DbSet.Where(d => d.Id.Equals(Id)).Include(i => i.Permissions).FirstOrDefaultAsync();
         }
 
-        public async override Task<int> CreateModel(Role role)
+        public override Task<int> CreateModel(Role role)
         {
             //PermissionService permissionService = this.ServiceProvider.GetService<PermissionService>();
             permissionService.Username = this.Username;
@@ -171,7 +171,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles
 
             int Count = this.Create(role);
 
-            return Count;
+            return Task.FromResult(Count);
         }
 
         public async override Task<int> UpdateModel(int Id, Role role)
@@ -192,11 +192,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles
 
                         if (p != null)
                         {
-                            permissionService.UpdateModel(p.Id, p);
+                            await permissionService.UpdateModel(p.Id, p);
                         }
                         else
                         {
-                            permissionService.DeleteModel(permissionId);
+                            await permissionService.DeleteModel(permissionId);
                         }
                     }
 
@@ -205,7 +205,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles
                         if (data.Id.Equals(0))
                         {
                             data.RoleId = Id;
-                            permissionService.CreateModel(data);
+                            await permissionService.CreateModel(data);
                         }
                     }
 
@@ -237,7 +237,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services.Account_and_Roles
 
                     foreach (int id in Permissions)
                     {
-                        permissionService.DeleteModel(id);
+                        await permissionService.DeleteModel(id);
                     }
 
                     Count = this.Delete(Id);
