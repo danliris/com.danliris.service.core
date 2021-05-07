@@ -256,7 +256,10 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public GarmentCurrency GetSingleByCodeDate(string code, DateTimeOffset date)
         {
-            var currencyWithCodeYear = DbSet.Where(entity => entity.Code == code).OrderBy(o => (o.Date - date.DateTime).Duration()).FirstOrDefault();
+            var currency = DbSet.Where(entity => entity.Code == code && entity.Date <= date).ToList().Select(o => new { Diffs = Math.Abs((o.Date.Date - date.DateTime.Date).Days), o.Date, o.Id }).OrderBy(o => o.Diffs).FirstOrDefault();
+            if (currency == null)
+                return null;
+            //var currencyWithCodeYear = DbSet.Where(entity => entity.Code == code && entity.Date <= date).OrderBy(o => Math.Abs((o.Date - date.DateTime).TotalDays)).FirstOrDefault();
             //if (currencyWithCodeYear.Count() == 0)
             //{
             //    return GetSingleByCode(code);
@@ -268,7 +271,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             //        currencyWithCodeYear.Last(d => d.Date <= date);
 
             //}
-            return currencyWithCodeYear;
+            return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
         }
 
         public List<GarmentCurrencyViewModel> GetByCodeBeforeDate(List<GarmentCurrencyViewModel> filters)
