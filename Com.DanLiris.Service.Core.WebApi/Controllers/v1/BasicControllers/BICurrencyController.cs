@@ -27,7 +27,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/master/bi-currencies")]
-    [Authorize]
+    //[Authorize]
     public class BICurrencyController : Controller
     {
         private const string ContentType = "application/vnd.openxmlformats";
@@ -56,7 +56,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
         {
             try
             {
-                var result = _service.Read(keyword, page, size, order);
+                var result = _service.Read(keyword, page, size, order, filter);
                 return Ok(new
                 {
                     apiVersion = ApiVersion,
