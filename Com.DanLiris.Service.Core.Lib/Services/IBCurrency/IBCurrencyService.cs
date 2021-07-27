@@ -53,7 +53,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
             return _dbContext.SaveChanges();
         }
 
-        public IndexDto Read(string keyword, int page, int size, string sort = "{}")
+        public IndexDto Read(string keyword, int page, int size, string sort = "{}", string filter = "{}")
         {
             var query = from ibCurrency in _dbContext.IBCurrencies.AsQueryable()
                         join currency in _dbContext.Currencies.AsQueryable() on ibCurrency.CurrencyId equals currency.Id into ibCurrencies
@@ -64,6 +64,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
 
             if (!string.IsNullOrWhiteSpace(keyword))
                 query = query.Where(entity => entity.Currency.Code.Contains(keyword));
+
+            var filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+            query = Filter(query, filterDictionary);
 
             var sortDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(sort);
             query = Order(query, sortDictionary);
@@ -90,6 +93,22 @@ namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
                 var orderType = sortDictionary[key];
 
                 query = query.OrderBy(string.Concat(key.Replace(".", ""), " ", orderType));
+            }
+            return query;
+        }
+
+        private IQueryable<IBCurrencyDto> Filter(IQueryable<IBCurrencyDto> query, Dictionary<string, string> filterDictionary)
+        {
+            if (filterDictionary != null && !filterDictionary.Count.Equals(0))
+            {
+                foreach (var f in filterDictionary)
+                {
+                    string key = f.Key;
+                    object Value = f.Value;
+                    string filterQuery = string.Concat(string.Empty, key, " == @0");
+
+                    query = query.Where(filterQuery, Value);
+                }
             }
             return query;
         }
