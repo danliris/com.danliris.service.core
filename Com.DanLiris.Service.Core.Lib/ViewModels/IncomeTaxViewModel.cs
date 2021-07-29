@@ -11,6 +11,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
 
         /* Double */
         public dynamic rate { get; set; }
+        public dynamic Rate { get; set; }
 
         public string description { get; set; }
 
