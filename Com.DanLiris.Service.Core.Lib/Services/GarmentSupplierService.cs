@@ -121,7 +121,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			{
 				Id = GarmentSupplier.IncomeTaxesId,
 				name = GarmentSupplier.IncomeTaxesName,
-				rate = GarmentSupplier.IncomeTaxesRate
+				rate = GarmentSupplier.IncomeTaxesRate,
+				Rate = GarmentSupplier.IncomeTaxesRate
 			};
 			GarmentSupplierVM.NPWP = GarmentSupplier.NPWP;
 			GarmentSupplierVM.serialNumber = GarmentSupplier.SerialNumber;

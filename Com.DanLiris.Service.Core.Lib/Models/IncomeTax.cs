@@ -58,11 +58,11 @@ namespace Com.DanLiris.Service.Core.Lib.Models
                     var firstCOA = COACodeCredit.Split(".")[0];
                     var secondCOA = COACodeCredit.Split(".")[1];
 
-                    if (int.TryParse(firstCOA, out var intFirstCOA) || firstCOA.Count() != 4)
+                    if (!int.TryParse(firstCOA, out var intFirstCOA) || firstCOA.Count() != 4)
                     {
                         validationResult.Add(new ValidationResult("Format COA salah", new List<string> { "COACodeCredit" }));
                     }
-                    else if (int.TryParse(secondCOA, out var intSecondCOA) || secondCOA.Count() != 2)
+                    else if (!int.TryParse(secondCOA, out var intSecondCOA) || secondCOA.Count() != 2)
                     {
                         validationResult.Add(new ValidationResult("Format COA salah", new List<string> { "COACodeCredit" }));
                     }
