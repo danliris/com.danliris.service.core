@@ -20,6 +20,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         [StringLength(500)]
         public string Name { get; set; }
 
+        [StringLength(500)]
+        public string GroupName { get; set; }
+
         public string Description { get; set; }        
         [MaxLength(50)]
         public string COACode { get; set; }

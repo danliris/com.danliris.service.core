@@ -192,5 +192,69 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             base.OnCreating(model);
         }
+
+        public Tuple<List<Division>, int, Dictionary<string, string>, List<string>> ReadModelByDivisionName(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        {
+            IQueryable<Division> Query = this.DbContext.Divisions;
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
+
+            /* Search With Keyword */
+            if (Keyword != null)
+            {
+                List<string> SearchAttributes = new List<string>()
+                {
+                    "GroupName"
+                };
+
+                Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
+            }
+
+            /* Const Select */
+            List<string> SelectedFields = new List<string>()
+                {
+                    "Id", "Code", "Name", "COACode"
+                };
+
+            Query = Query
+                .Select(b => new Division
+                {
+                    Id = b.Id,
+                    Code = b.Code,
+                    Name = b.Name,
+                    COACode = b.COACode
+                });
+
+            /* Order */
+            if (OrderDictionary.Count.Equals(0))
+            {
+                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+
+                Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
+            }
+            else
+            {
+                string Key = OrderDictionary.Keys.First();
+                string OrderType = OrderDictionary[Key];
+                string TransformKey = General.TransformOrderBy(Key);
+
+                BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+
+                Query = OrderType.Equals(General.ASCENDING) ?
+                    Query.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
+                    Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
+            }
+
+            /* Pagination */
+            Pageable<Division> pageable = new Pageable<Division>(Query, Page - 1, Size);
+            List<Division> Data = pageable.Data.ToList<Division>();
+
+            int TotalData = pageable.TotalCount;
+
+            SetCache();
+
+            return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
     }
 }
