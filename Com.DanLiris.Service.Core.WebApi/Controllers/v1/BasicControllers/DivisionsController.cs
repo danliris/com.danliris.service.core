@@ -25,11 +25,11 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
         {
             try
             {
-                Tuple<List<Division>, int, Dictionary<string, string>, List<string>> Data = Service.ReadModelByDivisionName(Page, Size, Order, Select, Keyword, Filter);
+                Tuple<List<DivisionGroupViewModel>, int, Dictionary<string, string>, List<string>> Data = Service.ReadModelByDivisionName(Page, Size, Order, Select, Keyword, Filter);
 
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
-                    .Ok<Division, DivisionViewModel>(Data.Item1, Service.MapToViewModel, Page, Size, Data.Item2, Data.Item1.Count, Data.Item3, Data.Item4);
+                    .Ok(Data.Item1, Page, Size, Data.Item2, Data.Item1.Count, Data.Item3, Data.Item4);
 
                 return Ok(Result);
             }
