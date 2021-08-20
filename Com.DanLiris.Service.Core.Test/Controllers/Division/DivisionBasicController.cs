@@ -98,7 +98,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.DivisionTest
         [Fact]
         public async Task Delete()
         {
-            Division division = await DataUtil.GetTestDataAsync();
+            Lib.Models.Division division = await DataUtil.GetTestDataAsync();
             DivisionViewModel VM = Service.MapToViewModel(division);
             var response = await this.Client.DeleteAsync(string.Concat(URI, "/", VM.Id));
 
@@ -108,7 +108,7 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.DivisionTest
         [Fact]
         public async Task Update()
         {
-            Division division = await DataUtil.GetTestDataAsync();
+            Lib.Models.Division division = await DataUtil.GetTestDataAsync();
             DivisionViewModel VM = Service.MapToViewModel(division);
             var response = await this.Client.PutAsync(string.Concat(URI, "/", VM.Id), new StringContent(JsonConvert.SerializeObject(VM).ToString(), Encoding.UTF8, "application/json"));
 

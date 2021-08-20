@@ -192,5 +192,67 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             base.OnCreating(model);
         }
+
+        public Tuple<List<DivisionGroupViewModel>, int, Dictionary<string, string>, List<string>> ReadModelByDivisionName(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        {
+            IQueryable<Division> Query = this.DbContext.Divisions;
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
+
+            var groupDivision = Query.GroupBy(element => element.GroupName)
+                                .Select(element => new DivisionGroupViewModel
+                                {
+                                    Name = element.Key,
+                                    DivisionCodes = element.Select(item => item.Code).ToList()
+                                });
+
+            /* Search With Keyword */
+            if (Keyword != null)
+            {
+                List<string> SearchAttributes = new List<string>()
+                {
+                    "Name"
+                };
+
+                groupDivision = groupDivision.Where(General.BuildSearch(SearchAttributes), Keyword.ToUpper());
+            }
+
+            /* Const Select */
+            List<string> SelectedFields = new List<string>()
+                {
+                    "Name", "DivisionCodes"
+                };
+
+            /* Order */
+            if (OrderDictionary.Count.Equals(0))
+            {
+                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+
+                groupDivision = groupDivision.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
+            }
+            else
+            {
+                string Key = OrderDictionary.Keys.First();
+                string OrderType = OrderDictionary[Key];
+                string TransformKey = General.TransformOrderBy(Key);
+
+                BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+
+                groupDivision = OrderType.Equals(General.ASCENDING) ?
+                    groupDivision.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
+                    groupDivision.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
+            }
+
+            /* Pagination */
+            Pageable<DivisionGroupViewModel> pageable = new Pageable<DivisionGroupViewModel>(groupDivision, Page - 1, Size);
+            List<DivisionGroupViewModel> Data = pageable.Data.ToList<DivisionGroupViewModel>();
+
+            int TotalData = pageable.TotalCount;
+
+            SetCache();
+
+            return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
     }
 }
