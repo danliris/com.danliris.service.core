@@ -11,9 +11,10 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210812074619_Initial_BankCashReceiptTypes")]
+    partial class Initial_BankCashReceiptTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1072,9 +1073,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("Description");
-
-                    b.Property<string>("GroupName")
-                        .HasMaxLength(500);
 
                     b.Property<string>("Name")
                         .HasMaxLength(500);
