@@ -274,6 +274,20 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
         }
 
+        public GarmentCurrency GetRate()
+        {
+            var curr = (from a in DbSet
+                        where a.Code == "USD"
+                        orderby a.Date descending
+                        select a).FirstOrDefault();
+            return curr;
+        }
+        public GarmentCurrency GetRatePEB( DateTimeOffset date)
+        {
+            var currency = DbSet.Where(entity =>entity.Code=="USD" &&  entity.Date <= date).OrderByDescending(s=>s.Date).ToList().FirstOrDefault();
+            
+            return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
+        }
         public List<GarmentCurrencyViewModel> GetByCodeBeforeDate(List<GarmentCurrencyViewModel> filters)
         {
             List<GarmentCurrencyViewModel> data = new List<GarmentCurrencyViewModel>();
