@@ -76,6 +76,7 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddScoped<DivisionService>()
                 .AddScoped<DesignMotiveService>()
                 .AddScoped<GarmentCurrencyService>()
+                .AddScoped<GarmentDetailCurrencyService>()
                 .AddScoped<BudgetCurrencyService>()
                 .AddScoped<GarmentBuyerService>()
                 .AddScoped<GarmentComodityService>()
