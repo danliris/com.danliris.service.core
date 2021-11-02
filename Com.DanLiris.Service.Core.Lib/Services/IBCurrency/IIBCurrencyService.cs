@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
 {
@@ -14,5 +15,6 @@ namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
 
         string GenerateCSVTemplate();
         CSVResult UploadCSV(List<CSVFormDto> data);
+        IBCurrencyDto GetSingleByCodeDate(string code, DateTimeOffset date);
     }
 }
