@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
 {
@@ -196,6 +197,29 @@ namespace Com.DanLiris.Service.Core.Lib.Services.IBCurrency
             }
 
             return result;
+        }
+
+        public IBCurrencyDto GetSingleByCodeDate(string code, DateTimeOffset date)
+        {
+            var currencies = (from IB in _dbContext.IBCurrencies
+                            join C in _dbContext.Currencies on IB.CurrencyId equals C.Id
+                            where C.Code == code && new DateTime(IB.Year, IB.Month, 1) <= date
+                            select new
+                            {
+                                Diffs = Math.Abs((new DateTime(IB.Year, IB.Month, 1) - date.DateTime.Date).Days),
+                                Date = new DateTime(IB.Year, IB.Month, 1),
+                                IB.Id,
+                                IB.CurrencyId
+                            }).OrderBy(element => element.Diffs).FirstOrDefault();
+
+            if (currencies == null)
+                return null;
+
+            var currency = _dbContext.Currencies.FirstOrDefault(entity => entity.Id == currencies.CurrencyId);
+
+            var model = _dbContext.IBCurrencies.FirstOrDefault(entity => entity.Id == currencies.Id);
+
+            return new IBCurrencyDto(model.Id, model._LastModifiedUtc, model.Year, model.Month, model.Rate, currency);
         }
     }
 }
