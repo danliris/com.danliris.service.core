@@ -35,6 +35,7 @@ using Com.DanLiris.Service.Core.Lib.Services.GarmentAdditionalCharges;
 using Com.DanLiris.Service.Core.Lib.Services.BudgetingCategory;
 using Com.DanLiris.Service.Core.Lib.Services.IBCurrency;
 using Com.DanLiris.Service.Core.Lib.Services.GarmentLeftoverWarehouseComodity;
+using Com.DanLiris.Service.Core.Lib.Services.BankCashReceiptType;
 
 namespace Com.DanLiris.Service.Core.WebApi
 {
@@ -123,6 +124,7 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddTransient<IBudgetingCategoryService, BudgetingCategoryService>()
                 .AddTransient<IGarmentAdditionalChargesService, GarmentAdditionalChargesService>()
                 .AddTransient<IIBCurrencyService, IBCurrencyService>()
+                .AddTransient<IBankCashReceiptTypeService, BankCashReceiptTypeService>()
                 .AddScoped<RolesService>()
                 .AddScoped<SizeService>();
 
