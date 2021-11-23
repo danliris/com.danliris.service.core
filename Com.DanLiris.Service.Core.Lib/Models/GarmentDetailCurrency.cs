@@ -22,11 +22,11 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         {
             List<ValidationResult> validationResult = new List<ValidationResult>();
 
-            if (string.IsNullOrWhiteSpace(this.Code))
-                validationResult.Add(new ValidationResult("Code is required", new List<string> { "Code" }));
+            //if (string.IsNullOrWhiteSpace(this.Code))
+            //    validationResult.Add(new ValidationResult("Code is required", new List<string> { "Code" }));
 
-            if (this.Date > DateTime.Now)
-                validationResult.Add(new ValidationResult("Date must be less than or equal today's date", new List<string> { "Date" }));
+            //if (this.Date > DateTime.Now)
+            //    validationResult.Add(new ValidationResult("Date must be less than or equal today's date", new List<string> { "Date" }));
 
             if (this.Rate.Equals(null) || this.Rate < 0)
                 validationResult.Add(new ValidationResult("Rate must be greater than zero", new List<string> { "Rate" }));
