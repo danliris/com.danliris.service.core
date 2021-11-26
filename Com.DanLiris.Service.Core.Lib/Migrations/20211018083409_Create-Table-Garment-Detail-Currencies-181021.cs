@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
-    public partial class CreateTableGarmentDetailCurrency281021 : Migration
+    public partial class CreateTableGarmentDetailCurrencies181021 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

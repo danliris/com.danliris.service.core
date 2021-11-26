@@ -11,8 +11,8 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20211028015401_Create-Table-Garment-Detail-Currency-281021")]
-    partial class CreateTableGarmentDetailCurrency281021
+    [Migration("20211018083409_Create-Table-Garment-Detail-Currencies-181021")]
+    partial class CreateTableGarmentDetailCurrencies181021
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
