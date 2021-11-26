@@ -284,8 +284,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         }
         public GarmentCurrency GetRatePEB( DateTimeOffset date)
         {
+
             var currency = DbSet.Where(entity =>entity.Code=="USD" &&  entity.Date <= date).OrderByDescending(s=>s.Date).ToList().FirstOrDefault();
-            
             return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
         }
         public List<GarmentCurrencyViewModel> GetByCodeBeforeDate(List<GarmentCurrencyViewModel> filters)
