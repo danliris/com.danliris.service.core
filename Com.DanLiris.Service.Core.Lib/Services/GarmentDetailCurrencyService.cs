@@ -160,5 +160,12 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
         }
 
+        public GarmentDetailCurrency GetRatePEB(DateTimeOffset date)
+        {
+            var currency = DbSet.Where(entity => entity.Code == "USD" && entity.Date <= date).ToList().Select(o => new { Diffs = Math.Abs((o.Date.Date - date.DateTime.Date).Days), o.Date, o.Id }).OrderBy(o => o.Diffs).FirstOrDefault();
+
+            return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
+        }
+
     }
 }
