@@ -84,6 +84,15 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentDetailCurrency
             var response = await this.Client.GetAsync($"{byCodeUri}?stringDate={model.Date.ToString()}");
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
-       
+
+        [Fact]
+        public async Task Should_Success_Get_Single_Data_By_PEBDate()
+        {
+            string byCodeUri = "v1/master/garment-detail-currencies/sales-debtor-currencies-peb";
+            Models.GarmentDetailCurrency model = await DataUtil.GetTestDataAsync();
+            var response = await this.Client.GetAsync($"{byCodeUri}?stringDate={model.Date.ToString()}");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
     }
 }
