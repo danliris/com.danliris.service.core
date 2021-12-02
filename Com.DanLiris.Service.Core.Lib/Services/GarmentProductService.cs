@@ -336,7 +336,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         {
             var codes = code.Split(",");
             //return this.DbSet.IgnoreQueryFilters().FirstOrDefault(p => code == p.Code);
-            return this.DbSet.IgnoreQueryFilters().Where(x => codes.Contains(x.Code)).Select(x => x).ToList();
+            return this.DbSet.Where(x => codes.Contains(x.Code)).Select(x => x).ToList();
         }
         public GarmentProduct GetByName(string name)
 		{
