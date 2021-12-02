@@ -104,6 +104,7 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddScoped<GarmentCategoryService>()
                 .AddScoped<GarmentSupplierService>()
                 .AddScoped<GarmentUnitService>()
+                .AddScoped<GarmentSampleUnitService>()
                 .AddScoped<GarmentBuyerBrandService>()
                 .AddScoped<GarmentSectionService>()
                 .AddScoped<StandardMinuteValueService>()
