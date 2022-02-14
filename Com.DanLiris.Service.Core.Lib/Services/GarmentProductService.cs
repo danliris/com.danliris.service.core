@@ -338,7 +338,16 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             //return this.DbSet.IgnoreQueryFilters().FirstOrDefault(p => code == p.Code);
             return this.DbSet.Where(x => codes.Contains(x.Code)).Select(x => x).ToList();
         }
-        public GarmentProduct GetByName(string name)
+
+		public List<GarmentProduct> GetFabricByCode(string code)
+		{
+			var listCode = code.Split(",");
+			var data = (from a in DbSet
+						   where listCode.Contains(a.Code)
+						   select a).ToList();
+			return data;
+		}
+		public GarmentProduct GetByName(string name)
 		{
 			return this.DbSet.FirstOrDefault(p => (p.Name==name) && p._IsDeleted == false);
 			
