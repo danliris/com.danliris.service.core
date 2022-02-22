@@ -257,5 +257,70 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             return Tuple.Create(Valid, ErrorList);
         }
-    }
+		public IQueryable<Currency> GetCurrencies(string Keyword, string Filter)
+		{
+			List<string> garmentCurrencies = new List<string>();
+			var queryGCurrencies= from a in DbContext.GarmentCurrencies
+											 select a.Code;
+			foreach(var item in queryGCurrencies)
+			{
+				garmentCurrencies.Add(item);
+			}
+			IQueryable<Currency> Query = from a in DbContext.Currencies
+										 where garmentCurrencies.Contains(a.Code)
+										 select a;
+			Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+			Query = ConfigureFilter(Query, FilterDictionary);
+			Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>("{}");
+
+			/* Search With Keyword */
+			if (Keyword != null)
+			{
+				List<string> SearchAttributes = new List<string>()
+				{
+					"Code"
+				};
+
+				Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword).Distinct();
+			}
+
+			/* Const Select */
+			List<string> SelectedFields = new List<string>()
+			{
+				  "Code"
+			};
+
+			Query = Query
+				.Select(p => new Currency
+				{
+
+					 
+					Code = p.Code,
+					Id = p.Id
+
+				});
+
+			/* Order */
+			if (OrderDictionary.Count.Equals(0))
+			{
+				OrderDictionary.Add("_updatedDate", General.DESCENDING);
+
+				Query = Query.OrderByDescending(b => b.Code); /* Default Order */
+			}
+			else
+			{
+				string Key = OrderDictionary.Keys.First();
+				string OrderType = OrderDictionary[Key];
+				string TransformKey = General.TransformOrderBy(Key);
+
+				BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+
+				Query = OrderType.Equals(General.ASCENDING) ?
+					Query.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
+					Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
+			}
+
+			return Query.Distinct();
+		}
+	}
 }
