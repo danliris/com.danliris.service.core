@@ -178,6 +178,66 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return Tuple.Create(Data, totalData, OrderDictionary, SelectedFields);
         }
 
+        public Tuple<List<Product>, int, Dictionary<string, string>, List<string>> ReadModelNullPrice(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        {
+            List<string> filterTags = new List<string>(){ "", "Dye Stuff Printing", "MATERIAL" } ;
+            IQueryable<Product> Query = this.DbContext.Products.Where(x => x.Price == 0 && filterTags.Contains(x.Tags) ).AsNoTracking();
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
+
+            /* Search With Keyword */
+            if (Keyword != null)
+            {
+                List<string> SearchAttributes = new List<string>()
+                {
+                    "Code", "Name"
+                };
+
+                Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
+            }
+
+            /* Const Select */
+            List<string> SelectedFields = new List<string>()
+            {
+                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
+            };
+
+
+
+            /* Order */
+            if (OrderDictionary.Count.Equals(0))
+            {
+                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+
+                Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
+            }
+            else
+            {
+                string Key = OrderDictionary.Keys.First();
+                string OrderType = OrderDictionary[Key];
+                string TransformKey = General.TransformOrderBy(Key);
+
+                BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+
+                Query = OrderType.Equals(General.ASCENDING) ?
+                    Query.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
+                    Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
+            }
+
+            /* Pagination */
+            //Pageable<Product> pageable = new Pageable<Product>(Query, Page - 1, Size);
+
+            var totalData = Query.Count();
+            Query = Query.Skip((Page - 1) * Size).Take(Size);
+
+            List<Product> Data = Query.ToList();
+
+            //int TotalData = Query.TotalCount;
+
+            return Tuple.Create(Data, totalData, OrderDictionary, SelectedFields);
+        }
+
         public ProductViewModel MapToViewModel(Product product)
         {
             ProductViewModel productVM = new ProductViewModel
