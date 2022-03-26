@@ -127,7 +127,8 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddTransient<IIBCurrencyService, IBCurrencyService>()
                 .AddTransient<IBankCashReceiptTypeService, BankCashReceiptTypeService>()
                 .AddScoped<RolesService>()
-                .AddScoped<SizeService>();
+                .AddScoped<SizeService>()
+                .AddScoped<VatService>();
 
 
             RegisterServices(services);
