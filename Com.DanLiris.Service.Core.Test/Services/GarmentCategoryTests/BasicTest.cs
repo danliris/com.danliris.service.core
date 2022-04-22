@@ -142,7 +142,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentCategoryTests
             GarmentCategory model2 = await DataUtil.GetTestDataAsync();
 
             var codes = string.Format("{0},{1}", model1.Code, model2.Code);
-            var Response = Services.GetByCode(new List<string> { model1.Code, model2.Code });            
+            var Response = Services.GetByCode(new List<string> { model1.Code, model2.Code });
             Assert.NotNull(Response);
         }
 
