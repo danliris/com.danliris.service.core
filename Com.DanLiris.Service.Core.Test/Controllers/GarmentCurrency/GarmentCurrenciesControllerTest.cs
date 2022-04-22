@@ -146,6 +146,68 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentCurrency
         }
 
         [Fact]
+        public void GetByPEBDATE_Return_failed()
+        {
+            //Setup
+            CoreDbContext dbContext = _dbContext(GetCurrentAsyncMethod());
+            Mock<IServiceProvider> serviceProvider = GetServiceProvider();
+
+            GarmentCurrencyService service = new GarmentCurrencyService(serviceProvider.Object);
+
+            serviceProvider.Setup(s => s.GetService(typeof(GarmentCurrencyService))).Returns(service);
+            serviceProvider.Setup(s => s.GetService(typeof(CoreDbContext))).Returns(dbContext);
+
+            Lib.Models.GarmentCurrency testData = GetTestData(dbContext);
+
+            //Act
+            IActionResult response = GetController(service).GetRatePEB("");
+
+
+            //Assert
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+        [Fact]
+        public void GetRateUSD_Return_Failed()
+        {
+            //Setup
+            CoreDbContext dbContext = _dbContext(GetCurrentAsyncMethod());
+            Mock<IServiceProvider> serviceProvider = GetServiceProvider();
+
+            GarmentCurrencyService service = new GarmentCurrencyService(serviceProvider.Object);
+
+            serviceProvider.Setup(s => s.GetService(typeof(GarmentCurrencyService))).Returns(service);
+            serviceProvider.Setup(s => s.GetService(typeof(CoreDbContext))).Returns(dbContext);
+
+            Lib.Models.GarmentCurrency testData = GetTestData(dbContext);
+
+            //Act
+            IActionResult response = GetController(service).GetRate();
+
+
+            //Assert
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public void GetByCode_Return_InternalServerError()
+        {
+            //Setup
+            Mock<IServiceProvider> serviceProvider = GetServiceProvider();
+            GarmentCurrencyService service = new GarmentCurrencyService(serviceProvider.Object);
+            serviceProvider.Setup(s => s.GetService(typeof(GarmentCurrencyService))).Returns(service);
+            
+            //Act
+            IActionResult response = GetController(service).GetByCode(null);
+
+
+            //Assert
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
         public void GetByCode_Return_Ok()
         {
             //Setup
@@ -168,22 +230,6 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentCurrency
             Assert.Equal((int)HttpStatusCode.OK, statusCode);
         }
 
-        [Fact]
-        public void GetByCode_Return_InternalServerError()
-        {
-            //Setup
-            Mock<IServiceProvider> serviceProvider = GetServiceProvider();
-            GarmentCurrencyService service = new GarmentCurrencyService(serviceProvider.Object);
-            serviceProvider.Setup(s => s.GetService(typeof(GarmentCurrencyService))).Returns(service);
-            
-            //Act
-            IActionResult response = GetController(service).GetByCode(null);
-
-
-            //Assert
-            int statusCode = this.GetStatusCode(response);
-            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
-        }
 
     }
 }
