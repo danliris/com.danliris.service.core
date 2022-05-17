@@ -27,6 +27,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
             SizeModel TestData = new SizeModel
             {
                 Size = string.Format("TEST {0}", guid),
+                SizeIdx = 0,
                 UId = guid
             };
 

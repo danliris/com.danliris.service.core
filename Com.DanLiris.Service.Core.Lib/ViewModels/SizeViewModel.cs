@@ -10,5 +10,6 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
     public class SizeViewModel : BasicViewModel
     {
         public string Size { get; set; }
+        public int SizeIdx { get; set; }
     }
 }
