@@ -22,11 +22,13 @@ namespace Com.DanLiris.Service.Core.Test.Services.SizeTests
         public override void EmptyCreateModel(Models.SizeModel model)
         {
             model.Size = string.Empty;
+            model.SizeIdx = 0;
         }
 
         public override void EmptyUpdateModel(Models.SizeModel model)
         {
             model.Size = string.Empty;
+            model.SizeIdx = 0;
         }
 
         public override Models.SizeModel GenerateTestModel()
@@ -36,6 +38,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.SizeTests
             return new Models.SizeModel()
             {
                 Size = string.Format("TEST {0}", guid),
+                SizeIdx = 0,
             };
         }
     }
