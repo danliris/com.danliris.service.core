@@ -53,7 +53,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Size", "_LastModifiedUtc"
+                "Id", "Size", "SizeIdx", "_LastModifiedUtc"
             };
 
             Query = Query
@@ -61,6 +61,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 {
                     Id = b.Id,
                     Size = b.Size,
+                    SizeIdx = b.SizeIdx,
                     _LastModifiedUtc = b._LastModifiedUtc
                 });
 
