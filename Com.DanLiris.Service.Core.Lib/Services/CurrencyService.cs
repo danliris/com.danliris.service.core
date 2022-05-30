@@ -293,13 +293,12 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			Query = Query
 				.Select(p => new Currency
 				{
-
-					 
 					Code = p.Code,
 					Id = p.Id,
-                    Rate = p.Rate,
-                    Description = p.Description,
-                    Symbol = p.Symbol
+          Rate = p.Rate,
+          Description = p.Description,
+          Symbol = p.Symbol
+
 				});
 
 			/* Order */
