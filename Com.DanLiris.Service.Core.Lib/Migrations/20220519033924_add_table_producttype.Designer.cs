@@ -11,9 +11,10 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220519033924_add_table_producttype")]
+    partial class add_table_producttype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -709,9 +710,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
 
                     b.Property<string>("Country")
                         .HasMaxLength(500);
-
-                    b.Property<string>("Job")
-                        .HasMaxLength(100);
 
                     b.Property<string>("NIK")
                         .HasMaxLength(100);
