@@ -13,28 +13,28 @@ using System.Text;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
-    public class SizeService : BasicService<CoreDbContext, SizeModel>, IMap<SizeModel, SizeViewModel>
+    public class ProductTypeService : BasicService<CoreDbContext, ProductType>, IMap<ProductType, ProductTypeViewModel>
     {
-        public SizeService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ProductTypeService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
-        public SizeModel MapToModel(SizeViewModel viewModel)
+        public ProductType MapToModel(ProductTypeViewModel viewModel)
         {
-            SizeModel model = new SizeModel();
-            PropertyCopier<SizeViewModel, SizeModel>.Copy(viewModel, model);
+            ProductType model = new ProductType();
+            PropertyCopier<ProductTypeViewModel, ProductType>.Copy(viewModel, model);
             return model;
         }
 
-        public SizeViewModel MapToViewModel(SizeModel model)
+        public ProductTypeViewModel MapToViewModel(ProductType model)
         {
-            SizeViewModel viewModel = new SizeViewModel();
-            PropertyCopier<SizeModel, SizeViewModel>.Copy(model, viewModel);
+            ProductTypeViewModel viewModel = new ProductTypeViewModel();
+            PropertyCopier<ProductType, ProductTypeViewModel>.Copy(model, viewModel);
             return viewModel;
         }
 
-        public override Tuple<List<SizeModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        public override Tuple<List<ProductType>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<SizeModel> Query = this.DbContext.Sizes;
+            IQueryable<ProductType> Query = this.DbContext.ProductTypes;
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
             Query = ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
@@ -44,7 +44,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "Size", 
+                    "Code", "Name"
                 };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
@@ -53,22 +53,22 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Size", "SizeIdx", "_LastModifiedUtc"
+                "Id", "Code", "Name","Remark", "_LastModifiedUtc"
             };
 
             Query = Query
-                .Select(b => new SizeModel
+                .Select(b => new ProductType
                 {
                     Id = b.Id,
-                    Size = b.Size,
-                    SizeIdx = b.SizeIdx,
+                    Code = b.Code,
+                    Name = b.Name,
                     _LastModifiedUtc = b._LastModifiedUtc
                 });
 
             /* Order */
             if (OrderDictionary.Count.Equals(0))
             {
-                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+                OrderDictionary.Add("_LastModifiedUtc", General.DESCENDING);
 
                 Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
             }
@@ -86,12 +86,24 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             }
 
             /* Pagination */
-            Pageable<SizeModel> pageable = new Pageable<SizeModel>(Query, Page - 1, Size);
-            List<SizeModel> Data = pageable.Data.ToList<SizeModel>();
+            Pageable<ProductType> pageable = new Pageable<ProductType>(Query, Page - 1, Size);
+            List<ProductType> Data = pageable.Data.ToList<ProductType>();
 
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+        public override void OnCreating(ProductType model)
+        {
+            CodeGenerator codeGenerator = new CodeGenerator();
+
+            do
+            {
+                model.Code = codeGenerator.GenerateCode();
+            }
+            while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
+
+            base.OnCreating(model);
         }
     }
 }
