@@ -40,6 +40,8 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
         [StringLength(100)]
         public string NIK { get; set; }
+        [StringLength(100)]
+        public string Job { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -73,6 +75,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
             if (string.IsNullOrEmpty(NIK))
                 validationResult.Add(new ValidationResult("NIK is required", new List<string> { "nik" }));
+
+            if (string.IsNullOrEmpty(Job))
+                validationResult.Add(new ValidationResult("Job is required", new List<string> { "job" }));
 
             return validationResult;
         }
