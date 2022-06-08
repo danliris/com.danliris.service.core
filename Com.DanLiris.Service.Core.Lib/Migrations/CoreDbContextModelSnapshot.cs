@@ -710,6 +710,9 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.Property<string>("Country")
                         .HasMaxLength(500);
 
+                    b.Property<string>("Job")
+                        .HasMaxLength(100);
+
                     b.Property<string>("NIK")
                         .HasMaxLength(100);
 
@@ -3094,6 +3097,59 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.ToTable("ProductSPPProperties");
                 });
 
+            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.ProductType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Code");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<string>("UId")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductTypes");
+                });
+
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Quality", b =>
                 {
                     b.Property<int>("Id")
@@ -3153,6 +3209,8 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.Property<bool>("Active");
 
                     b.Property<string>("Size");
+
+                    b.Property<int>("SizeIdx");
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
@@ -3618,6 +3676,61 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UnitOfMeasurements");
+                });
+
+            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Vat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("COACodeCredit");
+
+                    b.Property<DateTimeOffset?>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500);
+
+                    b.Property<double?>("Rate");
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Vat");
                 });
 
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.YarnMaterial", b =>
