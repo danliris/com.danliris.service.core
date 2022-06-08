@@ -50,12 +50,30 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
             string guid = Guid.NewGuid().ToString();
             GarmentCategory TestData = new GarmentCategory
             {
-                Name = "TEST",
-                CodeRequirement = "TEST",
-                CategoryType = "TEST",
-                UomId=1,
-                UomUnit = "TEST",
-                Code = guid
+                Name = string.Format("TEST {0}", guid),
+                CodeRequirement = string.Format("TEST {0}", guid),
+                CategoryType = string.Format("TEST {0}", guid),
+                UomId = 1,
+                UomUnit = "uom",
+                Code = string.Format("TEST {0}", guid),
+                UId = guid
+            };
+
+            return TestData;
+        }
+
+        public GarmentCategory GetNewData2()
+        {
+            string guid = Guid.NewGuid().ToString();
+            GarmentCategory TestData = new GarmentCategory
+            {
+                Name = string.Format("TEST {0}", guid),
+                CodeRequirement = string.Format("TEST {0}", guid),
+                CategoryType = string.Format("TEST {0}", guid),
+                UomId = 1,
+                UomUnit = "uom",
+                Code = string.Format("TEST {0}", guid),
+                UId = guid
             };
 
             return TestData;

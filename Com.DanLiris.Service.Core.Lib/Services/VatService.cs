@@ -13,28 +13,16 @@ using System.Text;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
-    public class SizeService : BasicService<CoreDbContext, SizeModel>, IMap<SizeModel, SizeViewModel>
+    //private const string UserAgent = "core-product-service";
+    public class VatService : BasicService<CoreDbContext, Vat>, IMap<Vat, VatViewModel>
     {
-        public SizeService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public VatService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-        }
-        public SizeModel MapToModel(SizeViewModel viewModel)
-        {
-            SizeModel model = new SizeModel();
-            PropertyCopier<SizeViewModel, SizeModel>.Copy(viewModel, model);
-            return model;
         }
 
-        public SizeViewModel MapToViewModel(SizeModel model)
+        public override Tuple<List<Vat>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            SizeViewModel viewModel = new SizeViewModel();
-            PropertyCopier<SizeModel, SizeViewModel>.Copy(model, viewModel);
-            return viewModel;
-        }
-
-        public override Tuple<List<SizeModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
-        {
-            IQueryable<SizeModel> Query = this.DbContext.Sizes;
+            IQueryable<Vat> Query = this.DbContext.Vat;
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
             Query = ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
@@ -44,7 +32,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "Size", 
+                    "Name", "COACodeCredit"
                 };
 
                 Query = Query.Where(General.BuildSearch(SearchAttributes), Keyword);
@@ -52,17 +40,19 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             /* Const Select */
             List<string> SelectedFields = new List<string>()
-            {
-                "Id", "Size", "SizeIdx", "_LastModifiedUtc"
-            };
+                {
+                  "Id","Name", "Rate","COACodeCredit", "Date"
+                };
 
             Query = Query
-                .Select(b => new SizeModel
+                .Select(b => new Vat
                 {
                     Id = b.Id,
-                    Size = b.Size,
-                    SizeIdx = b.SizeIdx,
-                    _LastModifiedUtc = b._LastModifiedUtc
+                    
+                    Name = b.Name,
+                    Rate = b.Rate,
+                    COACodeCredit = b.COACodeCredit,
+                    Date = b.Date
                 });
 
             /* Order */
@@ -86,12 +76,29 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             }
 
             /* Pagination */
-            Pageable<SizeModel> pageable = new Pageable<SizeModel>(Query, Page - 1, Size);
-            List<SizeModel> Data = pageable.Data.ToList<SizeModel>();
+            Pageable<Vat> pageable = new Pageable<Vat>(Query, Page - 1, Size);
+            List<Vat> Data = pageable.Data.ToList<Vat>();
 
             int TotalData = pageable.TotalCount;
 
+            SetCache();
+
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
+        }
+
+        public Vat MapToModel(VatViewModel viewModel)
+        {
+            Vat model = new Vat();
+            PropertyCopier<VatViewModel, Vat>.Copy(viewModel, model);
+            return model;
+        }
+
+        public VatViewModel MapToViewModel(Vat model)
+        {
+            VatViewModel viewModel = new VatViewModel();
+            PropertyCopier<Vat, VatViewModel>.Copy(model, viewModel);
+
+            return viewModel;
         }
     }
 }

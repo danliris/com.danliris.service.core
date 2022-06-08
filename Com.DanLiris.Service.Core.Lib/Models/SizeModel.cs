@@ -15,6 +15,7 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         [MaxLength(255)]
         public string UId { get; set; }
         public string Size { get; set; }
+        public int SizeIdx { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             SizeService service = validationContext.GetService<SizeService>();

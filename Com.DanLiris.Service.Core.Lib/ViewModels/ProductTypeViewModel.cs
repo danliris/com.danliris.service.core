@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-
 namespace Com.DanLiris.Service.Core.Lib.ViewModels
 {
-    public class SizeViewModel : BasicViewModel
+    public class ProductTypeViewModel : BasicViewModel
     {
-        public string Size { get; set; }
-        public int SizeIdx { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string Remark { get; set; }
     }
 }

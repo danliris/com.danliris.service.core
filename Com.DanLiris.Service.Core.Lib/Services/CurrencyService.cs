@@ -297,6 +297,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 					 
 					Code = p.Code,
 					Id = p.Id
+					Code = p.Code,
+					Id = p.Id,
+          Rate = p.Rate,
+          Description = p.Description,
+          Symbol = p.Symbol
 
 				});
 

@@ -24,5 +24,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         
         public string NPWP { get; set; }
         public string NIK { get; set; }
+
+        public string Job { get; set; }
     }
 }
