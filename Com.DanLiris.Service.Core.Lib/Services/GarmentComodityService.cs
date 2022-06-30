@@ -94,6 +94,26 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
+        public Tuple<List<GarmentComodity>,int> GetAllComodity()
+        {
+            IQueryable<GarmentComodity> Query = this.DbContext.GarmentComodities;
+
+            Query = Query
+                .Select(b => new GarmentComodity
+                {
+                    Id = b.Id,
+                    Code = b.Code,
+                    Name = b.Name,
+                }).Distinct();
+
+            var Data = Query.ToList();
+
+            int TotalData = Query.Count();
+
+            return Tuple.Create(Data,TotalData);
+        
+        }
+
         //public override void OnCreating(GarmentComodity model)
         //{
         //    CodeGenerator codeGenerator = new CodeGenerator();
