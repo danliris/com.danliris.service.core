@@ -17,9 +17,37 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     public class GarmentComodityController : BasicController<GarmentComodityService, GarmentComodity, GarmentComodityViewModel, CoreDbContext>
     {
         private new static readonly string ApiVersion = "1.0";
-
+        private GarmentComodityService Service;
         public GarmentComodityController(GarmentComodityService service) : base(service, ApiVersion)
         {
+            Service = service;
         }
+
+        [HttpGet("all")]
+        public IActionResult Get()
+        {
+
+            VerifyUser();
+
+            try
+            {
+                var data = Service.GetAllComodity();
+                return Ok(new
+                {
+                    apiVersion = ApiVersion,
+                    TotalData = data.Item2,
+                    data = data.Item1
+                });
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+
     }
 }
