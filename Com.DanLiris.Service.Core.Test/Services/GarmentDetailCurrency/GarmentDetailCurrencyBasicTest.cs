@@ -106,6 +106,22 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentDetailCurrency
 			var Response = Services.ReadModel(1, 25, order, new List<string>(), "", "{}");
 			Assert.NotNull(Response);
 		}
-		
-	}
+
+        [Fact]
+        public async void Should_Success_Get_Single_Data_By_Code_Date_PEB()
+        {
+            Models.GarmentDetailCurrency model = await DataUtil.GetTestDataAsync();
+            List<GarmentDetailCurrencyViewModel> garmentCurrencies = new List<GarmentDetailCurrencyViewModel>
+            {
+                new GarmentDetailCurrencyViewModel
+                {
+                    code = model.Code,
+                    date = model.Date
+                }
+            };
+            var Response = Services.GetSingleByCodeDatePEB(garmentCurrencies);
+            Assert.NotNull(Response);
+        }
+
+    }
 }

@@ -160,6 +160,21 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
         }
 
+        public List<GarmentDetailCurrencyViewModel> GetSingleByCodeDatePEB(List<GarmentDetailCurrencyViewModel> filters)
+        {
+            List<GarmentDetailCurrencyViewModel> data = new List<GarmentDetailCurrencyViewModel>();
+            foreach (var filter in filters)
+            {
+                var model = DbSet.Where(q => q.Code == filter.code && q.Date.Date == filter.date.Date).OrderByDescending(o => o.Date).FirstOrDefault();
+
+                if (data.Count(ac => ac.Id == model.Id) == 0)
+                {
+                    data.Add(MapToViewModel(model));
+                }
+            }
+            return data;
+        }
+
         public GarmentDetailCurrency GetRatePEB(DateTimeOffset date)
         {
             var currency = DbSet.Where(entity => entity.Code == "USD" && entity.Date <= date).ToList().Select(o => new { Diffs = Math.Abs((o.Date.Date - date.DateTime.Date).Days), o.Date, o.Id }).OrderBy(o => o.Diffs).FirstOrDefault();
