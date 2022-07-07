@@ -94,5 +94,43 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentDetailCurrency
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Should_Success_GetByCodeBeforeDatePEB()
+        {
+            string byCodeUri = "v1/master/garment-detail-currencies/single-by-code-date-peb";
+            Models.GarmentDetailCurrency model = await DataUtil.GetTestDataAsync();
+
+            List<GarmentDetailCurrencyViewModel> garmentCurrencies = new List<GarmentDetailCurrencyViewModel>
+            {
+                new GarmentDetailCurrencyViewModel
+                {
+                    code = model.Code,
+                    date = model.Date
+                }
+            };
+            var request = new HttpRequestMessage(HttpMethod.Get, byCodeUri)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(garmentCurrencies), Encoding.Unicode, "application/json")
+            };
+            var response = await this.Client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Error_GetByCodeBeforeDatePEB()
+        {
+            string byCodeUri = "v1/master/garment-detail-currencies/single-by-code-date-peb";
+            Models.GarmentDetailCurrency model = await DataUtil.GetTestDataAsync();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, byCodeUri)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(null), Encoding.Unicode, "application/json")
+            };
+            var response = await this.Client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
     }
 }
