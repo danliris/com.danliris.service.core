@@ -120,7 +120,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             garmentCurrency._LastModifiedBy = garmentCurrencyVM._LastModifiedBy;
             garmentCurrency._LastModifiedAgent = garmentCurrencyVM._LastModifiedAgent;
             garmentCurrency.Code = garmentCurrencyVM.code;
-            garmentCurrency.Date = garmentCurrencyVM.date;
+            garmentCurrency.Date = garmentCurrencyVM.date.AddHours(7);
             garmentCurrency.Rate = garmentCurrencyVM.rate;
             
             return garmentCurrency;
@@ -158,6 +158,21 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             if (currency == null)
                 return null;
             return DbSet.FirstOrDefault(entity => entity.Id == currency.Id);
+        }
+
+        public List<GarmentDetailCurrencyViewModel> GetSingleByCodeDatePEB(List<GarmentDetailCurrencyViewModel> filters)
+        {
+            List<GarmentDetailCurrencyViewModel> data = new List<GarmentDetailCurrencyViewModel>();
+            foreach (var filter in filters)
+            {
+                var model = DbSet.Where(q => q.Code == filter.code && q.Date.Date == filter.date.Date).OrderByDescending(o => o.Date).FirstOrDefault();
+
+                if (data.Count(ac => ac.Id == model.Id) == 0)
+                {
+                    data.Add(MapToViewModel(model));
+                }
+            }
+            return data;
         }
 
         public GarmentDetailCurrency GetRatePEB(DateTimeOffset date)
