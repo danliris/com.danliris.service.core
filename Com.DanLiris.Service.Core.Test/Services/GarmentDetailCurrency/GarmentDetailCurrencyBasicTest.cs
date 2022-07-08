@@ -122,6 +122,5 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentDetailCurrency
             var Response = Services.GetSingleByCodeDatePEB(garmentCurrencies);
             Assert.NotNull(Response);
         }
-
     }
 }

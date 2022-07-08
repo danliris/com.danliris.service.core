@@ -165,7 +165,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             List<GarmentDetailCurrencyViewModel> data = new List<GarmentDetailCurrencyViewModel>();
             foreach (var filter in filters)
             {
-                var model = DbSet.Where(q => q.Code == filter.code && q.Date.Date == filter.date.Date).OrderByDescending(o => o.Date).FirstOrDefault();
+                var model = DbSet.Where(q => q.Code == filter.code && q.Date.Date == filter.date.Date).OrderBy(o => o.Date).FirstOrDefault();
 
                 if (data.Count(ac => ac.Id == model.Id) == 0)
                 {

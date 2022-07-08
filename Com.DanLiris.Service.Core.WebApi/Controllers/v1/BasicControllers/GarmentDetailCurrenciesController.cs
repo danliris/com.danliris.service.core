@@ -95,7 +95,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
         }
 
         [HttpGet("single-by-code-date-peb")]
-        public IActionResult GetSingleByCodeDate([FromBody] List<GarmentDetailCurrencyViewModel> filters)
+        public IActionResult GetSingleByCodeDatePEB([FromBody] List<GarmentDetailCurrencyViewModel> filters)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                     new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
                     .Fail();
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
-            }          
+            }
         }
 
         [HttpGet("single-by-code-date")]
@@ -167,6 +167,5 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
-
     }
 }
