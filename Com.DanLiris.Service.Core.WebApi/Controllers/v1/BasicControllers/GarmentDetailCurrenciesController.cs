@@ -95,7 +95,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
         }
 
         [HttpGet("single-by-code-date-peb")]
-        public IActionResult GetSingleByCodeDate([FromBody] List<GarmentDetailCurrencyViewModel> filters)
+        public IActionResult GetSingleByCodeDatePEB([FromBody] List<GarmentDetailCurrencyViewModel> filters)
         {
             try
             {
