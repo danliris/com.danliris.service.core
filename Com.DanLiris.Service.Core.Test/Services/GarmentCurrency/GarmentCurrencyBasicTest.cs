@@ -145,7 +145,26 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentCurrency
 			Assert.NotNull(Response);
 		}
 
+        [Fact]
+        public async void Should_Success_Get_RateUSD()
+        {
+            Models.GarmentCurrency model = await DataUtil.GetTestDataAsync();
+            model.Code = "USD";
+           
+            var Response = Services.GetRate();
+            Assert.NotNull(Response);
+        }
+        [Fact]
+        public async void Should_Success_Get_RatebyBPDDate()
+        {
+            Models.GarmentCurrency model = await DataUtil.GetTestDataAsync();
+            model.Code = "USD";
+            model.Date = DateTime.Now;
 
-		
-	}
+            var Response = Services.GetRatePEB(DateTime.Now);
+            Assert.NotNull(Response);
+        }
+
+
+    }
 }
