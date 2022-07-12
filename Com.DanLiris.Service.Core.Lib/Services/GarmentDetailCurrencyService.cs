@@ -120,7 +120,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             garmentCurrency._LastModifiedBy = garmentCurrencyVM._LastModifiedBy;
             garmentCurrency._LastModifiedAgent = garmentCurrencyVM._LastModifiedAgent;
             garmentCurrency.Code = garmentCurrencyVM.code;
-            garmentCurrency.Date = garmentCurrencyVM.date;
+            garmentCurrency.Date = garmentCurrencyVM.date.AddHours(7);
             garmentCurrency.Rate = garmentCurrencyVM.rate;
             
             return garmentCurrency;
