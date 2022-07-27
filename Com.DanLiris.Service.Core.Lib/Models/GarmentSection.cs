@@ -16,6 +16,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public string Code { get; set; }
         public string Name { get; set; }
         public string Remark { get; set; }
+        public string ApprovalCC { get; set; }
+        public string ApprovalRO { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             GarmentSectionService service = validationContext.GetService<GarmentSectionService>();
@@ -27,6 +30,14 @@ namespace Com.DanLiris.Service.Core.Lib.Models
             if (string.IsNullOrWhiteSpace(this.Name))
             {
                 yield return new ValidationResult("Nama harus diisi", new List<string> { "Name" });
+            }
+            if (string.IsNullOrWhiteSpace(this.ApprovalCC))
+            {
+                yield return new ValidationResult("Nama Approval PR & CC harus diisi", new List<string> { "ApprovalCC" });
+            }
+            if (string.IsNullOrWhiteSpace(this.ApprovalRO))
+            {
+                yield return new ValidationResult("Nama Approval RO Garment harus diisi", new List<string> { "ApprovalRO" });
             }
             //else
             //{

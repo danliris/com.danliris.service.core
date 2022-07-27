@@ -21,12 +21,18 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentSection
         {
             model.Code = string.Empty;
             model.Name = string.Empty;
+            model.Remark = string.Empty;
+            model.ApprovalCC = string.Empty;
+            model.ApprovalRO= string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.GarmentSection model)
         {
             model.Code = string.Empty;
             model.Name = string.Empty;
+            model.Remark = string.Empty;
+            model.ApprovalCC = string.Empty;
+            model.ApprovalRO = string.Empty;
         }
 
         public override Models.GarmentSection GenerateTestModel()
@@ -37,7 +43,10 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentSection
             {
                 Code = guid,
                 Name = string.Format("TEST {0}", guid),
-            };
+                Remark = string.Empty,
+                ApprovalCC = string.Empty,
+                ApprovalRO = string.Empty,
+        };
         }
 
         

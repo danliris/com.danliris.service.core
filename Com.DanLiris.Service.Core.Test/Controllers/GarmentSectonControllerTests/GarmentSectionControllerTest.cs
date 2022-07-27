@@ -36,6 +36,9 @@ namespace Com.DanLiris.Service.Core.Test.Controllers.GarmentSectonControllerTest
             {
                 Code = guid,
                 Name = string.Format("TEST {0}", guid),
+                Remark = string.Format("TEST {0}", guid),
+                ApprovalCC = string.Format("TEST {0}", guid),
+                ApprovalRO = string.Format("TEST {0}", guid),
             };
         }
 
