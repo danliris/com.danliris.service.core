@@ -18,6 +18,8 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public string Remark { get; set; }
         public string ApprovalCC { get; set; }
         public string ApprovalRO { get; set; }
+        public string ApprovalKadiv { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -39,12 +41,16 @@ namespace Com.DanLiris.Service.Core.Lib.Models
             {
                 yield return new ValidationResult("Nama Approval RO Garment harus diisi", new List<string> { "ApprovalRO" });
             }
-            //else
-            //{
-            //    if (service.DbSet.Count(r => r.Id != this.Id && r.Code.Equals(this.Code) && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
-            //        yield return new ValidationResult("Nama komoditi sudah ada", new List<string> { "Name" });
-            //}
-            if (service.DbSet.Count(r => r.Id != this.Id && r.Code.Equals(this.Code) && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
+            if (string.IsNullOrWhiteSpace(this.ApprovalKadiv))
+            {
+                yield return new ValidationResult("Nama Approval CC Kadiv harus diisi", new List<string> { "ApprovalKadiv" });
+            } 
+                //else
+                //{
+                //    if (service.DbSet.Count(r => r.Id != this.Id && r.Code.Equals(this.Code) && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
+                //        yield return new ValidationResult("Nama komoditi sudah ada", new List<string> { "Name" });
+                //}
+                if (service.DbSet.Count(r => r.Id != this.Id && r.Code.Equals(this.Code) && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
             {
                 yield return new ValidationResult("Seksi sudah ada", new List<string> { "Code" });
                 yield return new ValidationResult("Seksi sudah ada", new List<string> { "Name" });
