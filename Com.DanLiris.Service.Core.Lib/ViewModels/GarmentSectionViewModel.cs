@@ -12,5 +12,6 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public string Remark { get; set; }
         public string ApprovalCC { get; set; }
         public string ApprovalRO { get; set; }
+        public string ApprovalKadiv { get; set; }
     }
 }

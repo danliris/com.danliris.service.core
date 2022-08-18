@@ -24,6 +24,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentSection
             model.Remark = string.Empty;
             model.ApprovalCC = string.Empty;
             model.ApprovalRO= string.Empty;
+            model.ApprovalKadiv = string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.GarmentSection model)
@@ -33,6 +34,7 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentSection
             model.Remark = string.Empty;
             model.ApprovalCC = string.Empty;
             model.ApprovalRO = string.Empty;
+            model.ApprovalKadiv = string.Empty;
         }
 
         public override Models.GarmentSection GenerateTestModel()
@@ -46,9 +48,8 @@ namespace Com.DanLiris.Service.Core.Test.Services.GarmentSection
                 Remark = string.Empty,
                 ApprovalCC = string.Empty,
                 ApprovalRO = string.Empty,
+                ApprovalKadiv = string.Empty,
         };
-        }
-
-        
+        }       
     }
 }
