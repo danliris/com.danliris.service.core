@@ -36,6 +36,7 @@ using Com.DanLiris.Service.Core.Lib.Services.BudgetingCategory;
 using Com.DanLiris.Service.Core.Lib.Services.IBCurrency;
 using Com.DanLiris.Service.Core.Lib.Services.GarmentLeftoverWarehouseComodity;
 using Com.DanLiris.Service.Core.Lib.Services.BankCashReceiptType;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentWareHouse;
 
 namespace Com.DanLiris.Service.Core.WebApi
 {
@@ -129,7 +130,8 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddScoped<RolesService>()
                 .AddScoped<SizeService>()
                 .AddScoped<VatService>()
-                .AddScoped<ProductTypeService>();
+                .AddScoped<ProductTypeService>()
+                .AddTransient<IGarmentWareHouseService, GarmentWareHouseService>();
 
 
             RegisterServices(services);
@@ -224,12 +226,12 @@ namespace Com.DanLiris.Service.Core.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<CoreDbContext>();
-                context.Database.SetCommandTimeout(1000 * 60 * 10);
-                context.Database.Migrate();
-            }
+            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    var context = serviceScope.ServiceProvider.GetService<CoreDbContext>();
+            //    context.Database.SetCommandTimeout(1000 * 60 * 10);
+            //    context.Database.Migrate();
+            //}
             app.UseAuthentication();
             app.UseCors("CorePolicy");
 

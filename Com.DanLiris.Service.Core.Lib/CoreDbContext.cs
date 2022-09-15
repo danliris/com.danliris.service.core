@@ -93,6 +93,7 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<BankCashReceiptTypeModel> BankCashReceiptTypes { get; set; }
         public DbSet<Vat> Vat { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<GarmentWareHouseModel> GarmentWareHouses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
