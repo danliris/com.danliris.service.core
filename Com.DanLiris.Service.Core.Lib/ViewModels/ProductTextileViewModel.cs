@@ -12,6 +12,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public string Name { get; set; }
         public ProductTextileUomViewModel UOM {get; set;}
         public string Description { get; set; }
+        public string BuyerType { get; set; }
 
         public class ProductTextileUomViewModel
         {
