@@ -47,7 +47,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "UOM", "Description"
+                "Id", "Code", "Name", "UOM", "Description", "BuyerType"
             };
 
             
@@ -87,7 +87,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public List<string> CsvHeader { get; } = new List<string>()
         {
-            "Kode", "Nama", "Satuan", "Keterangan"
+            "Kode", "Nama", "Satuan", "Keterangan", "Jenis"
         };
 
         public sealed class ProductTextileMap : ClassMap<ProductTextileViewModel>
@@ -98,6 +98,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Map(p => p.Name).Index(1);
                 Map(p => p.UOM.Unit).Index(2);
                 Map(p => p.Description).Index(3);
+                Map(p => p.BuyerType).Index(4);
             }
         }
 
@@ -175,6 +176,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Error.Add("Satuan", productTVM.UOM.Unit);
                    
                     Error.Add("Keterangan", productTVM.Description);
+                    Error.Add("Jenis", productTVM.BuyerType);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);
@@ -206,7 +208,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Name = productTVM.Name,
                 UomId = productTVM.UOM.Id,
                 UomUnit = productTVM.UOM.Unit,
-                Description = productTVM.Description
+                Description = productTVM.Description,
+                BuyerType = productTVM.BuyerType,
             };
                 
 
@@ -228,15 +231,13 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 _LastModifiedAgent = productT._LastModifiedAgent,
                 Code = productT.Code,
                 Name = productT.Name,
-
-
-               
                 Description = productT.Description,
                 UOM = new ProductTextileUomViewModel
                 {
                     Id = productT.UomId,
                     Unit = productT.UomUnit
                 },
+                BuyerType = productT.BuyerType
                 
             };
 

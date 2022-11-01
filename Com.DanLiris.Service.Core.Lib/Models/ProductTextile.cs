@@ -15,6 +15,8 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public int? UomId { get; set; }
         [StringLength(255)]
         public string UomUnit { get; set; }
+        [StringLength(50)]
+        public string BuyerType { get; set; }
         public string Description { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
