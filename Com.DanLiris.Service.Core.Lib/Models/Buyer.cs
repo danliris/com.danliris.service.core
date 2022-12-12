@@ -42,7 +42,8 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public string NIK { get; set; }
         [StringLength(100)]
         public string Job { get; set; }
-
+        [StringLength(255)]
+        public string BuyerOwner { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             List<ValidationResult> validationResult = new List<ValidationResult>();
@@ -73,11 +74,14 @@ namespace Com.DanLiris.Service.Core.Lib.Models
                     validationResult.Add(new ValidationResult("Code already exists", new List<string> { "code" }));
             }
 
-            if (string.IsNullOrEmpty(NIK))
-                validationResult.Add(new ValidationResult("NIK is required", new List<string> { "nik" }));
+            //if (string.IsNullOrEmpty(NIK))
+            //    validationResult.Add(new ValidationResult("NIK is required", new List<string> { "nik" }));
 
             if (string.IsNullOrEmpty(Job))
                 validationResult.Add(new ValidationResult("Job is required", new List<string> { "job" }));
+
+            if (string.IsNullOrEmpty(BuyerOwner))
+                validationResult.Add(new ValidationResult("Buyer Owner is required", new List<string> { "buyerOwner" }));
 
             return validationResult;
         }

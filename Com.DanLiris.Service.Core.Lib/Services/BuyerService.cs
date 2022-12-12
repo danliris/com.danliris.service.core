@@ -121,6 +121,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             buyerVM.NPWP = buyer.NPWP;
             buyerVM.NIK = buyer.NIK;
             buyerVM.Job = buyer.Job;
+            buyerVM.BuyerOwner = buyer.BuyerOwner;
             return buyerVM;
         }
 
@@ -149,6 +150,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             buyer.NPWP = buyerVM.NPWP;
             buyer.NIK = buyerVM.NIK;
             buyer.Job = buyerVM.Job;
+            buyer.BuyerOwner = buyerVM.BuyerOwner;
 
             return buyer;
         }
@@ -156,7 +158,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         /* Upload CSV */
         private readonly List<string> Header = new List<string>()
         {
-            "Kode Buyer", "Nama", "Alamat", "Kota", "Negara", "NPWP", "Jenis Buyer", "Kontak", "Tempo","NIK","Job"
+            "Kode Buyer", "Nama", "Alamat", "Kota", "Negara", "NPWP", "Jenis Buyer", "Kontak", "Tempo","NIK","Job","Nama Pemilik"
         };
 
         public List<string> CsvHeader => Header;
@@ -176,6 +178,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Map(b => b.Tempo).Index(8).TypeConverter<StringConverter>();
                 Map(b => b.NIK).Index(9);
                 Map(b => b.Job).Index(10);
+                Map(b => b.BuyerOwner).Index(11);
             }
 
         }
@@ -207,6 +210,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 if (string.IsNullOrWhiteSpace(buyerVM.Name))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh kosong, ");
+                }
+
+                if (string.IsNullOrWhiteSpace(buyerVM.BuyerOwner))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Nama pemilik boleh kosong, ");
                 }
 
                 if (string.IsNullOrWhiteSpace(buyerVM.Type))
@@ -269,6 +277,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Error.Add("Tempo", buyerVM.Tempo);
                     Error.Add("NIK", buyerVM.NIK);
                     Error.Add("Job", buyerVM.Job);
+                    Error.Add("Nama Pemilik", buyerVM.BuyerOwner);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);
