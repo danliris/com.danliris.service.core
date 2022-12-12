@@ -26,5 +26,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public string NIK { get; set; }
 
         public string Job { get; set; }
+
+        public string BuyerOwner { get; set; }
     }
 }
