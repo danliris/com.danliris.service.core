@@ -20,7 +20,6 @@ namespace Com.DanLiris.Service.Core.Lib.Models
         public string ApprovalRO { get; set; }
         public string ApprovalKadiv { get; set; }
 
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             GarmentSectionService service = validationContext.GetService<GarmentSectionService>();

@@ -16,36 +16,36 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
     public class GarmentDetailCurrenciesController : BasicController<GarmentDetailCurrencyService, GarmentDetailCurrency, GarmentDetailCurrencyViewModel, CoreDbContext>
     {
         private new static readonly string ApiVersion = "1.0";
-		GarmentDetailCurrencyService service;
+        GarmentDetailCurrencyService service;
 
         public GarmentDetailCurrenciesController(GarmentDetailCurrencyService service) : base(service, ApiVersion)
-		{
-			this.service = service;
-		}
+        {
+            this.service = service;
+        }
 
-		[HttpGet("byId")]
-		public IActionResult GetByIds([Bind(Prefix = "garmentdetailCurrencyList[]")]List<int> garmentdetailCurrencyList)
-		{
-			try
-			{
-				service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+        [HttpGet("byId")]
+        public IActionResult GetByIds([Bind(Prefix = "garmentdetailCurrencyList[]")]List<int> garmentdetailCurrencyList)
+        {
+            try
+            {
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
 
-				List<GarmentDetailCurrency> Data = service.GetByIds(garmentdetailCurrencyList);
+                List<GarmentDetailCurrency> Data = service.GetByIds(garmentdetailCurrencyList);
 
-				Dictionary<string, object> Result =
-					new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
-					.Ok(Data);
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(Data);
 
-				return Ok(Result);
-			}
-			catch (Exception e)
-			{
-				Dictionary<string, object> Result =
-					new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
-					.Fail();
-				return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
-			}
-		}
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
 
         [HttpGet("byCode/{code}")]
         public IActionResult GetByCode([FromRoute] string code)
