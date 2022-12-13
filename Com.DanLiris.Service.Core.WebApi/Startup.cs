@@ -37,6 +37,7 @@ using Com.DanLiris.Service.Core.Lib.Services.IBCurrency;
 using Com.DanLiris.Service.Core.Lib.Services.GarmentLeftoverWarehouseComodity;
 using Com.DanLiris.Service.Core.Lib.Services.BankCashReceiptType;
 using Com.DanLiris.Service.Core.Lib.Services.GarmentWareHouse;
+using Com.DanLiris.Service.Core.Lib.Services.GarmentMarketing;
 
 namespace Com.DanLiris.Service.Core.WebApi
 {
@@ -133,8 +134,8 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddScoped<ProductTypeService>()
                 .AddTransient<IGarmentWareHouseService, GarmentWareHouseService>()
                 .AddScoped<ProductTextileService>()
-                .AddScoped<MenuService>();
-
+                .AddScoped<MenuService>()
+                .AddTransient<IGarmentMarketingService, GarmentMarketingService>();
 
             RegisterServices(services);
 
