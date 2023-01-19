@@ -127,6 +127,33 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
             }
         }
 
+        [HttpGet("spinning/byId")]
+        public IActionResult GetProductByIds([FromBody] string productList)
+        {
+            try
+            {
+
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                List<string> _productList = productList.Split(',').ToList();
+
+                List<Product> Data = service.GetByIds(_productList);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(Data);
+
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpPost("packing/create")]
         public async Task<IActionResult> PostPacking([FromBody] PackingModel packings)
         {
