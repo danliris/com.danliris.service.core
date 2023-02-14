@@ -96,6 +96,7 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<GarmentWareHouseModel> GarmentWareHouses { get; set; }
         public DbSet<ProductTextile> ProductTextiles { get; set; }
         public DbSet<Menus> Menus { get; set; }
+        public DbSet<TrackModel> Track { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
