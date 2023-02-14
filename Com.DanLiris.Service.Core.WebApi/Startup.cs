@@ -135,7 +135,9 @@ namespace Com.DanLiris.Service.Core.WebApi
                 .AddTransient<IGarmentWareHouseService, GarmentWareHouseService>()
                 .AddScoped<ProductTextileService>()
                 .AddScoped<MenuService>()
+                .AddScoped<TrackService>();
                 .AddTransient<IGarmentMarketingService, GarmentMarketingService>();
+
 
             RegisterServices(services);
 
