@@ -1,7 +1,9 @@
-﻿using Com.Moonlay.Models;
+﻿using Com.DanLiris.Service.Core.Lib.Services;
+using Com.Moonlay.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace Com.DanLiris.Service.Core.Lib.Models
@@ -21,7 +23,15 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 validationResult.Add(new ValidationResult("Name is required", new List<string> { "name" }));
+            
+            if (validationResult.Count.Equals(0))
+            {
+                /* Service Validation */
+                TrackService service = (TrackService)validationContext.GetService(typeof(TrackService));
 
+                if (service.DbContext.Set<TrackModel>().Count(r => r._IsDeleted.Equals(false) && r.Type == this.Type && r.Name.Equals(this.Name)) > 0) /* Code Unique */
+                    validationResult.Add(new ValidationResult("Code already exists", new List<string> { "track" }));
+            }
             return validationResult;
         }
     }
