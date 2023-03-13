@@ -85,7 +85,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
         public List<string> CsvHeader { get; } = new List<string>()
         {
-            "Tipe", "Nama"
+            "Tipe", "Nama", "Box"
         };
 
         public sealed class TrackMap : ClassMap<TrackViewModel>
@@ -94,6 +94,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             {
                 Map(p => p.Type).Index(0);
                 Map(p => p.Name).Index(1);
+                Map(p => p.Box).Index(2);
             }
         }
 
@@ -110,21 +111,39 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Tipe tidak boleh kosong, ");
                 }
-                
+
+                if (string.IsNullOrWhiteSpace(TrackVM.Box))
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Box tidak boleh kosong, ");
+                }
+
 
                 if (string.IsNullOrWhiteSpace(TrackVM.Name))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh kosong, ");
                 }
-                else if (Data.Any(d => d != TrackVM && d.Name.Equals(TrackVM.Name)))
+                //else if (Data.Any(d => d != TrackVM && d.Name.Equals(TrackVM.Name)))
+                //{
+                //    ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
+                //}
+                //else if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(TrackVM.Name)))
+                //{
+                //    ErrorMessage = string.Concat(ErrorMessage, "Nama Jalur/Rak Sudak Di Input, ");
+               // }
+
+                if (Data.Any(d => d != TrackVM /*&& d.Name.Equals(TrackVM.Name)*/))
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                 }
-                else if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(TrackVM.Name)))
+
+                //if (Data.Count(d => d != TrackVM && d.Name.Equals(TrackVM.Name) && d.Box.Equals(TrackVM.Box) && d.Type.Equals(TrackVM.Type)) > 0)
+                //{
+                //    ErrorMessage = string.Concat(ErrorMessage, "Jalur/Track tidak boleh duplikat, ");
+                //}
+                if (this.DbSet.Count(d => d._IsDeleted.Equals(false) && d.Name.Equals(TrackVM.Name) && d.Type.Equals(TrackVM.Type) && d.Box.Equals(TrackVM.Box)) > 0)
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama Jalur/Rak Sudak Di Input, ");
                 }
-
                 if (!string.IsNullOrEmpty(ErrorMessage))
                 {
                     ErrorMessage = ErrorMessage.Remove(ErrorMessage.Length - 2);
@@ -132,6 +151,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
                     Error.Add("Kode Barang", TrackVM.Type);
                     Error.Add("Nama Barang", TrackVM.Name);
+                    Error.Add("Box", TrackVM.Box);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);
@@ -160,7 +180,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 _LastModifiedBy = trackVM._LastModifiedBy,
                 _LastModifiedAgent = trackVM._LastModifiedAgent,
                 Type = trackVM.Type,
-                Name = trackVM.Name
+                Name = trackVM.Name,
+                Box = trackVM.Box,
             };
 
 
@@ -182,7 +203,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 _LastModifiedAgent = trackT._LastModifiedAgent,
                 Type = trackT.Type,
                 Name = trackT.Name,
-               
+                Box = trackT.Box,
+
 
             };
 
