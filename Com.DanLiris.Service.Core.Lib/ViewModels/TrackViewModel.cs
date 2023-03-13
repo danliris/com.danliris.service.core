@@ -10,5 +10,6 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         
         public string Type { get; set; }
         public string Name { get; set; }
+        public string Box { get; set; }
     }
 }
