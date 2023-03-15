@@ -24,9 +24,11 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
             if (string.IsNullOrWhiteSpace(this.Name))
                 validationResult.Add(new ValidationResult("Name is required", new List<string> { "name" }));
-
-            if (string.IsNullOrWhiteSpace(this.Box))
-                validationResult.Add(new ValidationResult("Box is required", new List<string> { "box" }));
+            if (this.Type == "Rak")
+            {
+                if (string.IsNullOrWhiteSpace(this.Box))
+                    validationResult.Add(new ValidationResult("Box is required", new List<string> { "box" }));
+            }
 
             if (validationResult.Count.Equals(0))
             {
