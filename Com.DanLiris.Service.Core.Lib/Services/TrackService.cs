@@ -2,6 +2,7 @@
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.Moonlay.NetCore.Lib;
 using CsvHelper.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -27,6 +28,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         public override Tuple<List<TrackModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<TrackModel> Query = this.DbContext.Track.AsNoTracking();
+            
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Filter);
             Query = ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
@@ -83,6 +85,42 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return Tuple.Create(Data, totalData, OrderDictionary, SelectedFields);
         }
 
+        public ReadResponse<TrackViewModel> ReadModelSearch(int page = 1, int size = 25, string order = "{}", List<string> select = null, string keyword = null, string filter = "{}")
+        {
+
+
+            var query = DbContext.Track.Select(s => new TrackViewModel()
+            {
+                Id = s.Id,
+                Box = s.Box,
+                Type = s.Type,
+                Name = s.Name,
+                Concat = s.Box != null ? s.Type + " - " + s.Name + " - " + s.Box : s.Type + " - " + s.Name
+            });
+            List<string> SearchAttributes = new List<string>()
+                {
+                    "Concat"
+                };
+
+            query = query.Where(General.BuildSearch(SearchAttributes), keyword);
+            query.OrderBy(x => x.Id);
+
+            //query = QueryHelper<TrackViewModel>.Search(query, searchAttributes, keyword);
+
+            //var filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+            //query = QueryHelper<Models.AccountingCategory>.Filter(query, filterDictionary);
+
+            var orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+            //query = QueryHelper<Models.AccountingCategory>.Order(query, orderDictionary);
+
+            //var pageable = new Pageable<Models.AccountingCategory>(query, page - 1, size);
+            
+            var pageable = new Pageable<TrackViewModel>(query, page - 1, size);
+            var data = pageable.Data.ToList();
+            var totalData = pageable.TotalCount;
+            return new ReadResponse<TrackViewModel>(data, totalData, orderDictionary, new List<string>());
+        }
+
         public List<string> CsvHeader { get; } = new List<string>()
         {
             "Tipe", "Nama", "Box"
@@ -129,17 +167,17 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 //else if (this.DbSet.Any(d => d._IsDeleted.Equals(false) && d.Name.Equals(TrackVM.Name)))
                 //{
                 //    ErrorMessage = string.Concat(ErrorMessage, "Nama Jalur/Rak Sudak Di Input, ");
-               // }
+                // }
 
-                if (Data.Any(d => d != TrackVM /*&& d.Name.Equals(TrackVM.Name)*/))
-                {
-                    ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
-                }
-
-                //if (Data.Count(d => d != TrackVM && d.Name.Equals(TrackVM.Name) && d.Box.Equals(TrackVM.Box) && d.Type.Equals(TrackVM.Type)) > 0)
+                //if (Data.Any(d => d != TrackVM /*&& d.Name.Equals(TrackVM.Name)*/))
                 //{
-                //    ErrorMessage = string.Concat(ErrorMessage, "Jalur/Track tidak boleh duplikat, ");
+                //    ErrorMessage = string.Concat(ErrorMessage, "Nama tidak boleh duplikat, ");
                 //}
+
+                if (Data.Count(d => d != TrackVM && d.Name.Equals(TrackVM.Name) && d.Box.Equals(TrackVM.Box) && d.Type.Equals(TrackVM.Type)) > 0)
+                {
+                    ErrorMessage = string.Concat(ErrorMessage, "Jalur/Track tidak boleh duplikat, ");
+                }
                 if (this.DbSet.Count(d => d._IsDeleted.Equals(false) && d.Name.Equals(TrackVM.Name) && d.Type.Equals(TrackVM.Type) && d.Box.Equals(TrackVM.Box)) > 0)
                 {
                     ErrorMessage = string.Concat(ErrorMessage, "Nama Jalur/Rak Sudak Di Input, ");
@@ -204,6 +242,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Type = trackT.Type,
                 Name = trackT.Name,
                 Box = trackT.Box,
+                //Concat = trackT.Box !=null? trackT.Type+" - "+ trackT.Name +" - "+ trackT.Box : trackT.Type + " - " + trackT.Name
+
 
 
             };
