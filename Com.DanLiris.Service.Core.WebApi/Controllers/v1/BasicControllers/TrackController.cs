@@ -23,5 +23,26 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
         {
             this.service = service;
         }
+
+        [HttpGet("search")]
+        public IActionResult GetSearch(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")] List<string> select = null, string keyword = null, string filter = "{}")
+        {
+            try
+            {
+                var result = service.ReadModelSearch(page, size, order, select, keyword, filter);
+
+                //var response =
+                //new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE).Ok(null, result.Data, page, size, result.Count, result.Data.Count, result.Order, result.Selected);
+                return Ok(new
+                {
+                    data = result.Data
+                });
+            }
+            catch (Exception e)
+            {
+                var response = new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message).Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, response);
+            }
+        }
     }
 }
