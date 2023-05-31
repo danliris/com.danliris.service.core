@@ -25,7 +25,7 @@
     <PackageReference Include="MlkPwgen" Version="0.3.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
     <PackageReference Include="Moq" Version="4.8.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.7.12" />
   </ItemGroup>
 
