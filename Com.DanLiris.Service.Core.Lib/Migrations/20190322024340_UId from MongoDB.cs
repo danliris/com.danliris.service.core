@@ -15,12 +15,12 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UId",
-                table: "Roles",
-                type: "nvarchar(255)",
-                maxLength: 255,
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "UId",
+            //    table: "Roles",
+            //    type: "nvarchar(255)",
+            //    maxLength: 255,
+            //    nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "UId",
@@ -36,12 +36,12 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UId",
-                table: "Permissions",
-                type: "nvarchar(255)",
-                maxLength: 255,
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "UId",
+            //    table: "Permissions",
+            //    type: "nvarchar(255)",
+            //    maxLength: 255,
+            //    nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "UId",
@@ -64,19 +64,19 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UId",
-                table: "AccountRoles",
-                type: "nvarchar(255)",
-                maxLength: 255,
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "UId",
+            //    table: "AccountRoles",
+            //    type: "nvarchar(255)",
+            //    maxLength: 255,
+            //    nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "UId",
-                table: "AccountProfiles",
-                type: "nvarchar(255)",
-                maxLength: 255,
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "UId",
+            //    table: "AccountProfiles",
+            //    type: "nvarchar(255)",
+            //    maxLength: 255,
+            //    nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -85,9 +85,9 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 name: "UId",
                 table: "StandardTests");
 
-            migrationBuilder.DropColumn(
-                name: "UId",
-                table: "Roles");
+            //migrationBuilder.DropColumn(
+            //    name: "UId",
+            //    table: "Roles");
 
             migrationBuilder.DropColumn(
                 name: "UId",
@@ -97,9 +97,9 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 name: "UId",
                 table: "ProcessType");
 
-            migrationBuilder.DropColumn(
-                name: "UId",
-                table: "Permissions");
+            //migrationBuilder.DropColumn(
+            //    name: "UId",
+            //    table: "Permissions");
 
             migrationBuilder.DropColumn(
                 name: "UId",
@@ -113,13 +113,13 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 name: "UId",
                 table: "ColorTypes");
 
-            migrationBuilder.DropColumn(
-                name: "UId",
-                table: "AccountRoles");
+            //migrationBuilder.DropColumn(
+            //    name: "UId",
+            //    table: "AccountRoles");
 
-            migrationBuilder.DropColumn(
-                name: "UId",
-                table: "AccountProfiles");
+            //migrationBuilder.DropColumn(
+            //    name: "UId",
+            //    table: "AccountProfiles");
         }
     }
 }
