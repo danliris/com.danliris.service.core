@@ -21,181 +21,181 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+            //modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountProfile", b =>
+            //    {
+            //        b.Property<int>("Id")
+            //            .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccountId");
+            //        b.Property<int>("AccountId");
 
-                    b.Property<string>("Firstname");
+            //        b.Property<string>("Firstname");
 
-                    b.Property<string>("Gender");
+            //        b.Property<string>("Gender");
 
-                    b.Property<string>("Lastname");
+            //        b.Property<string>("Lastname");
 
-                    b.HasKey("Id");
+            //        b.HasKey("Id");
 
-                    b.ToTable("AccountProfiles");
-                });
+            //        b.ToTable("AccountProfiles");
+            //    });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+            //modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountRole", b =>
+            //    {
+            //        b.Property<int>("Id")
+            //            .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccountId");
+            //        b.Property<int>("AccountId");
 
-                    b.Property<bool>("Active");
+            //        b.Property<bool>("Active");
 
-                    b.Property<int>("RoleId");
+            //        b.Property<int>("RoleId");
 
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_CreatedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_CreatedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_CreatedUtc");
+            //        b.Property<DateTime>("_CreatedUtc");
 
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_DeletedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_DeletedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_DeletedUtc");
+            //        b.Property<DateTime>("_DeletedUtc");
 
-                    b.Property<bool>("_IsDeleted");
+            //        b.Property<bool>("_IsDeleted");
 
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_LastModifiedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_LastModifiedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_LastModifiedUtc");
+            //        b.Property<DateTime>("_LastModifiedUtc");
 
-                    b.HasKey("Id");
+            //        b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+            //        b.HasIndex("RoleId");
 
-                    b.ToTable("AccountRoles");
-                });
+            //        b.ToTable("AccountRoles");
+            //    });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Permission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+            //modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Permission", b =>
+            //    {
+            //        b.Property<int>("Id")
+            //            .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Active");
+            //        b.Property<bool>("Active");
 
-                    b.Property<string>("Division");
+            //        b.Property<string>("Division");
 
-                    b.Property<int>("RoleId");
+            //        b.Property<int>("RoleId");
 
-                    b.Property<string>("Unit");
+            //        b.Property<string>("Unit");
 
-                    b.Property<string>("UnitCode");
+            //        b.Property<string>("UnitCode");
 
-                    b.Property<int>("UnitId");
+            //        b.Property<int>("UnitId");
 
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_CreatedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_CreatedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_CreatedUtc");
+            //        b.Property<DateTime>("_CreatedUtc");
 
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_DeletedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_DeletedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_DeletedUtc");
+            //        b.Property<DateTime>("_DeletedUtc");
 
-                    b.Property<bool>("_IsDeleted");
+            //        b.Property<bool>("_IsDeleted");
 
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_LastModifiedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_LastModifiedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_LastModifiedUtc");
+            //        b.Property<DateTime>("_LastModifiedUtc");
 
-                    b.Property<int>("permission");
+            //        b.Property<int>("permission");
 
-                    b.HasKey("Id");
+            //        b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+            //        b.HasIndex("RoleId");
 
-                    b.ToTable("Permissions");
-                });
+            //        b.ToTable("Permissions");
+            //    });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+            //modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", b =>
+            //    {
+            //        b.Property<int>("Id")
+            //            .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Active");
+            //        b.Property<bool>("Active");
 
-                    b.Property<string>("Code");
+            //        b.Property<string>("Code");
 
-                    b.Property<string>("Description");
+            //        b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+            //        b.Property<string>("Name");
 
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_CreatedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_CreatedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_CreatedUtc");
+            //        b.Property<DateTime>("_CreatedUtc");
 
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_DeletedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_DeletedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_DeletedUtc");
+            //        b.Property<DateTime>("_DeletedUtc");
 
-                    b.Property<bool>("_IsDeleted");
+            //        b.Property<bool>("_IsDeleted");
 
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_LastModifiedAgent")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
+            //        b.Property<string>("_LastModifiedBy")
+            //            .IsRequired()
+            //            .HasMaxLength(255);
 
-                    b.Property<DateTime>("_LastModifiedUtc");
+            //        b.Property<DateTime>("_LastModifiedUtc");
 
-                    b.HasKey("Id");
+            //        b.HasKey("Id");
 
-                    b.ToTable("Roles");
-                });
+            //        b.ToTable("Roles");
+            //    });
 
             modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.AccountBank", b =>
                 {
@@ -1681,21 +1681,21 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
                     b.ToTable("YarnMaterials");
                 });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountRole", b =>
-                {
-                    b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", "Role")
-                        .WithMany("AccountRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            //modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.AccountRole", b =>
+            //    {
+            //        b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", "Role")
+            //            .WithMany("AccountRoles")
+            //            .HasForeignKey("RoleId")
+            //            .OnDelete(DeleteBehavior.Cascade);
+            //    });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Permission", b =>
-                {
-                    b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", "Role")
-                        .WithMany("Permissions")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            //modelBuilder.Entity("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Permission", b =>
+            //    {
+            //        b.HasOne("Com.DanLiris.Service.Core.Lib.Models.Account_and_Roles.Role", "Role")
+            //            .WithMany("Permissions")
+            //            .HasForeignKey("RoleId")
+            //            .OnDelete(DeleteBehavior.Cascade);
+            //    });
 #pragma warning restore 612, 618
         }
     }
