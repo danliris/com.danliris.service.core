@@ -8,9 +8,12 @@ using CsvHelper.TypeConversion;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
@@ -681,6 +684,37 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         public Task<Product> GetProductForSpinning(int Id)
         {
             return DbContext.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
+        }
+        public MemoryStream DownloadTemplate()
+        {
+            IQueryable<Product> Query = from a in this.DbContext.Products
+                                        where a.Price > 0
+                                        select a;
+
+            DataTable result = new DataTable();
+
+
+            result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Kode Barang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Nama Barang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Satuan Default", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Harga Barang", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tags", DataType = typeof(String) });
+            int idx = 0;
+            foreach (var item in Query)
+            {
+                idx++;
+                result.Rows.Add(idx,item.Code, item.Name, item.UomUnit, item.CurrencyCode, item.Price, item.Tags);
+            }
+            ExcelPackage package = new ExcelPackage();
+          
+
+            var sheet = package.Workbook.Worksheets.Add("Report");
+            sheet.Cells["A1"].LoadFromDataTable(result, true, OfficeOpenXml.Table.TableStyles.Light16);
+            MemoryStream stream = new MemoryStream();
+            package.SaveAs(stream);
+            return stream;
         }
     }
 }
