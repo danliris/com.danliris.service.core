@@ -103,7 +103,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 };
 
             query = query.Where(General.BuildSearch(SearchAttributes), keyword);
-            query.OrderBy(x => x.Id);
+            query.OrderBy(x => x.Box);
 
             //query = QueryHelper<TrackViewModel>.Search(query, searchAttributes, keyword);
 
@@ -115,7 +115,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             //var pageable = new Pageable<Models.AccountingCategory>(query, page - 1, size);
             
-            var pageable = new Pageable<TrackViewModel>(query, page - 1, size);
+            var pageable = new Pageable<TrackViewModel>(query, page - 1, 15);
             var data = pageable.Data.ToList();
             var totalData = pageable.TotalCount;
             return new ReadResponse<TrackViewModel>(data, totalData, orderDictionary, new List<string>());

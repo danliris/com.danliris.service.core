@@ -35,7 +35,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                 //new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE).Ok(null, result.Data, page, size, result.Count, result.Data.Count, result.Order, result.Selected);
                 return Ok(new
                 {
-                    data = result.Data
+                    data = result.Data.OrderBy( x => x.Box)
                 });
             }
             catch (Exception e)
