@@ -283,5 +283,66 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
             }
 
         }
+
+        [HttpPut("posting")]
+        public async Task<IActionResult> Posting ([FromBody] List<ProductViewModel> product)
+        {
+            try
+            {
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                await service.productPost(product);
+
+                //Dictionary<string, object> Result =
+                //new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
+                //.Ok();
+                //return NoContent();
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(product);
+
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPut("nonactived/{id}")]
+        public async Task<IActionResult> NonActived([FromRoute] int id)
+        {
+            try
+            {
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                await service.productNonActive(id);
+
+
+                Dictionary<string, object> Result =
+                new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
+                .Ok();
+                return NoContent();
+
+                //Dictionary<string, object> Result =
+                //    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                //    .Ok(product);
+
+                //return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }

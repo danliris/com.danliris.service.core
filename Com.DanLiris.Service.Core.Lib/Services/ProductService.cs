@@ -1,7 +1,9 @@
 ﻿using Com.DanLiris.Service.Core.Lib.Helpers;
+using Com.DanLiris.Service.Core.Lib.Helpers.IdentityService;
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
@@ -18,16 +20,22 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
     public class ProductService : BasicService<CoreDbContext, Product>, IBasicUploadCsvService<ProductViewModel>, IMap<Product, ProductViewModel>
     {
         private const string UserAgent = "core-product-service";
-
-        public ProductService(IServiceProvider serviceProvider) : base(serviceProvider)
+        protected IIdentityService _IdentityService;
+        protected DbSet<Product> _DbSet;
+        //public CoreDbContext _DbContext;
+        public ProductService(IServiceProvider serviceProvider, CoreDbContext dbContext) : base(serviceProvider)
         {
             DbContext.Database.SetCommandTimeout(1000 * 60 * 2);
+            //_DbContext = dbContext;
+            _DbSet = dbContext.Set<Product>();
+            _IdentityService = serviceProvider.GetService<IIdentityService>();
         }
 
         public override Tuple<List<Product>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -51,7 +59,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc"
+                "Id", "Code", "Name", "UOM", "Currency",  "Price", "Tags", "_LastModifiedUtc", "IsPosted"
             };
 
             //Query = Query
@@ -293,7 +301,10 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                         Code = product.SPPProperties.OrderTypeCode,
                         Name = product.SPPProperties.OrderTypeName
                     }
-                }
+
+
+                },
+                IsPosted = product.Active
             };
 
             return productVM;
@@ -715,6 +726,60 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             MemoryStream stream = new MemoryStream();
             package.SaveAs(stream);
             return stream;
+        }
+
+        public async Task<int> productPost(List<ProductViewModel> product)
+        {
+            int Updated = 1;
+            var Ids = product.Select(d => d.Id).ToList();
+            var listData = this.DbContext.Products.Where(m => Ids.Contains(m.Id) && !m._IsDeleted).ToList();
+
+            listData.ForEach(async m =>
+            {
+                Updated = await productUpdated(m);
+
+                //m.Active = true;
+                //m.FlagForUpdate("dev2", UserAgent);
+
+
+
+
+                //DbContext.Products.Update(m);
+
+                //Updated += await DbContext.SaveChangesAsync();
+
+
+            });
+            
+            return Updated;
+        }
+
+        public async Task<int> productUpdated(Product model)
+        {
+            
+               
+            model.Active = true;
+            model.FlagForUpdate( "dev2", UserAgent);
+
+
+
+
+            DbContext.Products.Update(model);
+           
+            return await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> productNonActive(int Id)
+        {
+           
+            
+            var model = this.DbContext.Products.FirstOrDefault( x => x.Id == Id);
+
+            model.Active = false;
+            model.FlagForUpdate("dev2", UserAgent);
+
+            DbContext.Products.Update(model);
+            return await DbContext.SaveChangesAsync();
         }
     }
 }
