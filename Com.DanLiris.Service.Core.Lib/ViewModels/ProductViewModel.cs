@@ -22,6 +22,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public ProductUomViewModel UOM { get; set; }
         
         public string Tags { get; set; }
+        public bool IsPosted { get; set; }
     }
 
     public class ProductSPPPropertyViewModel
