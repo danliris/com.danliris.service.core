@@ -23,6 +23,37 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         
         public string Tags { get; set; }
         public bool IsPosted { get; set; }
+        public bool IsPriceChange { get; set; }
+        public string EditReason { get; set; }
+    }
+
+    public class MonitoringProductViewModel : BasicViewModel
+    {
+
+        public string Code { get; set; }
+
+        public string Name { get; set; }
+
+        public dynamic Price { get; set; }
+        public dynamic PriceOrigin { get; set; }
+
+        public decimal DiffPrice {get; set;}
+        public decimal DiffPricePercentage {get; set;}
+
+        public string CurrencyCode { get; set; }
+
+        public ProductSPPPropertyViewModel SPPProperties { get; set; }
+
+        public string Description { get; set; }
+
+        public string UOMUnit { get; set; }
+
+        public string Tags { get; set; }
+        public bool IsPosted { get; set; }
+        public bool IsPriceChange { get; set; }
+        public string EditReason { get; set; }
+        public DateTimeOffset DateIn { get; set; }
+        public DateTimeOffset DateChange { get; set; }
     }
 
     public class ProductSPPPropertyViewModel

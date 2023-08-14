@@ -68,6 +68,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
             }
         }
 
+
         [HttpGet("spinning/{id}")]
         public async Task<IActionResult> GetByIdForSpinning([FromRoute] int id)
         {
@@ -291,7 +292,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
             {
                 service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
 
-                await service.productPost(product);
+                await service.productPost(product, service.Username);
 
                 //Dictionary<string, object> Result =
                 //new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
@@ -321,7 +322,7 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
             {
                 service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
 
-                await service.productNonActive(id);
+                await service.productNonActive(id, service.Username);
 
 
                 Dictionary<string, object> Result =
@@ -335,6 +336,60 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
 
                 //return Ok(Result);
 
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateProduct([FromRoute] int id, [FromBody] ProductViewModel product)
+        {
+            try
+            {
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                await service.UpdateProduct(id, service.Username, product);
+
+
+                Dictionary<string, object> Result =
+                new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
+                .Ok();
+                return NoContent();
+
+                //Dictionary<string, object> Result =
+                //    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                //    .Ok(product);
+
+                //return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+
+        [HttpGet("monitoring-product-price")]
+        public IActionResult GetMonitoringProduct(int productId, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        {
+            try
+            {
+                var Data = Service.GetReport(productId, dateFrom, dateTo);
+
+                Dictionary<string, object> Result =
+                   new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                   .Ok(Data);
+
+                return Ok(Result);
             }
             catch (Exception e)
             {

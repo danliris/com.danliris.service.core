@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
     public class ProductService : BasicService<CoreDbContext, Product>, IBasicUploadCsvService<ProductViewModel>, IMap<Product, ProductViewModel>
@@ -29,13 +30,14 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         private const string UserAgent = "core-product-service";
         protected IIdentityService _IdentityService;
         protected DbSet<Product> _DbSet;
-        //public CoreDbContext _DbContext;
-        public ProductService(IServiceProvider serviceProvider, CoreDbContext dbContext) : base(serviceProvider)
+        private readonly CoreDbContext _dbContext;
+        public ProductService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             DbContext.Database.SetCommandTimeout(1000 * 60 * 2);
             //_DbContext = dbContext;
-            _DbSet = dbContext.Set<Product>();
+            //_DbSet = dbContext.Set<Product>();
             _IdentityService = serviceProvider.GetService<IIdentityService>();
+            _dbContext = serviceProvider.GetService<CoreDbContext>();
         }
 
         public override Tuple<List<Product>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -728,7 +730,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return stream;
         }
 
-        public async Task<int> productPost(List<ProductViewModel> product)
+        public async Task<int> productPost(List<ProductViewModel> product, string username)
         {
             int Updated = 1;
             var Ids = product.Select(d => d.Id).ToList();
@@ -736,7 +738,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             listData.ForEach(async m =>
             {
-                Updated = await productUpdated(m);
+                Updated = await productUpdated(m, username);
 
                 //m.Active = true;
                 //m.FlagForUpdate("dev2", UserAgent);
@@ -754,7 +756,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return Updated;
         }
 
-        public async Task<int> productUpdated(Product model)
+        public async Task<int> productUpdated(Product model, string username)
         {
             
                
@@ -769,17 +771,101 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             return await DbContext.SaveChangesAsync();
         }
 
-        public async Task<int> productNonActive(int Id)
+        public async Task<int> productNonActive(int Id, string username)
         {
            
             
             var model = this.DbContext.Products.FirstOrDefault( x => x.Id == Id);
 
             model.Active = false;
-            model.FlagForUpdate("dev2", UserAgent);
+            model.FlagForUpdate(username, UserAgent);
 
             DbContext.Products.Update(model);
             return await DbContext.SaveChangesAsync();
+        }
+        
+        public async Task<int> UpdateProduct(int Id, string username, ProductViewModel product )
+        {
+
+            //var modelHistory = new ProductPriceHistoryModel();
+
+
+            var model = this.DbContext.Products.FirstOrDefault(x => x.Id == Id);
+            if (product.IsPriceChange)
+            {
+
+                var dataHistory = this.DbContext.ProductPriceHistories.OrderByDescending( s => s._CreatedUtc).FirstOrDefault(a => a.ProductId == Id);
+
+                var modelHistory = new ProductPriceHistoryModel();
+                if (dataHistory != null) {
+                    modelHistory = new ProductPriceHistoryModel(
+                    product.Code, product.Name, model.Price, product.Price, product.Currency.Id, product.Currency.Code, product.Currency.Symbol, product.EditReason, product.UOM.Id, product.UOM.Unit, model.Id, dataHistory._CreatedUtc);
+                }
+                else {
+                    modelHistory = new ProductPriceHistoryModel(
+                    product.Code, product.Name, model.Price, product.Price, product.Currency.Id, product.Currency.Code, product.Currency.Symbol, product.EditReason, product.UOM.Id, product.UOM.Unit, model.Id, model._CreatedUtc);
+                }
+
+                
+
+                modelHistory.FlagForCreate(username, UserAgent);
+                _dbContext.ProductPriceHistories.Add(modelHistory);
+            }
+
+            model.Name = product.Name;
+            model.UomId = product.UOM.Id;
+            model.UomUnit = product.UOM.Unit;
+            model.CurrencyId = product.Currency.Id;
+            model.CurrencyCode = product.Currency.Code;
+            model.CurrencySymbol = product.Currency.Symbol;
+            model.Price = product.Price;
+            model.Tags = product.Tags;
+            model.Description = product.Description;
+
+            model.FlagForUpdate(username, UserAgent);
+
+            DbContext.Products.Update(model);
+            return await DbContext.SaveChangesAsync();
+        }
+
+        public List<MonitoringProductViewModel> GetReport(int productId, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        {
+            var Query = GetReportQuery(productId, dateFrom, dateTo).ToList();
+
+            return Query;
+        }
+
+        public IQueryable<MonitoringProductViewModel> GetReportQuery(int productId ,  DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        {
+            
+
+            var Query = DbContext.ProductPriceHistories.AsNoTracking();
+
+            if (productId != 0) {
+                Query = Query.Where(s => s.ProductId == productId);
+            }
+
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                Query = Query.Where(s => dateFrom.Value.Date <= s._CreatedUtc.Date &&
+                            s._CreatedUtc.Date <= dateTo.Value.Date);
+            }
+            var data = Query.Select(s => new MonitoringProductViewModel()
+            {
+                Code = s.Code,
+                Name = s.Name,
+                DateIn = s.DateBefore,
+                UOMUnit = s.UomUnit,
+                CurrencyCode = s.CurrencyCode,
+                PriceOrigin = s.PriceOrigin,
+                Price = s.Price,
+                DiffPrice = Math.Abs( s.Price - s.PriceOrigin),
+                DiffPricePercentage = ((Math.Abs(s.Price - s.PriceOrigin)/s.PriceOrigin )) * 100,
+                EditReason = s.EditReason,
+                DateChange = s._CreatedUtc
+
+            });
+            return data;
         }
     }
 }
