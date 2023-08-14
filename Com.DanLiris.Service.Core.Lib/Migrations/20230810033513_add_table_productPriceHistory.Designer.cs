@@ -11,9 +11,10 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230810033513_add_table_productPriceHistory")]
+    partial class add_table_productPriceHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3211,8 +3212,6 @@ namespace Com.DanLiris.Service.Core.Lib.Migrations
 
                     b.Property<string>("CurrencySymbol")
                         .HasMaxLength(255);
-
-                    b.Property<DateTime>("DateBefore");
 
                     b.Property<string>("EditReason")
                         .HasMaxLength(1000);
