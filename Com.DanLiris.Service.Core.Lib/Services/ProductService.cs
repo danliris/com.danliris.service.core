@@ -21,7 +21,7 @@ using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-
+using System.Globalization;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -859,13 +859,126 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 CurrencyCode = s.CurrencyCode,
                 PriceOrigin = s.PriceOrigin,
                 Price = s.Price,
-                DiffPrice = Math.Abs( s.Price - s.PriceOrigin),
-                DiffPricePercentage = ((Math.Abs(s.Price - s.PriceOrigin)/s.PriceOrigin )) * 100,
+                DiffPrice =  s.Price - s.PriceOrigin,
+                DiffPricePercentage = (((s.Price - s.PriceOrigin)/s.PriceOrigin )) * 100,
                 EditReason = s.EditReason,
                 DateChange = s._CreatedUtc
 
-            });
+            }).OrderByDescending(b => b.Code).ThenByDescending(s => s.DateIn);
             return data;
+        }
+
+        public MemoryStream GenerateExcel(int productId, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        {
+            var Query = GetReportQuery(productId, dateFrom, dateTo);
+            Query = Query.OrderByDescending(b => b.Code).ThenByDescending(s => s.DateIn);
+            DataTable result = new DataTable();
+            //No	Unit	Budget	Kategori	Tanggal PR	Nomor PR	Kode Barang	Nama Barang	Jumlah	Satuan	Tanggal Diminta Datang	Status	Tanggal Diminta Datang Eksternal
+
+
+            result.Columns.Add(new DataColumn() { ColumnName = "Kode Barang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Nama Barang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Input", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Harga Lama", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Harga Baru", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Selisih Harga", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Persentase Selisih ", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Alasan Perubahan", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Perubahan", DataType = typeof(String) });
+            if (Query.ToArray().Count() == 0)
+                result.Rows.Add("","","","","",0,0,0,"",""); // to allow column name to be generated properly for empty data as template
+            else
+            {
+                int index = 0;
+                foreach (var item in Query)
+                {
+                    index++;
+                    string percentage = (item.DiffPricePercentage/100).ToString("P", CultureInfo.InvariantCulture);
+                    string inputDate = item.DateIn == new DateTime(1970, 1, 1) || item.DateIn.ToString("dd MMMM yyyy") == "01 Jan 0001" ? "-" : item.DateIn.ToOffset(new TimeSpan(7, 0, 0)).ToString("dd MMMM yyyy", new CultureInfo("id-ID"));
+                    string changeDate = item.DateChange == new DateTime(1970, 1, 1) ? "-" : item.DateChange.ToOffset(new TimeSpan(7, 0, 0)).ToString("dd MMMM yyyy", new CultureInfo("id-ID"));
+
+                    result.Rows.Add(item.Code, item.Name, inputDate, item.UOMUnit, item.CurrencyCode, item.PriceOrigin, item.Price, Math.Round( item.DiffPrice, 2), percentage,
+                       item.EditReason, changeDate );
+                }
+            }
+
+            ExcelPackage package = new ExcelPackage();
+            bool styling = true;
+            var Data = Query;
+
+            foreach (KeyValuePair<DataTable, String> item in new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") })
+            {
+                var sheet = package.Workbook.Worksheets.Add(item.Value);
+                sheet.Cells["A1"].LoadFromDataTable(item.Key, true, (styling == true) ? OfficeOpenXml.Table.TableStyles.Light16 : OfficeOpenXml.Table.TableStyles.None);
+
+                Dictionary<string, int> counts = new Dictionary<string, int>();
+                Dictionary<string, int> countsType = new Dictionary<string, int>();
+                //var docNo = Data.ToArray();
+                int value;
+
+                foreach (var a in Data)
+                {
+                    if (counts.TryGetValue(a.Code, out value))
+                    {
+                        counts[a.Code]++;
+                    }
+                    else
+                    {
+                        counts[a.Code] = 1;
+                    }
+                }
+
+                int index = 2;
+                foreach (KeyValuePair<string, int> b in counts)
+                {
+                    sheet.Cells["A" + index + ":A" + (index + b.Value - 1)].Merge = true;
+                    sheet.Cells["A" + index + ":A" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["B" + index + ":B" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["B" + index + ":B" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["C" + index + ":C" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["C" + index + ":C" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["D" + index + ":D" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["D" + index + ":D" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    sheet.Cells["E" + index + ":E" + (index + b.Value - 1)].Merge = true;
+                    sheet.Cells["E" + index + ":E" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["F" + index + ":F" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["F" + index + ":F" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["G" + index + ":G" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["G" + index + ":G" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["H" + index + ":H" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["H" + index + ":H" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["I" + index + ":I" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["I" + index + ":I" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["J" + index + ":J" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["J" + index + ":J" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    //sheet.Cells["K" + index + ":K" + (index + b.Value - 1)].Merge = true;
+                    //sheet.Cells["K" + index + ":K" + (index + b.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+
+
+                    index += b.Value;
+
+                    sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+                }
+            }
+
+            MemoryStream stream = new MemoryStream();
+            package.SaveAs(stream);
+            return stream;
+
+            //return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
         }
     }
 }
