@@ -799,11 +799,11 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 var modelHistory = new ProductPriceHistoryModel();
                 if (dataHistory != null) {
                     modelHistory = new ProductPriceHistoryModel(
-                    product.Code, product.Name, model.Price, product.Price, product.Currency.Id, product.Currency.Code, product.Currency.Symbol, product.EditReason, product.UOM.Id, product.UOM.Unit, model.Id, dataHistory._CreatedUtc);
+                    product.Code, product.Name, model.Price, (decimal)product.Price, product.Currency.Id, product.Currency.Code, product.Currency.Symbol, product.EditReason, product.UOM.Id, product.UOM.Unit, model.Id, dataHistory._CreatedUtc);
                 }
                 else {
                     modelHistory = new ProductPriceHistoryModel(
-                    product.Code, product.Name, model.Price, product.Price, product.Currency.Id, product.Currency.Code, product.Currency.Symbol, product.EditReason, product.UOM.Id, product.UOM.Unit, model.Id, model._CreatedUtc);
+                    product.Code, product.Name, model.Price, (decimal)product.Price, product.Currency.Id, product.Currency.Code, product.Currency.Symbol, product.EditReason, product.UOM.Id, product.UOM.Unit, model.Id, model._CreatedUtc);
                 }
 
                 
@@ -818,7 +818,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             model.CurrencyId = product.Currency.Id;
             model.CurrencyCode = product.Currency.Code;
             model.CurrencySymbol = product.Currency.Symbol;
-            model.Price = product.Price;
+            model.Price = (decimal)product.Price;
             model.Tags = product.Tags;
             model.Description = product.Description;
 
