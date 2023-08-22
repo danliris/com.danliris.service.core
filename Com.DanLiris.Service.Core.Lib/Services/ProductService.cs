@@ -700,25 +700,25 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         }
         public MemoryStream DownloadTemplate()
         {
-            IQueryable<Product> Query = from a in this.DbContext.Products
+            IQueryable<Product> Query = (from a in this.DbContext.Products
                                         where a.Price > 0
-                                        select a;
+                                        select a).OrderByDescending(s=>s._CreatedUtc);
 
             DataTable result = new DataTable();
 
-
-            result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
+ 
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Barang", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Barang", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Satuan Default", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Harga Barang", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Tags", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Create", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Update", DataType = typeof(String) });
             int idx = 0;
             foreach (var item in Query)
             {
                 idx++;
-                result.Rows.Add(idx,item.Code, item.Name, item.UomUnit, item.CurrencyCode, item.Price, item.Tags);
+                result.Rows.Add(item.Code, item.Name,  item.Price,  item.CurrencyCode, item.UomUnit,item._CreatedUtc.ToString(),item._LastModifiedUtc.ToString());
             }
             ExcelPackage package = new ExcelPackage();
           
