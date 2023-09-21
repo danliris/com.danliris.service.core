@@ -100,6 +100,7 @@ namespace Com.DanLiris.Service.Core.Lib
         public DbSet<TrackModel> Track { get; set; }
 
         public DbSet<ProductPriceHistoryModel> ProductPriceHistories { get; set; }
+        public DbSet<DebitCreditNoteModel> DebitCreditNotes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
