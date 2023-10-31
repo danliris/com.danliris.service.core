@@ -51,6 +51,12 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 "Id", "Code", "Division", "Name", "COACode", "AccountingUnitId"
             };
 
+            List<string> codeIgnore = new List<string>()
+            {
+                "S1", "S3", "SP3", "S4"
+            };
+
+
             Query = Query
                 .Select(u => new Unit
                 {
@@ -62,7 +68,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Name = u.Name,
                     COACode = u.COACode,
                     AccountingUnitId = u.AccountingUnitId
-                }).Where(x => x.Id != 37);
+                }).Where(x => x.Id != 37 && !codeIgnore.Contains(x.Code));
 
             /* Order */
             if (OrderDictionary.Count.Equals(0))
