@@ -1,4 +1,5 @@
 ﻿using Com.DanLiris.Service.Core.Lib.Models;
+using Com.DanLiris.Service.Core.Lib.ViewModels;
 using Com.Moonlay.NetCore.Lib.Service;
 using System;
 using System.Collections.Generic;
@@ -8,21 +9,31 @@ using Com.DanLiris.Service.Core.Lib.Helpers;
 using Newtonsoft.Json;
 using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
-using Com.DanLiris.Service.Core.Lib.ViewModels;
 using CsvHelper.Configuration;
 using System.Dynamic;
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using CsvHelper.TypeConversion;
 using Microsoft.Extensions.Primitives;
+using Com.Moonlay.Models;
+using System.Threading.Tasks;
+using Com.DanLiris.Service.Core.Lib.Helpers.IdentityService;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
     public class SupplierService : BasicService<CoreDbContext, Supplier>, IBasicUploadCsvService<SupplierViewModel>, IMap<Supplier, SupplierViewModel>
     {
+        private const string UserAgent = "core-product-service";
+        protected IIdentityService _IdentityService;
+        protected DbSet<Supplier> _DbSet;
+        private readonly CoreDbContext _dbContext;
         private readonly string[] ImportAllowed = { "True", "False" };
 
         public SupplierService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+            DbContext.Database.SetCommandTimeout(1000 * 60 * 2);
+            //_IdentityService = serviceProvider.GetService<IIdentityService>();
+            //_dbContext = serviceProvider.GetService<CoreDbContext>();
         }
 
         public override Tuple<List<Supplier>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null,string Filter="{}")
@@ -46,7 +57,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "_id", "code", "name", "address", "import", "NPWP"
+                "_id", "code", "name", "address", "import", "NPWP", "IsPosted"
             };
 
             Query = Query
@@ -57,7 +68,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Name = s.Name,
                     Address = s.Address,
                     Import = s.Import,
-                    NPWP = s.NPWP
+                    NPWP = s.NPWP,
+                    Active = s.Active
                 });
 
             /* Order */
@@ -111,6 +123,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             supplierVM.import = supplier.Import;
             supplierVM.NPWP = supplier.NPWP;
             supplierVM.serialNumber = supplier.SerialNumber;
+            supplierVM.IsPosted = supplier.Active;
 
             return supplierVM;
         }
@@ -137,8 +150,49 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             supplier.Import = !Equals(supplierVM.import, null) ? Convert.ToBoolean(supplierVM.import) : null; /* Check Null */
             supplier.NPWP = supplierVM.NPWP;
             supplier.SerialNumber = supplierVM.serialNumber;
+            supplier.Active = supplierVM.IsPosted;
 
             return supplier;
+        }
+
+        public async Task<int> SupplierPost(List<SupplierViewModel> supplier, string username)
+        {
+            int Updated = 1;
+            var Ids = supplier.Select(d => d._id).ToList();
+            var listData = this.DbContext.Suppliers.Where(m => Ids.Contains(m.Id) && !m._IsDeleted).ToList();
+
+            listData.ForEach(async m =>
+            {
+                Updated = await supplierUpdated(m, username);
+
+            });
+
+            return Updated;
+        }
+
+        public async Task<int> supplierUpdated(Supplier model, string username)
+        {
+
+
+            model.Active = true;
+            model.FlagForUpdate("dev2", UserAgent);
+
+
+            DbContext.Suppliers.Update(model);
+
+            return await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> supplierNonActive(int Id, string username)
+        {
+
+            var model = this.DbContext.Suppliers.FirstOrDefault(x => x.Id == Id);
+
+            model.Active = false;
+            model.FlagForUpdate(username, UserAgent);
+
+            DbContext.Suppliers.Update(model);
+            return await DbContext.SaveChangesAsync();
         }
 
         /* Upload CSV */
@@ -237,5 +291,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             return Tuple.Create(Valid, ErrorList);
         }
+
+       
     }
 }
