@@ -21,5 +21,6 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public string NPWP { get; set; }
 
         public string serialNumber { get; set; }
+        public bool IsPosted { get; set; }
     }
 }
