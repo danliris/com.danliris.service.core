@@ -27,5 +27,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
 		public dynamic usetax { get; set; }
 
 		public IncomeTaxViewModel IncomeTaxes { get; set; }
+
+		public bool IsPosted { get; set; }
 	}
 }
