@@ -15,12 +15,18 @@ using Com.DanLiris.Service.Core.Lib.Interfaces;
 using CsvHelper.TypeConversion;
 using Microsoft.Extensions.Primitives;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using Com.Moonlay.Models;
+using Com.DanLiris.Service.Core.Lib.Helpers.IdentityService;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
 	public class GarmentSupplierService : BasicService<CoreDbContext, GarmentSupplier>, IBasicUploadCsvService<GarmentSupplierViewModel>, IMap<GarmentSupplier, GarmentSupplierViewModel>
 	{
-
+		private const string UserAgent = "core-product-service";
+		protected IIdentityService _IdentityService;
+		protected DbSet<Supplier> _DbSet;
+		private readonly CoreDbContext _dbContext;
 		private readonly string[] ImportAllowed = { "True", "False" };
 		private readonly string[] UseVatAllowed = { "True", "False" };
 		private readonly string[] UseTaxAllowed = { "True", "False" };
@@ -47,7 +53,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			/* Const Select */
 			List<string> SelectedFields = new List<string>()
 			{
-				"Id", "code", "name", "address", "import", "NPWP", "usevat", "usetax", "IncomeTaxes"
+				"Id", "code", "name", "address", "import", "NPWP", "usevat", "usetax", "IncomeTaxes", "IsPosted"
 			};
 
 			Query = Query
@@ -64,7 +70,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 					IncomeTaxesId = s.IncomeTaxesId,
 					IncomeTaxesName = s.IncomeTaxesName,
 					IncomeTaxesRate = s.IncomeTaxesRate,
-					_LastModifiedUtc =s._LastModifiedUtc
+					_LastModifiedUtc =s._LastModifiedUtc,
+					Active = s.Active
 				}).OrderByDescending(b => b._LastModifiedUtc);
 
 			/* Order */
@@ -126,6 +133,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			};
 			GarmentSupplierVM.NPWP = GarmentSupplier.NPWP;
 			GarmentSupplierVM.serialNumber = GarmentSupplier.SerialNumber;
+			GarmentSupplierVM.IsPosted = GarmentSupplier.Active;
 			
 
 			return GarmentSupplierVM;
@@ -166,9 +174,50 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			}
 			GarmentSupplier.NPWP = GarmentSupplierVM.NPWP;
 			GarmentSupplier.SerialNumber = GarmentSupplierVM.serialNumber;
+			GarmentSupplier.Active = GarmentSupplierVM.IsPosted;
 			
 
 			return GarmentSupplier;
+		}
+
+		public async Task<int> GarmentSupplierPost(List<GarmentSupplierViewModel> garmentsupplier, string username)
+		{
+			int Updated = 1;
+			var Ids = garmentsupplier.Select(d => d.Id).ToList();
+			var listData = this.DbContext.GarmentSuppliers.Where(m => Ids.Contains(m.Id) && !m._IsDeleted).ToList();
+
+			listData.ForEach(async m =>
+			{
+				Updated = await garmentsupplierUpdated(m, username);
+
+			});
+
+			return Updated;
+		}
+
+		public async Task<int> garmentsupplierUpdated(GarmentSupplier model, string username)
+		{
+
+
+			model.Active = true;
+			model.FlagForUpdate("dev2", UserAgent);
+
+
+			DbContext.GarmentSuppliers.Update(model);
+
+			return await DbContext.SaveChangesAsync();
+		}
+
+		public async Task<int> garmentsupplierNonActive(int Id, string username)
+		{
+
+			var model = this.DbContext.GarmentSuppliers.FirstOrDefault(x => x.Id == Id);
+
+			model.Active = false;
+			model.FlagForUpdate(username, UserAgent);
+
+			DbContext.GarmentSuppliers.Update(model);
+			return await DbContext.SaveChangesAsync();
 		}
 
 		/* Upload CSV */
