@@ -22,6 +22,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 		public string Address { get; set; }
 
 		[StringLength(500)]
+		public string Country { get; set; }
+
+		[StringLength(500)]
 		public string Contact { get; set; }
 
 		[StringLength(500)]

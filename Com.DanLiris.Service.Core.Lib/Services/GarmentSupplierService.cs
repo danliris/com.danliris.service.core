@@ -47,7 +47,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			/* Const Select */
 			List<string> SelectedFields = new List<string>()
 			{
-				"Id", "code", "name", "address", "import", "NPWP", "usevat", "usetax", "IncomeTaxes"
+				"Id", "code", "name", "address", "country", "import", "NPWP", "usevat", "usetax", "IncomeTaxes", "IsPosted"
 			};
 
 			Query = Query
@@ -57,6 +57,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 					Code = s.Code,
 					Name = s.Name,
 					Address = s.Address,
+					Country = s.Country,
 					Import = s.Import,
 					NPWP = s.NPWP,
 					UseVat = s.UseVat,
@@ -112,6 +113,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			GarmentSupplierVM.code = GarmentSupplier.Code;
 			GarmentSupplierVM.name = GarmentSupplier.Name;
 			GarmentSupplierVM.address = GarmentSupplier.Address;
+			GarmentSupplierVM.country = GarmentSupplier.Country;
 			GarmentSupplierVM.contact = GarmentSupplier.Contact;
 			GarmentSupplierVM.PIC = GarmentSupplier.PIC;
 			GarmentSupplierVM.import = GarmentSupplier.Import;
@@ -147,6 +149,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			GarmentSupplier.Code = GarmentSupplierVM.code;
 			GarmentSupplier.Name = GarmentSupplierVM.name;
 			GarmentSupplier.Address = GarmentSupplierVM.address;
+			GarmentSupplier.Country = GarmentSupplierVM.country;
 			GarmentSupplier.Contact = GarmentSupplierVM.contact;
 			GarmentSupplier.PIC = GarmentSupplierVM.PIC;
 			GarmentSupplier.Import = !Equals(GarmentSupplierVM.import, null) ? Convert.ToBoolean(GarmentSupplierVM.import) : false;
@@ -174,7 +177,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 		/* Upload CSV */
 		private readonly List<string> Header = new List<string>()
 		{
-			"Kode", "Nama Supplier", "Alamat", "Kontak", "PIC", "Import","Kena PPN","Kena PPH", "Jenis PPH", "Rate PPH", "NPWP", "Serial Number"
+			"Kode","Nama Supplier","Alamat","Negara","Kontak","PIC","Import","Kena PPN","Kena PPH","Jenis PPH","Rate PPH","NPWP","Serial Number"
 		};
 		public List<string> CsvHeader => Header;
 
@@ -186,15 +189,17 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 				Map(s => s.code).Index(0);
 				Map(s => s.name).Index(1);
 				Map(s => s.address).Index(2);
-				Map(s => s.contact).Index(3);
-				Map(s => s.PIC).Index(4);
-				Map(s => s.import).Index(5).TypeConverter<StringConverter>();
-				Map(s => s.usevat ).Index(6).TypeConverter<StringConverter>();
-				Map(s => s.usetax).Index(7).TypeConverter<StringConverter>();
-				Map(s => s.IncomeTaxes.name).Index(8);
-				Map(s => s.IncomeTaxes.rate).Index(9).TypeConverter<StringConverter>();
-				Map(s => s.NPWP).Index(10);
-				Map(s => s.serialNumber).Index(11);
+				Map(s => s.country).Index(3);
+				Map(s => s.contact).Index(4);
+				Map(s => s.PIC).Index(5);
+				Map(s => s.import).Index(6).TypeConverter<StringConverter>();
+				Map(s => s.usevat ).Index(7).TypeConverter<StringConverter>();
+				Map(s => s.usetax).Index(8).TypeConverter<StringConverter>();
+				Map(s => s.IncomeTaxes.name).Index(9);
+				Map(s => s.IncomeTaxes.rate).Index(10).TypeConverter<StringConverter>();
+				Map(s => s.NPWP).Index(11);
+				Map(s => s.serialNumber).Index(12);
+
 			}
 		}
 
@@ -351,6 +356,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 					Error.Add("Kode", GarmentSupplierVM.code);
 					Error.Add("Nama Supplier", GarmentSupplierVM.name);
 					Error.Add("Alamat", GarmentSupplierVM.address);
+					Error.Add("Negara", GarmentSupplierVM.country);
 					Error.Add("Kontak", GarmentSupplierVM.code);
 					Error.Add("PIC", GarmentSupplierVM.PIC);
 					Error.Add("Import", GarmentSupplierVM.import);

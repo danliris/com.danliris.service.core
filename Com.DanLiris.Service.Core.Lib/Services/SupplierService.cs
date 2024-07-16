@@ -46,7 +46,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "_id", "code", "name", "address", "import", "NPWP"
+                "_id", "code", "name", "address", "country", "import", "NPWP", "IsPosted"
             };
 
             Query = Query
@@ -56,6 +56,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Code = s.Code,
                     Name = s.Name,
                     Address = s.Address,
+                    Country = s.Country,
                     Import = s.Import,
                     NPWP = s.NPWP
                 });
@@ -106,6 +107,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             supplierVM.code = supplier.Code;
             supplierVM.name = supplier.Name;
             supplierVM.address = supplier.Address;
+            supplierVM.country = supplier.Country;
             supplierVM.contact = supplier.Contact;
             supplierVM.PIC = supplier.PIC;
             supplierVM.import = supplier.Import;
@@ -132,6 +134,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             supplier.Code = supplierVM.code;
             supplier.Name = supplierVM.name;
             supplier.Address = supplierVM.address;
+            supplier.Country = supplierVM.country;
             supplier.Contact = supplierVM.contact;
             supplier.PIC = supplierVM.PIC;
             supplier.Import = !Equals(supplierVM.import, null) ? Convert.ToBoolean(supplierVM.import) : null; /* Check Null */
@@ -144,7 +147,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         /* Upload CSV */
         private readonly List<string> Header = new List<string>()
         {
-            "Kode", "Nama Supplier", "Alamat", "Kontak", "PIC", "Import", "NPWP", "Serial Number"
+            "Kode", "Nama Supplier", "Alamat", "Negara", "Kontak", "PIC", "Import", "NPWP", "Serial Number"
         };
 
         public List<string> CsvHeader => Header;
@@ -157,11 +160,12 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Map(s => s.code).Index(0);
                 Map(s => s.name).Index(1);
                 Map(s => s.address).Index(2);
-                Map(s => s.contact).Index(3);
-                Map(s => s.PIC).Index(4);
-                Map(s => s.import).Index(5).TypeConverter<StringConverter>();
-                Map(s => s.NPWP).Index(6);
-                Map(s => s.serialNumber).Index(7);
+                Map(s => s.country).Index(3);
+                Map(s => s.contact).Index(4);
+                Map(s => s.PIC).Index(5);
+                Map(s => s.import).Index(6).TypeConverter<StringConverter>();
+                Map(s => s.NPWP).Index(7);
+                Map(s => s.serialNumber).Index(8);
             }
         }
 
@@ -219,6 +223,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Error.Add("Kode", supplierVM.code);
                     Error.Add("Nama Supplier", supplierVM.name);
                     Error.Add("Alamat", supplierVM.address);
+                    Error.Add("Negara", supplierVM.country);
                     Error.Add("Kontak", supplierVM.code);
                     Error.Add("PIC", supplierVM.PIC);
                     Error.Add("Import", supplierVM.import);
