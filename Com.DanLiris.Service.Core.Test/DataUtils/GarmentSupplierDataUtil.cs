@@ -44,6 +44,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 SerialNumber = guid,
                 PIC = guid,
                 Address = guid,
+                Country = guid,
                 Contact = guid,
                 IncomeTaxesId = 1,
                 IncomeTaxesName = guid,
@@ -66,6 +67,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {
@@ -91,6 +93,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {
@@ -116,6 +119,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {
@@ -141,6 +145,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {
@@ -166,6 +171,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {
@@ -191,6 +197,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {
@@ -216,6 +223,7 @@ namespace Com.DanLiris.Service.Core.Test.DataUtils
                 serialNumber = guid,
                 PIC = guid,
                 address = guid,
+                country = guid,
                 contact = guid,
                 IncomeTaxes = new IncomeTaxViewModel
                 {

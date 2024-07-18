@@ -11,9 +11,10 @@ using System;
 namespace Com.DanLiris.Service.Core.Lib.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240712060031_Alter_Table_Suppliers_Add_Column_Country")]
+    partial class Alter_Table_Suppliers_Add_Column_Country
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
