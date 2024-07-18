@@ -15,6 +15,8 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
 
 		public string contact { get; set; }
 
+		public string country { get; set; }
+
 		public string PIC { get; set; }
 
 		/* Bool */
