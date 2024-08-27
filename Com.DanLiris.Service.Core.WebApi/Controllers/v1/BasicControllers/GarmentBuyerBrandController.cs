@@ -47,6 +47,55 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+        //
+        [HttpPut("posting")]
+        public async Task<IActionResult> Posting([FromBody] List<GarmentBuyerBrandViewModel> garmentbuyer)
+        {
+            try
+            {
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                await service.GarmentBuyerPost(garmentbuyer, service.Username);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(garmentbuyer);
+
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPut("nonactived/{id}")]
+        public async Task<IActionResult> NonActived([FromRoute] int id)
+        {
+            try
+            {
+                service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                await service.garmentbuyerNonActive(id, service.Username);
+
+
+                Dictionary<string, object> Result =
+                new ResultFormatter(ApiVersion, General.CREATED_STATUS_CODE, General.OK_MESSAGE)
+                .Ok();
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
 
     }
 }
