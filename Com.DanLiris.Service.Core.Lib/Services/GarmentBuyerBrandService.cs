@@ -2,6 +2,7 @@
 using Com.DanLiris.Service.Core.Lib.Interfaces;
 using Com.DanLiris.Service.Core.Lib.Models;
 using Com.DanLiris.Service.Core.Lib.ViewModels;
+using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
 using CsvHelper.Configuration;
 using Microsoft.Extensions.Primitives;
@@ -13,11 +14,13 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
     public class GarmentBuyerBrandService : BasicService<CoreDbContext, GarmentBuyerBrand>, IBasicUploadCsvService<GarmentBuyerBrandViewModel>, IMap<GarmentBuyerBrand, GarmentBuyerBrandViewModel>
     {
+        private const string UserAgent = "core-product-service";
         public GarmentBuyerBrandService(IServiceProvider serviceProvider) :base(serviceProvider)
         {
         }
@@ -43,7 +46,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Name", "Buyers","BuyerName"
+                "Id", "Code", "Name", "Buyers","BuyerName", "IsPosted"
             };
 
             Query = Query
@@ -53,7 +56,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Code = b.Code,
                     Name = b.Name,
                     BuyerName=b.BuyerName,
-                    _LastModifiedUtc = b._LastModifiedUtc
+                    _LastModifiedUtc = b._LastModifiedUtc,
+                    Active = b.Active
                 });
 
             /* Order */
@@ -102,6 +106,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             garmentBuyerVM.Code = garmentBuyer.Code;
             garmentBuyerVM.Name = garmentBuyer.Name;
             garmentBuyerVM.BuyerName = garmentBuyer.BuyerName;
+            garmentBuyerVM.IsPosted = garmentBuyer.Active;
             garmentBuyerVM.Buyers = new GarmentBuyerViewModel
             {
                 Id = garmentBuyer.BuyerId,
@@ -127,6 +132,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             garmentBuyer._LastModifiedAgent = garmentBuyerVM._LastModifiedAgent;
             garmentBuyer.Code = garmentBuyerVM.Code;
             garmentBuyer.Name = garmentBuyerVM.Name;
+            garmentBuyer.Active = garmentBuyerVM.IsPosted;
             if (garmentBuyerVM.Buyers != null)
             {
                 garmentBuyer.BuyerId = garmentBuyerVM.Buyers.Id;
@@ -293,6 +299,42 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             }
 
             return Query.Distinct();
+        }
+        //
+        public async Task<int> GarmentBuyerPost(List<GarmentBuyerBrandViewModel> garmentbuyer, string username)
+        {
+            int Updated = 1;
+            var Ids = garmentbuyer.Select(d => d.Id).ToList();
+            var listData = this.DbContext.GarmentBuyerBrands.Where(m => Ids.Contains(m.Id) && !m._IsDeleted).ToList();
+
+            listData.ForEach(async m =>
+            {
+                Updated = await garmentbuyerUpdated(m, username);
+
+            });
+
+            return Updated;
+        }
+
+        public async Task<int> garmentbuyerUpdated(GarmentBuyerBrand model, string username)
+        {
+            model.Active = true;
+            model.FlagForUpdate("dev2", UserAgent);
+
+            DbContext.GarmentBuyerBrands.Update(model);
+
+            return await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> garmentbuyerNonActive(int Id, string username)
+        {
+            var model = this.DbContext.GarmentBuyerBrands.FirstOrDefault(x => x.Id == Id);
+
+            model.Active = false;
+            model.FlagForUpdate(username, UserAgent);
+
+            DbContext.GarmentBuyerBrands.Update(model);
+            return await DbContext.SaveChangesAsync();
         }
     }
 }
