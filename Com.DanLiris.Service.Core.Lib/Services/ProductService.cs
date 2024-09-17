@@ -712,13 +712,14 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             result.Columns.Add(new DataColumn() { ColumnName = "Harga Barang", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Keterangan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Create", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Update", DataType = typeof(String) });
             int idx = 0;
             foreach (var item in Query)
             {
                 idx++;
-                result.Rows.Add(item.Code, item.Name,  item.Price,  item.CurrencyCode, item.UomUnit,item._CreatedUtc.ToString(),item._LastModifiedUtc.ToString());
+                result.Rows.Add(item.Code, item.Name,  item.Price,  item.CurrencyCode, item.UomUnit, item.Description, item._CreatedUtc.ToString(),item._LastModifiedUtc.ToString());
             }
             ExcelPackage package = new ExcelPackage();
           
