@@ -29,7 +29,13 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 
         [StringLength(500)]
         public string PIC { get; set; }
-        
+
+        [StringLength(100)]
+        public string BussinessType { get; set; }
+
+        [StringLength(100)]
+        public string Email { get; set; }
+
         public bool? Import { get; set; }
 
         [StringLength(100)]
