@@ -57,7 +57,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "_id", "code", "name", "address", "country", "import", "NPWP", "IsPosted"
+                "_id", "code", "name", "address", "country", "import", "NPWP", "IsPosted", "BussinessType", "Email"
             };
 
             Query = Query
@@ -70,7 +70,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Country = s.Country,
                     Import = s.Import,
                     NPWP = s.NPWP,
-                    Active = s.Active
+                    Active = s.Active,
+                    BussinessType = s.BussinessType,
+                    Email = s.Email
                 });
 
             /* Order */
@@ -126,6 +128,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             supplierVM.NPWP = supplier.NPWP;
             supplierVM.serialNumber = supplier.SerialNumber;
             supplierVM.IsPosted = supplier.Active;
+            supplierVM.bussinessType = supplier.BussinessType;
+            supplierVM.email = supplier.Email;
 
             return supplierVM;
         }
@@ -154,6 +158,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             supplier.NPWP = supplierVM.NPWP;
             supplier.SerialNumber = supplierVM.serialNumber;
             supplier.Active = supplierVM.IsPosted;
+            supplier.BussinessType = supplierVM.bussinessType;
+            supplier.Email = supplierVM.email;
 
             return supplier;
         }
@@ -201,7 +207,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
         /* Upload CSV */
         private readonly List<string> Header = new List<string>()
         {
-            "Kode", "Nama Supplier", "Alamat", "Negara", "Kontak", "PIC", "Import", "NPWP", "Serial Number"
+            "Kode", "Nama Supplier", "Alamat", "Negara", "Kontak", "PIC", "Import", "NPWP", "Serial Number", "Tipe Bisnis", "Email"
         };
 
         public List<string> CsvHeader => Header;
@@ -220,6 +226,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                 Map(s => s.import).Index(6).TypeConverter<StringConverter>();
                 Map(s => s.NPWP).Index(7);
                 Map(s => s.serialNumber).Index(8);
+                Map(s => s.bussinessType).Index(9);
+                Map(s => s.email).Index(10);
             }
         }
 
@@ -283,6 +291,8 @@ namespace Com.DanLiris.Service.Core.Lib.Services
                     Error.Add("Import", supplierVM.import);
                     Error.Add("NPWP", supplierVM.NPWP);
                     Error.Add("Serial Number", supplierVM.serialNumber);
+                    Error.Add("Tipe Bisnis", supplierVM.serialNumber);
+                    Error.Add("Email", supplierVM.serialNumber);
                     Error.Add("Error", ErrorMessage);
 
                     ErrorList.Add(Error);

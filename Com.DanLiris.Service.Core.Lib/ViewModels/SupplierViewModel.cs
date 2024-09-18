@@ -17,6 +17,10 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
 
         public string PIC { get; set; }
 
+        public string bussinessType { get; set; }
+
+        public string email { get; set; }
+
         /* Bool */
         public dynamic import { get; set; }
 
