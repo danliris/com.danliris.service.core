@@ -762,7 +762,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             
                
             model.Active = true;
-            model.FlagForUpdate( "dev2", UserAgent);
+            model.FlagForUpdate(username, UserAgent);
 
 
 

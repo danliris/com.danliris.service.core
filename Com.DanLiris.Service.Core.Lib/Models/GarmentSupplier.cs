@@ -38,6 +38,9 @@ namespace Com.DanLiris.Service.Core.Lib.Models
 		[StringLength(500)]
 		public string SerialNumber { get; set; }
 
+		[StringLength(500)]
+		public string Description { get; set; }
+
 		public bool? UseTax { get; set; }
 
 		/* IncomeTaxes*/
