@@ -14,5 +14,7 @@ namespace Com.DanLiris.Service.Core.Lib.ViewModels
         public GarmentBuyerViewModel Buyers { get; set; }
 
         public string BuyerName { get; set; }
+
+        public bool IsPosted { get; set; }
     }
 }
