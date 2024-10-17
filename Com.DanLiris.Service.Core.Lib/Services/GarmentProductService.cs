@@ -15,6 +15,7 @@ using Com.DanLiris.Service.Core.Lib.Interfaces;
 using CsvHelper.TypeConversion;
 using Microsoft.Extensions.Primitives;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -575,5 +576,12 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
             return Query.Distinct();
         }
+
+        public override async Task<GarmentProduct> ReadModelById(int Id)
+        {
+            var result = await DbSet.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id.Equals(Id));
+            return result;
+        }
+
     }
 }
