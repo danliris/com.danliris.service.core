@@ -99,5 +99,34 @@ namespace Com.DanLiris.Service.Core.WebApi.Controllers.v1.BasicControllers
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+        //
+        [HttpGet("download")]
+        public IActionResult GetXls(DateTime? dateFrom, DateTime? dateTo)
+        {
+            try
+            {
+                //int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                string accept = Request.Headers["Accept"];
+                byte[] xlsInBytes;
+                DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
+                DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
+
+                var xls = service.GenerateExcel(dateFrom, dateTo);
+
+                string filename = String.Format("Garment Supplier - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }

@@ -18,6 +18,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Com.Moonlay.Models;
 using Com.DanLiris.Service.Core.Lib.Helpers.IdentityService;
+using System.IO;
+using System.Data;
+using System.Globalization;
 
 namespace Com.DanLiris.Service.Core.Lib.Services
 {
@@ -135,6 +138,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			};
 			GarmentSupplierVM.NPWP = GarmentSupplier.NPWP;
 			GarmentSupplierVM.serialNumber = GarmentSupplier.SerialNumber;
+			GarmentSupplierVM.description = GarmentSupplier.Description;
 			GarmentSupplierVM.IsPosted = GarmentSupplier.Active;
 			
 
@@ -177,9 +181,9 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 			}
 			GarmentSupplier.NPWP = GarmentSupplierVM.NPWP;
 			GarmentSupplier.SerialNumber = GarmentSupplierVM.serialNumber;
+			GarmentSupplier.Description = GarmentSupplierVM.description;
 			GarmentSupplier.Active = GarmentSupplierVM.IsPosted;
 			
-
 			return GarmentSupplier;
 		}
 
@@ -203,7 +207,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 
 
 			model.Active = true;
-			model.FlagForUpdate("dev2", UserAgent);
+			model.FlagForUpdate("username", UserAgent);
 
 
 			DbContext.GarmentSuppliers.Update(model);
@@ -226,7 +230,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 		/* Upload CSV */
 		private readonly List<string> Header = new List<string>()
 		{
-			"Kode","Nama Supplier","Alamat","Negara","Kontak","PIC","Import","Kena PPN","Kena PPH","Jenis PPH","Rate PPH","NPWP","Serial Number"
+			"Kode","Nama Supplier","Alamat","Negara","Kontak","PIC","Import","Kena PPN","Kena PPH","Jenis PPH","Rate PPH","NPWP","Serial Number","Description"
 		};
 		public List<string> CsvHeader => Header;
 
@@ -248,6 +252,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 				Map(s => s.IncomeTaxes.rate).Index(10).TypeConverter<StringConverter>();
 				Map(s => s.NPWP).Index(11);
 				Map(s => s.serialNumber).Index(12);
+				Map(s => s.description).Index(13);
 
 			}
 		}
@@ -415,6 +420,7 @@ namespace Com.DanLiris.Service.Core.Lib.Services
 					Error.Add("Rate PPH", GarmentSupplierVM.IncomeTaxes.rate);
 					Error.Add("NPWP", GarmentSupplierVM.NPWP);
 					Error.Add("Serial Number", GarmentSupplierVM.serialNumber);
+					Error.Add("Description", GarmentSupplierVM.description);
 					Error.Add("Error", ErrorMessage);
 
 					ErrorList.Add(Error);
@@ -434,6 +440,81 @@ namespace Com.DanLiris.Service.Core.Lib.Services
             var codes = code.Split(",");
             //return this.DbSet.IgnoreQueryFilters().FirstOrDefault(p => code == p.Code);
             return this.DbSet.IgnoreQueryFilters().Where(x => codes.Contains(x.Code)).Select(x => x).ToList();
+        }
+
+        //
+        public IQueryable<XLSGarmentSupplierViewModel> GetReportQuery(DateTime? dateFrom, DateTime? dateTo)
+        {
+            DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
+            DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
+           
+			var NewQuery = (from a in this.DbContext.GarmentSuppliers 
+                            where a._IsDeleted == false 
+						       && a._CreatedUtc.AddHours(7).Date >= DateFrom.Date &&
+                               a._CreatedUtc.AddHours(7).Date <= DateTo.Date
+
+                         select new XLSGarmentSupplierViewModel
+						 {
+							 createddate = a._CreatedUtc,
+							 code = a.Code,
+							 name = a.Name,
+							 address = a.Address,
+							 country = a.Country,
+							 import = a.Import == true ? "IMPORT" : "LOKAL",
+							 NPWP = a.NPWP,
+							 contact = a.Contact,
+							 PIC = a.PIC,
+							 usevat = a.UseVat == true ? "YA" : "TIDAK",
+							 usetax = a.UseTax == true ? "YA" : "TIDAK",
+							 taxname = a.IncomeTaxesName,
+							 taxrate = a.IncomeTaxesRate,
+							 serialNumber = a.SerialNumber,
+							 description = a.Description,
+							 Aktif = a.Active == true ? "SUDAH" : "BELUM"
+	                     });
+            return NewQuery;
+        }
+
+        public MemoryStream GenerateExcel(DateTime? dateFrom, DateTime? dateTo)
+        {
+            var Query = GetReportQuery(dateFrom, dateTo);
+            Query = Query.OrderBy(b => b.code);
+            DataTable result = new DataTable();
+
+            result.Columns.Add(new DataColumn() { ColumnName = "NO", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "TGL INPUT", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KODE", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NAMA SUPPLIER", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "ALAMAT", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NEGARA", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "IMPORT", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NPWP", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KONTAK", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PIC", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KENA PPN", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KENA PPH", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NAMA PPH", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "RATE PPH", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "SERIAL NUMBER", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KETERANGAN", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "AKTIF", DataType = typeof(String) });
+
+
+            if (Query.ToArray().Count() == 0)
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", 0, "", "", ""); // to allow column name to be generated properly for empty data as template
+            else
+            {
+                var index = 0;
+                foreach (var item in Query)
+                {
+					index++;
+                    string CreatedDate = item.createddate == new DateTime(1970, 1, 1) ? "-" : item.createddate.ToOffset(new TimeSpan(7, 0, 0)).ToString("dd/MM/yyyy", new CultureInfo("id-ID"));
+
+                    result.Rows.Add(index, CreatedDate, item.code, item.name, item.address, item.country, item.import, item.NPWP, item.contact, item.PIC, item.usevat, item.usetax, item.taxname, item.taxrate, item.serialNumber, item.description, item.Aktif);
+                }
+            }
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Sheet1") }, true);
+
         }
     }
 }
